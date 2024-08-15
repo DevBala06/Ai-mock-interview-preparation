@@ -37,7 +37,7 @@ const Cursor: React.FC = () => {
   return (
     <div
       ref={cursorRef}
-      className="w-[16px] bg-[#000000] h-[16px] z-[9999] flex justify-center items-center text-[2.2px] pt-[1px] font-[400] fixed left-0 top-0 pointer-events-none rounded-full border-zinc-300"
+      className="w-[16px] bg-[#000000] h-[16px] max-lg:hidden z-[9999] flex justify-center items-center text-[2.2px] pt-[1px] font-[400] fixed left-0 top-0 pointer-events-none rounded-full border-zinc-300"
     ></div>
   );
 };

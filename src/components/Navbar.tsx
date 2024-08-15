@@ -68,23 +68,22 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="relative ">
+      <div className="relative mb-32 ">
       <div className="overflow-hidden max-w-screen-xl   mx-auto text-black  px-9 pt-3 flex items-center justify-between ">
-        <div className="text-xl font-medium">
+        <div className="text-xl font-semibold">
           Mock<span>.io</span>
         </div>
-        <div className="max-lg:hidden flex border border-[#0000003a] px-5 uppercase justify-start items-center py-2 rounded-full">
-          <Link href={"#"} className="relative text-sm font-medium mr-7">
+        <div className="max-lg:hidden flex  border border-[#00000048] px-5 uppercase justify-start items-center py-2 rounded-full">
+          <Link href={"#"} className="relative text-sm font-semibold mr-7">Home
             {/* <motion.div
               className="bg-blue-500 absolute inset-0"
               style={{ borderRadius: 9999 }}
             ></motion.div> */}
-            <span className="z-10 relative px-3 py-2">Home</span>
           </Link>
-          <Link href={"#"} className="text-sm relative font-medium mr-7">
+          <Link href={"#"} className="text-sm relative font-semibold mr-7">
             About
           </Link>
-          <Link href={"#"} className="text-sm relative font-medium">
+          <Link href={"#"} className="text-sm relative font-semibold">
             Contact Us
           </Link>
         </div>
@@ -131,19 +130,19 @@ const Navbar = () => {
        
         
       </div>
-        <motion.div
-          variants={menuVariants}
-          initial="hidden"
-          animate={isOpen ? "visible" : "hidden"}
-          className=" absolute w-[62%] rounded-lg  right-0 top-0 h-[15rem]  sm:h-[25rem] lg:hidden  bg-[#6b728070] flex-col"
-          
-        >
-          <div className="flex flex-col  items-center justify-center gap-y-1 h-full w-full">
-            <Link href={"#"}>HOME</Link>
-            <Link href={"#"}>ABOUT</Link>
-            <Link href={"#"}>CONTACT US</Link>
-          </div>
-        </motion.div>
+      <motion.div
+  variants={menuVariants}
+  initial="hidden"
+  animate={isOpen ? "visible" : "hidden"}
+  className="absolute w-[62%] rounded-lg z-10 right-0 top-0 h-[15rem] sm:h-[25rem] lg:hidden bg-[#F1F0EE] backdrop-blur-lg bg-opacity-30 border border-white border-opacity-20 shadow-lg flex-col"
+>
+  <div className="flex flex-col items-center justify-center gap-y-1 h-full w-full">
+    <Link href={"#"}>HOME</Link>
+    <Link href={"#"}>ABOUT</Link>
+    <Link href={"#"}>CONTACT US</Link>
+  </div>
+</motion.div>
+
       </div>
     </>
   );

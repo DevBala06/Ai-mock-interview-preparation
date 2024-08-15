@@ -1,6 +1,5 @@
 import { Lato } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
 import Cursor from "@/components/Cursor";
 import { CursorProvider } from "@/context/CursorContext";
 import { ReactNode } from "react";
@@ -24,13 +23,13 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html lang="en">
       <body className={lato.className}>
         <CursorProvider>
-          <div className="w-[100%] h-screen bg-[#F1F0EE]">
+          <div className="w-[100%] h-screen overflow-x-hidden  bg-[#F1F0EE]">
             <Cursor />
-            <div>
-              <Navbar />
-            </div>
+            
             {children}
+            
           </div>
+          
         </CursorProvider>
       </body>
     </html>
