@@ -3,9 +3,41 @@ import Link from "next/link";
 import { motion, Variants } from 'framer-motion';
 import { RxHamburgerMenu } from "react-icons/rx";
 import { IoClose } from "react-icons/io5";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useCursor } from "../context/CursorContext";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+
 
 const Navbar = () => {
+
+  const { cursorRef } = useCursor();
+  const { contextSafe } = useGSAP();
+
+  const handleMouseEnter = (e: React.MouseEvent<HTMLElement>) => {
+    if (cursorRef && cursorRef.current) {
+      gsap.to(cursorRef.current, {
+        duration: "0.3",
+        ease: "power3.out",
+        opacity: "0",
+      });
+    }
+  };
+
+  const handleMouseLeave = (e: React.MouseEvent<HTMLElement>) => {
+    if (cursorRef && cursorRef.current) {
+      cursorRef.current.innerHTML = "";
+      gsap.to(cursorRef.current, {
+        scale: "1",
+        backgroundColor: "#000000",
+        duration: "0.3",
+        ease: "power3.out",
+        mixBlendMode: "normal",
+        opacity:'1',
+      });
+    }
+  };
+
   type Buttons = {
     btn: string;
     hreff: string;
@@ -43,6 +75,15 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [width, setWidth] = useState<number>(0);
 
+  const [position, setPosition] = useState({
+    left:0,
+    width:0,
+    opacity:0
+  })
+
+  const ref1 = useRef<HTMLAnchorElement>(null);
+  const ref2 = useRef<HTMLAnchorElement>(null);
+  const ref3 = useRef<HTMLAnchorElement>(null);
 
 
   useEffect(() => {
@@ -73,21 +114,63 @@ const Navbar = () => {
         <div className="text-xl font-semibold">
           Mock<span>.io</span>
         </div>
-        <div className="max-lg:hidden flex  border border-[#00000048] px-5 uppercase justify-start items-center py-2 rounded-full">
-          <Link href={"#"} className="relative text-sm font-semibold mr-7">Home
+        <div className="max-lg:hidden relative flex z-0  gap-x-2 border-2 border-[#000000] bg-white  uppercase justify-start items-center p-1 h-10 rounded-full"
+        onMouseEnter={contextSafe(handleMouseEnter)}
+        onMouseLeave={contextSafe(handleMouseLeave)}>
+          <Link href={"#"} ref={ref1} onMouseEnter={()=>{
+            if(!ref1.current) return;
+            const {width} = ref1.current.getBoundingClientRect();
+            setPosition({
+              width,
+              opacity:1,
+              left:ref1.current.offsetLeft,
+            })
+          }} onMouseLeave={()=>{
+            setPosition((prv)=>({
+              ...prv,
+              opacity:0,
+            }))
+          }} className="relative text-sm text-white   px-3   z-40 mix-blend-difference font-normal ">Home
             {/* <motion.div
               className="bg-blue-500 absolute inset-0"
               style={{ borderRadius: 9999 }}
             ></motion.div> */}
           </Link>
-          <Link href={"#"} className="text-sm relative font-semibold mr-7">
+          <Link href={"#"} ref={ref2} onMouseEnter={()=>{
+            if(!ref2.current) return;
+            const {width} = ref2.current.getBoundingClientRect();
+            setPosition({
+              width,
+              opacity:1,
+              left:ref2.current.offsetLeft,
+            })
+          }} onMouseLeave={()=>{
+            setPosition((prv)=>({
+              ...prv,
+              opacity:0,
+            }))
+          }} className="text-sm relative z-40 px-3 text-white  mix-blend-difference font-normal ">
             About
           </Link>
-          <Link href={"#"} className="text-sm relative font-semibold">
+          <Link href={"#"} ref={ref3} onMouseEnter={()=>{
+            if(!ref3.current) return;
+            const {width} = ref3.current.getBoundingClientRect();
+            setPosition({
+              width,
+              opacity:1,
+              left:ref3.current.offsetLeft,
+            })
+          }} onMouseLeave={()=>{
+            setPosition((prv)=>({
+              ...prv,
+              opacity:0,
+            }))
+          }} className="text-sm relative text-white px-3 z-40  mix-blend-difference font-normal">
             Contact Us
           </Link>
+          <motion.div animate={position} className="absolute  h-8 z-30  rounded-full bg-black"></motion.div>
         </div>
-        <div className="gap-x-3 flex">
+        <div className="gap-x-3 flex" onMouseEnter={contextSafe(handleMouseEnter)} onMouseLeave={contextSafe(handleMouseLeave)}>
           {btn.map((button, i) => (
             <Link
               key={i}

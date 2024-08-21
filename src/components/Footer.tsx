@@ -7,7 +7,7 @@ import { FaLinkedinIn } from "react-icons/fa";
 const Footer = () => {
   return (
     <>
-    <footer className="bg-[#F1F0EE] py-8 h-screen sticky bottom-0">
+    <footer className="bg-[#F1F0EE] py-8 h-screen ">
       <div className=" h-2/6 flex justify-between max-lg:justify-center  items-center max-lg:flex-col bg-[#807c7c33] p-10 rounded-xl mx-auto w-[96%]">
      <div className="max-lg:flex max-lg:flex-col max-lg:items-center"> 
         <h1 className="text-3xl max-lg:text-2xl font-black">Join our Newsletter</h1>
