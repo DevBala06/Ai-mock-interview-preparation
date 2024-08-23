@@ -12,12 +12,19 @@ const config: Config = {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-      },screens: {
+      },
+      
+      screens: {
         
         'xsm': '375px',  // Custom breakpoint for 375px
         'lsm': '425px',  // Custom breakpoint for 425px
         // Continue adding other breakpoints if needed
       },
+
+      rotate: {
+        '17': '17deg',
+        '28': '35deg'
+      }
     },
   },
   plugins: [],
