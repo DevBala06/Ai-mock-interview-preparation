@@ -8,6 +8,7 @@ const Testimonials = () => {
   const column1 = doubleTestimonials.filter((_, i) => i % 3 === 0);
   const column2 = doubleTestimonials.filter((_, i) => i % 3 === 1);
   const column3 = doubleTestimonials.filter((_, i) => i % 3 === 2);
+  
 
   return (
     // <div className='columns-1 sm:columns-2 lg:columns-3 bg-zinc-50  space-y-4 lg:gap-4 p-4 lg:p-0'>

@@ -6,7 +6,6 @@ import gsap from "gsap";
 import TopCompanies from "@/components/TopCompanies";
 import Footer from "@/components/Footer";
 import ScrollTrigger from "gsap/ScrollTrigger";
-import Testimonials from "@/components/Testimonials";
 import Features from "@/components/Features";
 import { useEffect, useRef, useState } from "react";
 import Pricing from "@/components/Pricing";
