@@ -24,7 +24,7 @@ const Footer = () => {
             <h1 className="max-md:text-lg text-5xl font-black">Mock.io</h1>
             <p className="text-sm font-bold text-gray-900 max-md:text-xs max-md:mt-2   mt-5">~ We provide AI-powered mock interviews designed to help you land
               your dream job. Our platform delivers personalized practice
-              sessions tailored to boost your skills and confidence.</p>
+              sessions tailored to boost your skill and confidence.</p>
             </div>
             <div className="w-2/5 max-md:w-full max-md:mt-2 max-md:gap-y-2 max-md:items-start  flex max-md:flex-col items-center justify-center">
                 <div className="flex flex-col  text-sm max-md:font-extrabold max-md:text-xs font-extrabold gap-y-2 max-md:gap-y-0 text-gray-600">
