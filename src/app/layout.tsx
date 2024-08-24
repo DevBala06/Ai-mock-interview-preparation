@@ -3,6 +3,7 @@ import "./globals.css";
 import Cursor from "@/components/Cursor";
 import { CursorProvider } from "@/context/CursorContext";
 import { ReactNode } from "react";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const lato = Lato({
   subsets: ["latin"],
@@ -20,18 +21,20 @@ type RootLayoutProps = {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="en">
-      <body className={lato.className}>
-        <CursorProvider>
-          <div className="w-[100%] h-screen overflow-x-hidden  bg-[#F1F0EE]">
-            <Cursor />
-            
-            {children}
-            
-          </div>
-          
-        </CursorProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body className={lato.className}>
+          <CursorProvider>
+            <div className="w-[100%] h-screen overflow-x-hidden  bg-[#F1F0EE]">
+              <Cursor />
+
+              {children}
+
+            </div>
+
+          </CursorProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

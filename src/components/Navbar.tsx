@@ -68,8 +68,8 @@ const Navbar = () => {
   };
 
   const btn: Buttons[] = [
-    { btn: "Login", hreff: "/login", color: "white", text: "black" },
-    { btn: "Signup", hreff: "/signup", color: "#1a202c", text: "white" },
+    { btn: "Login", hreff: "/sign-in", color: "white", text: "black" },
+    { btn: "Signup", hreff: "/sign-up", color: "#1a202c", text: "white" },
   ];
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -224,10 +224,10 @@ const Navbar = () => {
             <Link href={"#"}>ABOUT</Link>
             <Link href={"#"}>CONTACT US</Link>
             <div className="w-4/6 flex items-center justify-center gap-5 mt-4">
-              <Link href="/login">
+              <Link href="/sign-in">
                 <button className="px-3 py-1 border bg-[#F1F0EE] backdrop-blur-lg bg-opacity-10 border-white border-opacity-20 shadow-sm rounded-md ">Login</button>
               </Link>
-              <Link href='/signup'>
+              <Link href='/sign-up'>
                 <button className="px-3 py-1 border bg-[#F1F0EE] backdrop-blur-lg bg-opacity-10 border-white border-opacity-20 shadow-sm rounded-md ">Sign Up</button>
               </Link>
             </div>
