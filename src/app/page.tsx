@@ -12,13 +12,14 @@ import Pricing from "@/components/Pricing";
 import HeroSection from "@/components/HeroSection";
 import DashboardImg from "@/components/DashboardImg";
 import TestimonialSection from "@/components/TestimonialSection";
+import { FAQAccordian } from "@/components/FAQAccordian";
 
 const Home = () => {
   // const { cursorRef } = useCursor();
   const elem = useRef<HTMLDivElement>(null);
   const [sectionHeight, setSectionHeight] = useState(0);
   // const { contextSafe } = useGSAP();
-  
+
   useEffect(() => {
     const calculateHeight = () => {
       if (elem.current) {
@@ -27,27 +28,27 @@ const Home = () => {
       }
       return 1000; // Fallback value
     };
-    
+
     const updateHeight = () => {
       const height = calculateHeight();
       setSectionHeight(height);
     };
 
     updateHeight();
-    
+
     gsap.registerPlugin(ScrollTrigger);
-  
+
     // Create ScrollTrigger instance
     ScrollTrigger.create({
       id: "cardsScroll",
       trigger: elem.current,
       pin: true,
       start: "top top",
-      end: () => `+=${sectionHeight}px`, 
+      end: () => `+=${sectionHeight}px`,
       scrub: true,
       invalidateOnRefresh: true,
     });
-  
+
     // Debounced resize event handler
     const resizeObserver = new ResizeObserver(() => {
       updateHeight();
@@ -58,7 +59,7 @@ const Home = () => {
       resizeObserver.observe(elem.current);
     }
     // Add resize event listener
-  
+
     // Cleanup function
     return () => {
       ScrollTrigger.getById("cardsScroll")?.kill();
@@ -68,19 +69,19 @@ const Home = () => {
       resizeObserver.disconnect();
     };
   }, []);
-  
 
-  
-  
+
+
+
   return (
     <>
       <div>
         <Navbar />
       </div>
       <div className="w-full min-h-screen relative bg-[#F1F0EE]">
-        <HeroSection/>
+        <HeroSection />
 
-        <DashboardImg/>
+        <DashboardImg />
 
         <section className=" bottom-0 left-0 right-0 w-[87%] mx-auto h-[50vh] bg-[#F1F0EE]">
           <div className="w-full">
@@ -88,15 +89,20 @@ const Home = () => {
           </div>
         </section>
         <section className="min-h-fit mb-56 "  >
-          
-          <div className="w-full min-h-fit  bg-[#F1F0EE] "  ref={elem} >
+
+          <div className="w-full min-h-fit  bg-[#F1F0EE] " ref={elem} >
             <Features />
           </div>
         </section>
-        <TestimonialSection/>
-            <div className="w-[90%] mx-auto h-full lg:h-screen mt-11">
-              <Pricing/>
-            </div>
+        <TestimonialSection />
+        <div className="w-[90%] mx-auto h-full lg:h-screen mt-11">
+          <Pricing />
+        </div>
+
+        <div className="w-[90%] mx-auto h-full lg:h-screen mb-10 mt-11">
+          <FAQAccordian />
+        </div>
+
       </div>
       <div>
         <Footer />
