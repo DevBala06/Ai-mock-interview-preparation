@@ -13,6 +13,7 @@ import HeroSection from "@/components/HeroSection";
 import DashboardImg from "@/components/DashboardImg";
 import TestimonialSection from "@/components/TestimonialSection";
 import { FAQAccordian } from "@/components/FAQAccordian";
+import Cursor from "@/components/Cursor";
 
 const Home = () => {
   // const { cursorRef } = useCursor();
@@ -75,6 +76,8 @@ const Home = () => {
 
   return (
     <>
+              <Cursor />
+
       <div>
         <Navbar />
       </div>

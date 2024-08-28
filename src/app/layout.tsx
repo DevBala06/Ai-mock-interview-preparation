@@ -1,6 +1,6 @@
 import { Lato } from "next/font/google";
 import "./globals.css";
-import Cursor from "@/components/Cursor";
+// import Cursor from "@/components/Cursor";
 import { CursorProvider } from "@/context/CursorContext";
 import { ReactNode } from "react";
 import { ClerkProvider } from "@clerk/nextjs";
@@ -26,9 +26,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <body className={lato.className}>
           <CursorProvider>
             <div className="w-[100%] h-screen overflow-x-hidden  bg-[#F1F0EE]">
-              <Cursor />
-
+              
               {children}
+
+              
 
             </div>
 
