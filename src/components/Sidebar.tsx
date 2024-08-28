@@ -82,7 +82,7 @@ const Sidebar: React.FC = () => {
           transition={{ duration: 0.3 }}
         >
           <FiPieChart />
-          <span className={`${open ? "block" : "hidden"} transition-colors duration-300`}>
+          <span className={`${open ? "block" : "hidden"}  `}>
             Dashboard
           </span>
         </motion.div>
@@ -94,7 +94,7 @@ const Sidebar: React.FC = () => {
           transition={{ duration: 0.3 }}
         >
           <FaClipboardList />
-          <span className={`${open ? "block" : "hidden"} transition-colors duration-300`}>
+          <span className={`${open ? "block" : "hidden"}`}>
             Interviews
           </span>
         </motion.div>
@@ -106,7 +106,7 @@ const Sidebar: React.FC = () => {
           transition={{ duration: 0.3 }}
         >
           <FaComments />
-          <span className={`${open ? "block" : "hidden"} transition-colors duration-300`}>
+          <span className={`${open ? "block" : "hidden"} `}>
             Feedbacks
           </span>
         </motion.div>
