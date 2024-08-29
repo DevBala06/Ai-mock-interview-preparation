@@ -71,13 +71,9 @@ const Home = () => {
     };
   }, []);
 
-
-
-
   return (
     <>
-              <Cursor />
-
+      <Cursor />
       <div>
         <Navbar />
       </div>

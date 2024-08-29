@@ -7,9 +7,12 @@ import { useEffect, useRef, useState } from "react";
 import { useCursor } from "../context/CursorContext";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-
+import { useUser } from "@clerk/nextjs";
+import { UserButton } from "@clerk/clerk-react";
 
 const Navbar = () => {
+
+  const { isSignedIn } = useUser()
 
   const { cursorRef } = useCursor();
   const { contextSafe } = useGSAP();
@@ -106,7 +109,6 @@ const Navbar = () => {
     }
   }, [width]);
 
-
   return (
     <>
       <div className="relative mb-32 ">
@@ -170,48 +172,67 @@ const Navbar = () => {
             </Link>
             <motion.div animate={position} className="absolute  h-8 z-30  rounded-full bg-black"></motion.div>
           </div>
-          <div className="gap-x-3 flex" onMouseEnter={contextSafe(handleMouseEnter)} onMouseLeave={contextSafe(handleMouseLeave)}>
-            {btn.map((button, i) => (
-              <Link
-                key={i}
-                style={{
-                  backgroundColor: button.color,
-                  color: button.text,
-                  transition: "background-color 0.3s, color 0.3s",
-                }}
-                onMouseEnter={(e) => {
-                  if (button.btn === "Login") {
-                    e.currentTarget.style.backgroundColor = button.text;
-                    e.currentTarget.style.color = button.color;
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (button.btn === "Login") {
-                    e.currentTarget.style.backgroundColor = button.color;
-                    e.currentTarget.style.color = button.text;
-                  }
-                }}
-                className="max-md:hidden py-2 px-5 rounded-full border border-[#0000005d] font-medium text-sm"
-                href={button.hreff}
-              >
-                {button.btn}
-              </Link>
-            ))}
-            <div className="hidden max-lg:flex justify-center items-center ml-3">
-              {isOpen === false ?
-                <RxHamburgerMenu
-                  className="text-2xl absolute right-3 z-50"
-                  onClick={() => setIsOpen(true)}
-                /> :
-                <IoClose
-                  className="text-2xl absolute right-3 z-50"
-                  onClick={() => setIsOpen(false)}
-                />}
-
+          {!isSignedIn ? (
+            <div className="gap-x-3 flex" onMouseEnter={contextSafe(handleMouseEnter)} onMouseLeave={contextSafe(handleMouseLeave)}>
+              {btn.map((button, i) => (
+                <Link
+                  key={i}
+                  style={{
+                    backgroundColor: button.color,
+                    color: button.text,
+                    transition: "background-color 0.3s, color 0.3s",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (button.btn === "Login") {
+                      e.currentTarget.style.backgroundColor = button.text;
+                      e.currentTarget.style.color = button.color;
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (button.btn === "Login") {
+                      e.currentTarget.style.backgroundColor = button.color;
+                      e.currentTarget.style.color = button.text;
+                    }
+                  }}
+                  className="max-md:hidden py-2 px-5 rounded-full border border-[#0000005d] font-medium text-sm"
+                  href={button.hreff}
+                >
+                  {button.btn}
+                </Link>
+              ))}
+              <div className="hidden max-lg:flex justify-center items-center ml-3">
+                {isOpen === false ?
+                  <RxHamburgerMenu
+                    className="text-2xl absolute right-3 z-50"
+                    onClick={() => setIsOpen(true)}
+                  /> :
+                  <IoClose
+                    className="text-2xl absolute right-3 z-50"
+                    onClick={() => setIsOpen(false)}
+                  />}
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="flex items-center justify-center gap-8">
+              <div>
+                <Link href="/dashboard">
+                  <button
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = "black";
+                      e.currentTarget.style.color = "white";
+
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = "white";
+                      e.currentTarget.style.color = "black";
+                      e.currentTarget.style.border = ".5px solid black"
+                    }} className="bg-[#1a202c] px-4 py-1.5 rounded-full text-white ">Dashboard</button>
+                </Link>
+              </div>
+            </div>
 
 
+          )}
         </div>
         <motion.div
           variants={menuVariants}

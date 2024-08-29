@@ -25,14 +25,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <html lang="en">
         <body className={lato.className}>
           <CursorProvider>
-            <div className="w-[100%] h-screen overflow-x-hidden  bg-[#F1F0EE]">
-              
+            <div className="w-[100%] h-screen overflow-x-hidden  bg-[#F1F0EE]">   
               {children}
-
-              
-
             </div>
-
           </CursorProvider>
         </body>
       </html>
