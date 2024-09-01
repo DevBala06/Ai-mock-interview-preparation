@@ -1,7 +1,7 @@
 'use client'
 import React from "react";
 import {motion} from 'framer-motion';
-import { testimonials } from "../utils/testimonialData";
+import { testimonials } from "../data/testimonialData";
 
 const Testimonials = () => {
   const doubleTestimonials = [...testimonials];

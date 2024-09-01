@@ -1,6 +1,6 @@
 import React from "react";
-import { companies } from "../utils/topCompanies";
-import IconComponent from "../utils/IconComponent";
+import { companies } from "../data/topCompanies";
+import IconComponent from "../data/IconComponent";
 import { motion } from "framer-motion";
 
 const TopCompanies = () => {

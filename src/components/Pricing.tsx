@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { FaSquareCheck } from "react-icons/fa6";
-import { pricingPlans } from "@/utils/pricingData"; // Ensure the path to your pricing data is correct
+import { pricingPlans } from "@/data/pricingData"; // Ensure the path to your pricing data is correct
 import {
   motion,
   useMotionTemplate,

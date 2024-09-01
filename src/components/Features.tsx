@@ -1,6 +1,6 @@
 'use client';
 import React, {  useRef } from 'react';
-import { features } from '@/utils/features';
+import { features } from '@/data/features';
 import Link from 'next/link';
 import { FaArrowTurnUp } from "react-icons/fa6";
 

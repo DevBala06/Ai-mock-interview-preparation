@@ -4,7 +4,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { accordianData } from "../utils/accordianData"
+import { accordianData } from "../data/accordianData"
 
 export function FAQAccordian() {
   return (
