@@ -1,26 +1,5 @@
 import { Schema, model, models } from 'mongoose';
 
-<<<<<<< HEAD
-const NewUserSchema = new Schema({
-  _id: {
-    type: String,
-    required: true,
-  },
-  userName: {
-    type: String,
-    required: true, // This line indicates that userName is required
-  },
-  createdAt: {
-    type: Date,
-    required: true,
-  },
-  updatedAt: {
-    type: Date,
-    required: true,
-  },
-=======
-
-
 interface NewUserType extends Document {
     clerkId:string;
     email:string;
@@ -48,7 +27,6 @@ const NewUserSchema = new Schema<NewUserType>({
 }, {
     timestamps: true,
     versionKey: false,
->>>>>>> 4da2ea92bcc56da993de452dd2c417031dc58419
 });
 
 const NewUser = models.NewUser || model('NewUser', NewUserSchema);

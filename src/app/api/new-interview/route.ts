@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-import { NextResponse } from "next/server";
-import connectToDb from "@/utils/config/db";
-import NewInterview from "@/utils/models/newInterview.model";
-
-=======
 
 import { NextRequest, NextResponse } from "next/server";
 import connectToDb from "@/utils/config/db";
@@ -39,7 +33,6 @@ export const GET = async (request:NextRequest) => {
     }
 };
 
->>>>>>> 4da2ea92bcc56da993de452dd2c417031dc58419
 export const POST = async (request: Request) => {
     try {
         await connectToDb();
