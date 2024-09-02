@@ -27,12 +27,13 @@ export const POST = async (request: Request) => {
 
         const body = await request.json();
 
-        const { _id, userName, createdAt, updatedAt } = body;
+        const { clerkId, userName, email, createdAt, updatedAt } = body;
 
         const user = await NewUser.findOneAndUpdate(
-            { _id },
+            { clerkId },
             {
               userName,
+              email,
               createdAt,
               updatedAt,
             },

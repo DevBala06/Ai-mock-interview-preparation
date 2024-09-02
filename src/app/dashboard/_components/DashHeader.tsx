@@ -7,11 +7,43 @@ import { PiHandWavingBold } from "react-icons/pi";
 import DashHeaderLoader from "./Loaders/DashHeaderLoader";
 import axios from "axios";
 
+
+interface QueryResponseFromAi {
+  questions: string[];
+  answers: string[];
+}
+
+interface SfResponseFromAi {
+  suggestions: string;
+  feedback: string;
+}
+
+interface Interview {
+  createdAt: string;
+  difficultyLevel: string;
+  jobRole: string;
+  queryResponseFromAi: QueryResponseFromAi;
+  sfResponseFromAi: SfResponseFromAi;
+  technologies: string[];
+  updatedAt: string;
+  userId: string;
+  _id: string;
+}
+
+interface InterviewData {
+  interviews: Interview[];
+  message: string;
+}
+
+
 const DashHeader = () => {
+  
   const { user } = useUser();
   const [isMounted, setIsMounted] = useState(false);
-
+  const [interviewData, setInterviewData] = useState<InterviewData>({ interviews: [], message: '' });
+  
   useEffect(() => {
+<<<<<<< HEAD
     const sendUserData = async () => {
       if (user) {
         try {
@@ -28,6 +60,44 @@ const DashHeader = () => {
           console.error('Error sending user data', error);
         }
       }
+=======
+    if (user) {
+      const userData = {
+        clerkId: user.id,
+        userName: user.username,
+        email:user.primaryEmailAddress,
+        createdAt: user.createdAt,
+        updatedAt: new Date(),
+      };
+      axios.post('/api/new-user', userData)
+        .then(response => {
+          console.log('User data sent to server');
+        })
+        .catch(error => {
+          console.error('Error sending user data', error);
+        });
+
+        const fetchInterviews = async () => {
+          if (user) {  
+              try {
+                  const response = await axios.get('/api/new-interview', {
+                      params: { userId: user.id } 
+                  });
+                  const data = await response.data;
+                  console.log(data)
+                  setInterviewData(data);
+              } catch (err) {
+                  console.log('Failed to fetch interviews');
+                  console.log(err);
+              }
+          }
+      };
+
+      if(user){
+        fetchInterviews();
+      };
+
+>>>>>>> 4da2ea92bcc56da993de452dd2c417031dc58419
     };
 
     sendUserData();
@@ -62,6 +132,14 @@ const DashHeader = () => {
             <UserButton />
           </div>
         </div>
+      </div>
+      <div>
+      {interviewData.interviews.length > 0 ? (
+                <h1>Job Role: {interviewData.interviews[0].jobRole}</h1>
+            ) : (
+                <h1>No job roles available</h1>
+            )}
+
       </div>
     </div>
   );
