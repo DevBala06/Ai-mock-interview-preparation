@@ -3,21 +3,26 @@ import { Document, model, models, Schema } from "mongoose";
 
 
 interface NewUserType extends Document {
-    _id:string;
+    clerkId:string;
+    email:string;
     userName:string;
     createdAt: Date;
     updatedAt: Date;
 };
 
 const NewUserSchema = new Schema<NewUserType>({
-    _id:{
+    clerkId:{
+        type: String,
+        required:true,
+        unique:true,
+    },
+    email:{
         type: String,
         required:true,
         unique:true,
     },
     userName: {
         type: String,
-        required: true,
         unique:true,
         maxlength: [50, 'Username cannot exceed 50 characters'],
     },

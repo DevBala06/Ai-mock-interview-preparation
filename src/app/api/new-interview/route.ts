@@ -1,14 +1,24 @@
 
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import connectToDb from "@/utils/config/db";
 import NewInterview from "@/utils/models/newInterview.model";
 
 
-export const GET = async () => {
+export const GET = async (request:NextRequest) => {
     try {
         await connectToDb();
 
-        const interviews = await NewInterview.find();
+        const url = new URL(request.url);
+        const userId = url.searchParams.get('userId');
+
+        if (!userId) {
+            return NextResponse.json(
+                { message: "User ID is required" },
+                { status: 400 }
+            );
+        }
+
+        const interviews = await NewInterview.find({userId});
 
         return NextResponse.json({
             message: "Interviews fetched successfully",
