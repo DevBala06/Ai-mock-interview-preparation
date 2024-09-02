@@ -1,4 +1,5 @@
-import { Document, model, models, Schema } from "mongoose";
+import { Document, model, models, Schema } from "mongoose"; 
+
 
 interface AiQueryResponseTypes {
     questions: string[];
@@ -11,6 +12,7 @@ interface SFresponseTypes {
 }
 
 interface NewInterviewType extends Document {
+    userId:string;
     jobRole: string;
     technologies: string[];
     difficultyLevel: string;
@@ -47,6 +49,10 @@ const SFresponse: Schema = new Schema({
 }, { _id: false });
 
 const NewInterviewSchema = new Schema<NewInterviewType>({
+    userId:{
+        type: String,
+        required:true,
+    },
     jobRole: {
         type: String,
         required: [true, 'Job role is required'],

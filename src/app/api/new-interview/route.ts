@@ -27,11 +27,14 @@ export const POST = async (request: Request) => {
     try {
         await connectToDb();
 
+
         const body = await request.json();
 
-        const { jobRole, technologies, difficultyLevel, queryResponseFromAi, sfResponseFromAi } = body;
+        const { jobRole, technologies, difficultyLevel, queryResponseFromAi, sfResponseFromAi , userId } = body;
+        
 
         const newInterview = await NewInterview.create({
+            userId,
             jobRole,
             technologies,
             difficultyLevel,
