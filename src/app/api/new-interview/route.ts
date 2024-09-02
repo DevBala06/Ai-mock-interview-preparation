@@ -1,37 +1,22 @@
-
 import { NextResponse } from "next/server";
 import connectToDb from "@/utils/config/db";
 import NewInterview from "@/utils/models/newInterview.model";
-
-
-export const GET = async () => {
-    try {
-        await connectToDb();
-
-        const interviews = await NewInterview.find();
-
-        return NextResponse.json({
-            message: "Interviews fetched successfully",
-            interviews
-        }, { status: 200 });
-
-    } catch (error: any) {
-        console.error("Error fetching interviews:", error);
-        return NextResponse.json({
-            message: "Failed to fetch interviews", error: error.message
-        }, { status: 500 });
-    }
-};
 
 export const POST = async (request: Request) => {
     try {
         await connectToDb();
 
-
         const body = await request.json();
-
-        const { jobRole, technologies, difficultyLevel, queryResponseFromAi, sfResponseFromAi , userId } = body;
+        console.log(body);
         
+
+        const { jobRole, technologies, difficultyLevel, queryResponseFromAi, userId } = body;
+
+        if (!Array.isArray(queryResponseFromAi) || !queryResponseFromAi.every(q => q.question && q.answer)) {
+            return NextResponse.json({
+                message: "Invalid format for queryResponseFromAi. Each item must have a 'question' and 'answer'."
+            }, { status: 400 });
+        }
 
         const newInterview = await NewInterview.create({
             userId,
@@ -39,20 +24,18 @@ export const POST = async (request: Request) => {
             technologies,
             difficultyLevel,
             queryResponseFromAi,
-            sfResponseFromAi,
         });
-
-        const savedInterview = await newInterview.save();
 
         return NextResponse.json({
             message: "Interview created successfully",
-            interview: savedInterview
+            interview: newInterview
         }, { status: 201 });
 
     } catch (error: any) {
         console.error("Error creating interview:", error);
         return NextResponse.json({
-            message: "Failed to create interview", error: error.message
+            message: "Failed to create interview",
+            error: error.message
         }, { status: 500 });
     }
 };

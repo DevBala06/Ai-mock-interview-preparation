@@ -1,31 +1,23 @@
-import { Document, model, models, Schema } from "mongoose";
+import { Schema, model, models } from 'mongoose';
 
-
-
-interface NewUserType extends Document {
-    _id:string;
-    userName:string;
-    createdAt: Date;
-    updatedAt: Date;
-};
-
-const NewUserSchema = new Schema<NewUserType>({
-    _id:{
-        type: String,
-        required:true,
-        unique:true,
-    },
-    userName: {
-        type: String,
-        required: true,
-        unique:true,
-        maxlength: [50, 'Username cannot exceed 50 characters'],
-    },
-}, {
-    timestamps: true,
-    versionKey: false,
+const NewUserSchema = new Schema({
+  _id: {
+    type: String,
+    required: true,
+  },
+  userName: {
+    type: String,
+    required: true, // This line indicates that userName is required
+  },
+  createdAt: {
+    type: Date,
+    required: true,
+  },
+  updatedAt: {
+    type: Date,
+    required: true,
+  },
 });
 
-const NewUser = models.NewUser<NewUserType> || model("NewUser", NewUserSchema)
-
-export default NewUser
+const NewUser = models.NewUser || model('NewUser', NewUserSchema);
+export default NewUser;
