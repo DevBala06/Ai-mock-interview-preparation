@@ -42,11 +42,12 @@ const DashHeader = () => {
   useEffect(() => {
     const sendUserData = async () => {
       if (user) {
+        const primaryEmail = user.emailAddresses.find(email => email.id === user.primaryEmailAddressId)?.emailAddress || "default@example.com";
         try {
           const userData = {
             clerkId: user.id,
             userName: user.username || "DefaultUsername",
-            email: user.primaryEmailAddress,
+            email: primaryEmail,
             createdAt: user.createdAt,
             updatedAt: new Date(),
           };
