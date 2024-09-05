@@ -98,7 +98,7 @@ const Home = () => {
           <Pricing />
         </div>
 
-        <div className="w-[90%] mx-auto h-full lg:h-screen mb-10 mt-11">
+        <div className="w-[90%] mx-auto h-full lg:h-fit mb-10 mt-11">
           <FAQAccordian />
         </div>
 
