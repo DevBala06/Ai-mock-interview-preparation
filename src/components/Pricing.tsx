@@ -87,62 +87,62 @@ const TiltCard = ({ items }: { items: Pricing }) => {
       }}
       className="relative justify-center items-center  border border-violet-500/20 rounded-lg p-3 flex flex-col gap-3 bg-transparent  "
     >
+      <div
+        style={{
+          transform: "translateZ(50px)",
+          transformStyle: "preserve-3d",
+        }}
+        className="  rounded-xl p-6 bg-white shadow-lg"
+      >
         <div
-            style={{
-              transform: "translateZ(50px)",
-              transformStyle: "preserve-3d",
-            }}
-            className="  rounded-xl p-6 bg-white shadow-lg"
-          >
-            <div
-        className="relative"
-        
-      >
-        <h1
-          
-          className="text-2xl font-semibold"
+          className="relative"
+
         >
-          {items.name}
-        </h1>
+          <h1
+
+            className="text-2xl font-semibold"
+          >
+            {items.name}
+          </h1>
+        </div>
+        <div
+
+        >
+          <p
+            className="text-sm">{items.description}</p>
+        </div>
+        <div
+
+          className="flex items-end justify-start gap-1"
+        >
+          <h1
+            className="text-5xl font-bold">${items.price}</h1>
+          <span
+          >/</span>
+          <p
+          >{items.duration}</p>
+        </div>
+        <div
+
+        >
+          <button
+            className="w-full rounded-lg border border-slate-500 hover:bg-black  hover:text-white flex items-center justify-center gap-2 font-semibold px-2 py-2 transition-all ease-in duration-700">
+            Get started
+          </button>
+        </div>
+        <div
+
+          className="mt-3"
+        >
+          <ul
+            className="list-none mt-2 flex flex-col gap-2">
+            {items.features.map((feature, index) => (
+              <Step key={index} title={feature} />
+            ))}
+          </ul>
+        </div>
       </div>
-      <div
-        
-      >
-        <p 
- className="text-sm">{items.description}</p>
-      </div>
-      <div
-        
-        className="flex items-end justify-start gap-1"
-      >
-        <h1 
- className="text-5xl font-bold">${items.price}</h1>
-        <span 
->/</span>
-        <p 
->{items.duration}</p>
-      </div>
-      <div
-       
-      >
-        <button 
- className="w-full rounded-lg border border-slate-500 hover:bg-black  hover:text-white flex items-center justify-center gap-2 font-semibold px-2 py-2 transition-all ease-in duration-700">
-          Get started
-        </button>
-      </div>
-      <div
-        
-        className="mt-3"
-      >
-        <ul 
- className="list-none mt-2 flex flex-col gap-2">
-          {items.features.map((feature, index) => (
-            <Step key={index} title={feature} />
-          ))}
-        </ul>
-      </div>
-          </div>
-      
+
     </motion.div>
   );
 };
