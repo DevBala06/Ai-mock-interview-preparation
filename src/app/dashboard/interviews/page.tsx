@@ -1,11 +1,14 @@
 import React from 'react'
-import Header from '../_components/interviews_comps/Header'
+import Header from '../_components/Header'
 
 const page = () => {
   return (
     <div>
       <div>
         <Header />
+      </div>
+      <div>
+        
       </div>
     </div>
   )

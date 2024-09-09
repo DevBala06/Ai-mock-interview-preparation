@@ -43,6 +43,12 @@ export const POST = async (request: Request) => {
 
         const { jobRole, technologies, difficultyLevel, queryResponseFromAi, userId } = body;
 
+        if (!jobRole || !technologies || !difficultyLevel) {
+            return NextResponse.json({
+                message: "Please fill all the requirements to generate questions "
+            },)
+        }
+
         if (!Array.isArray(queryResponseFromAi) || !queryResponseFromAi.every(q => q.question && q.answer)) {
             return NextResponse.json({
                 message: "Invalid format for queryResponseFromAi. Each item must have a 'question' and 'answer'."
