@@ -84,10 +84,12 @@ const Sidebar: React.FC = () => {
           transition={{ duration: 0.3 }}
 
         >
+          <Link href={'/dashboard'} className="flex items-center justify-center gap-2">
           <FiPieChart />
           <span className={`${open ? "block" : "hidden"}`}>
             Dashboard
           </span>
+          </Link>
         </motion.div>
         <motion.div
           className="relative flex font-semibold items-center text-[#FDFFF4] rounded-full z-50 space-x-2 p-2 cursor-pointer"
