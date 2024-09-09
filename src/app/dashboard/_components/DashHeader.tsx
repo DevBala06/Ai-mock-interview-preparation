@@ -113,11 +113,11 @@ const DashHeader = () => {
         </div>
       </div>
       <div>
-        {interviewData.interviews.length > 0 ? (
+        {/* {interviewData.interviews.length > 0 ? (
           <h1>Job Role: {interviewData.interviews[0].jobRole}</h1>
         ) : (
           <h1>No job roles available</h1>
-        )}
+        )} */}
       </div>
     </div>
   );
