@@ -1,0 +1,78 @@
+const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const inputPrompt = `jobrole: ${jobRole}, technologies: ${technologies}, difficultyLevel: ${difficultyLevel}. Based on these provided information, generate 5 interview questions in JSON format with "question" and "answer" fields in each JSON object.`;
+
+    try {
+      const result = await chatSession.sendMessage(inputPrompt);
+      const formattedResponse = result.response
+        .text()
+        .replace("```json", "")
+        .replace("```", "");
+      const parsedResponse = JSON.parse(formattedResponse);
+
+      setResponseFromAi(parsedResponse);
+
+      // Sending the data to the backend including the generated response
+      const response = await axios.post(
+        "http://localhost:3000/api/new-interview",
+        {
+          userId: user?.id,
+          jobRole,
+          technologies,
+          difficultyLevel,
+          queryResponseFromAi: parsedResponse,
+        }
+      );
+
+      console.log("Data successfully inserted:", response.data);
+    } catch (error) {
+      console.error("Error occurred:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  const interviewerNames = [
+    "Sarah Johnson", "Michael Chen", "Emily Rodriguez", "David Patel", "Olivia Kim"
+  ];
+  const randomInterviewer = interviewerNames[Math.floor(Math.random() * interviewerNames.length)];
+
+  const inputPrompt = `Create an interview dialogue flow for a ${jobRole} position with the following tech stack: ${technologies}. The difficulty level should be ${difficultyLevel}. 
+    
+    Start with a personalized introduction: "Hello Abhishek, I'm ${randomInterviewer}, your interviewer for today's interview. It's great to meet you today for this ${jobRole} position interview."
+    
+    Then, begin with an opening question that's always a variation of "Tell me about yourself" or a similar introductory question.
+    
+    Provide the response as a Json format, where each object represents a dialogue turn and includes the following properties: 
+    - questionNumber (starting from 1)
+    - question (the actual question)
+    - expectedAnswer (expected answer)
+    
+    The first object should be the introduction, the second should be the opening question, and the rest should be technical questions related to the job role and technologies.
+
+    You have to work strictly on this text "Make the response in json format this is compulsory, and dont give any of the instructions and dont give any of not related text below or above except json."
+    
+    Example structure:
+    [
+      {
+        "questionNumber": 1,
+        "question": "Hello Abhishek, I'm ${randomInterviewer}, your personal interviewer for this interview. It's great to meet you today for this ${jobRole} position interview."
+        "expectedAnswer": hello, mr/mrs ${randomInterviewer} im abhishek jaiswar,
+      },
+      {
+        "questionNumber": 2,
+        "question": "To start off, could you tell me a bit about yourself and your journey in the tech world?"
+        "expectedAnswer": "Ok, have 3 years of experience in this field, "or something"",
+      },
+      {
+        "questionNumber": 3,
+        "question": "A brief overview of your background, education, and relevant experience in the field."
+        "expectedAnswer": "Expected Answer add according to the questions",
+      },
+      // ... more questions and expected answers
+    ]
+    
+    Please generate a realistic interview dialogue following this structure, focusing on
