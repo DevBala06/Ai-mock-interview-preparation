@@ -4,6 +4,7 @@ import axios from "axios";
 import { useUser } from "@clerk/nextjs";
 import { Loader2Icon } from "lucide-react";
 import { useRouter } from 'next/navigation';
+import { ObjectId } from "mongoose";
 
 interface ModalProps {
   openModal: boolean;
@@ -14,6 +15,8 @@ interface UserData {
   jobRole: string;
   technologies: string;
   difficultyLevel: string;
+  userId: any
+
 }
 
 const Modal: React.FC<ModalProps> = ({ openModal, handleCloseModal }) => {
@@ -34,7 +37,8 @@ const Modal: React.FC<ModalProps> = ({ openModal, handleCloseModal }) => {
     const userData: UserData = {
       jobRole: formData.get("jobRole") as string,
       technologies: formData.get("technologies") as string,
-      difficultyLevel: formData.get("difficultyLevel") as string
+      difficultyLevel: formData.get("difficultyLevel") as string,
+      userId: user?.id
     };
   
     try {
@@ -42,7 +46,7 @@ const Modal: React.FC<ModalProps> = ({ openModal, handleCloseModal }) => {
       
       const response = await axios.post("/api/generate-interview", userData, {
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         }
       });
   
@@ -74,7 +78,7 @@ const Modal: React.FC<ModalProps> = ({ openModal, handleCloseModal }) => {
             <div className="flex justify-between items-center relative mb-4">
               <div>
                 <h2 className="text-xl font-black">Start Your Mock Interview</h2>
-                <p className="text-xs font-semibold text-gray-400">
+                <p className="text-xs font-semibold text-zinc-600">
                   Create Your Custom AI Mock Interview
                 </p>
               </div>
@@ -88,7 +92,7 @@ const Modal: React.FC<ModalProps> = ({ openModal, handleCloseModal }) => {
             </div>
             <form className="grid gap-4" onSubmit={onSubmit}>
               <div>
-                <label htmlFor="role" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="role" className="block text-sm font-semibold text-zinc-800">
                   Role
                 </label>
                 <input
@@ -96,30 +100,30 @@ const Modal: React.FC<ModalProps> = ({ openModal, handleCloseModal }) => {
                   name="jobRole"
                   id="role"
                   placeholder="Front-end Developer"
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                  className="mt-1 px-2 py-1 block w-full rounded-sm border-zinc-200 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                   required
                 />
               </div>
               <div>
-                <label htmlFor="technologies" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="technologies" className="block text-sm font-semibold text-zinc-800">
                   Technologies
                 </label>
                 <textarea
                   name="technologies"
                   id="technologies"
                   placeholder="React, Bootstrap, Express"
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                  className="mt-1 resize-none px-2 py-1 h-20 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                   required
                 />
               </div>
               <div>
-                <label htmlFor="difficulty" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="difficulty" className="block text-sm font-semibold text-zinc-800">
                   Difficulty
                 </label>
                 <select
                   name="difficultyLevel"
                   id="difficulty"
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                  className="mt-1 px-3 py-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                   required
                 >
                   <option value="easy">Easy</option>

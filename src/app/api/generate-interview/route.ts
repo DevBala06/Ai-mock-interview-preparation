@@ -2,29 +2,42 @@ import { NextRequest, NextResponse } from "next/server";
 import connectToDb from "@/utils/config/db";
 import { chatSession } from "@/utils/gemini-ai-model/question_answer_model";
 import Interview from "@/utils/models/interviewSchema";
+import NewUser from "@/utils/models/user.model";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     await connectToDb();
 
-    const interviews = await Interview.find({}).sort({ createdAt: -1 });
+    // Parse URL to get the query parameter (userId)
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get('userId'); // Get userId from the query parameters
+
+    let interviews;
+
+    if (userId) {
+      // Fetch interviews related to a specific userId
+      interviews = await Interview.find({ userId }).sort({ createdAt: -1 });
+    } 
 
     return NextResponse.json({ interviews });
   } catch (error) {
-    console.error("Error fetching interviews:", error);
+    console.error('Error fetching interviews:', error);
     return NextResponse.json(
-      { error: "Failed to fetch interviews" },
+      { error: 'Failed to fetch interviews' },
       { status: 500 }
     );
   }
 }
+
 
 export async function POST(request: NextRequest) {
   try {
     await connectToDb();
 
     const body = await request.json();
-    const { jobRole, technologies, difficultyLevel } = body;
+    const { jobRole, technologies, difficultyLevel, userId } = body;
+    console.log(userId);
+    
 
     if (!jobRole || !technologies || !difficultyLevel) {
       return NextResponse.json(
@@ -86,6 +99,7 @@ export async function POST(request: NextRequest) {
     }));
 
     const newInterview = await Interview.create({
+      userId,
       jobRole: jobRole,
       technologies: technologies,
       difficultyLevel: difficultyLevel,

@@ -78,7 +78,7 @@ export default function page() {
             Back to Interviews
           </button>
         </Link>
-        <Link href={`/interviews/${interview._id}/start`}>
+        <Link href={`/dashboard/cunduct-interview`}>
           <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors">
             Start Interview
           </button>

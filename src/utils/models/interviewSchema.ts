@@ -16,6 +16,10 @@ const questionSchema = new Schema({
 }, { _id: false });
 
 const interviewSchema = new Schema({
+    userId: {
+        type: String,
+        required: true,
+    },
     jobRole: {
         type: String,
         required: true
@@ -28,8 +32,8 @@ const interviewSchema = new Schema({
         type: String,
         required: true
     },
-    questions: [questionSchema]  
-});
+    questions: [questionSchema]
+}, { timestamps: true });
 
 const Interview = models.Interview || model('Interview', interviewSchema);
 
