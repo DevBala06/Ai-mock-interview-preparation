@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import axios from "axios";
 import { useUser } from "@clerk/nextjs";
 import { Loader2Icon } from "lucide-react";
-// import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 interface ModalProps {
   openModal: boolean;
@@ -19,7 +19,7 @@ interface UserData {
 const Modal: React.FC<ModalProps> = ({ openModal, handleCloseModal }) => {
   const [loading, setLoading] = useState(false);
   const { user } = useUser();
-  // const router = useRouter();
+  const router = useRouter();
 
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
@@ -40,18 +40,17 @@ const Modal: React.FC<ModalProps> = ({ openModal, handleCloseModal }) => {
     try {
       setLoading(true);
       
-      const response = await axios.post<{ interviewId: string }>("/api/generate-interview", userData, {
+      const response = await axios.post("/api/generate-interview", userData, {
         headers: {
           'Content-Type': 'application/json'
         }
       });
   
       console.log("Success:", response.data);
-      // router.push(`/interview/${response.data.interviewId}`);
+      router.push(`/dashboard/interviews`);
       
     } catch (error) {
       console.error("Error:", error);
-      // TODO: Add error handling, e.g., display an error message to the user
     } finally {
       setLoading(false);
       handleCloseModal();

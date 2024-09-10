@@ -3,6 +3,22 @@ import connectToDb from "@/utils/config/db";
 import { chatSession } from "@/utils/gemini-ai-model/question_answer_model";
 import Interview from "@/utils/models/interviewSchema";
 
+export async function GET() {
+  try {
+    await connectToDb();
+
+    const interviews = await Interview.find({}).sort({ createdAt: -1 });
+
+    return NextResponse.json({ interviews });
+  } catch (error) {
+    console.error("Error fetching interviews:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch interviews" },
+      { status: 500 }
+    );
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     await connectToDb();
