@@ -20,6 +20,10 @@ interface UserAnswer {
   answer: string;
 }
 
+interface ResultType {
+  transcript: string;
+}
+
 
 interface Question {
   questionNumber: number;
@@ -49,6 +53,8 @@ export default function page() {
   const [answered, setAnswered] = useState(0);
   const [unanswered, setUnanswered] = useState(0);
   const [isVideoOn, setIsVideoOn] = useState(false);
+  const [text, setText] = useState<string>('');
+
 
   const startVideo = () => {
     // Logic to start video
@@ -71,6 +77,20 @@ export default function page() {
     continuous: true,
     useLegacyResults: false
   });
+
+
+  useEffect(() => {
+    if (results && results.length > 0) {
+      const transcripts = results.map(result => {
+        if (typeof result === 'string') {
+          return result;
+        } else {
+          return (result as ResultType).transcript;
+        }
+      }).join('\n');
+      setText(transcripts);
+    }
+  }, [results]);
 
   const handleNext = () => {
     if(interview){
@@ -115,23 +135,7 @@ if(skipped < interview?.questions?.length - 1){
 
     fetchInterview();
   }, [params.id]);
-
-  useEffect(() => {
-    if (results && results.length > 0) {
-      results.forEach((result) => {
-        if (typeof result === 'object' && result.transcript) {
-          setUserAnswers((prevAnswers) => [
-            ...prevAnswers,
-            { 
-              question: interview?.questions[currentQuestionIndex]?.question.toString() || "", 
-              answer: result.transcript 
-            },
-          ]);
-          console.log(userAnswers);
-        }
-      });
-    }
-  }, [results, currentQuestionIndex, interview]);
+  
   
   
   
@@ -232,7 +236,9 @@ if(skipped < interview?.questions?.length - 1){
       </div>
       <div className="relative  bg-white w-full p-5 rounded-lg h-[55%]  flex justify-center items-center">
         <label htmlFor="userEditor" className="text-sm font-semibold block absolute top-1 left-6" >Answer Editor</label>
-      <textarea name="userEditor" placeholder="Enter your answer" rows={11} cols={60} id="UserEditor" className="bg-gray-100 rounded-lg text-gray-800 font-semibold p-2 outline-1 "></textarea>
+      <textarea name="userEditor" placeholder="Enter your answer" rows={11} cols={60} id="UserEditor" className="bg-gray-100 rounded-lg text-gray-800 font-semibold p-2 outline-1 "
+      value={text} 
+      onChange={(e) => setText(e.target.value)} ></textarea>
       </div>
     </div>
     </div>
