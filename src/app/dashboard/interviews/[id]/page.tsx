@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams } from "next/navigation";
 import axios from "axios";
 import Link from "next/link";
@@ -54,6 +54,7 @@ export default function page() {
   const [unanswered, setUnanswered] = useState(0);
   const [isVideoOn, setIsVideoOn] = useState(false);
   const [text, setText] = useState<string>('');
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
 
   const startVideo = () => {
@@ -81,16 +82,18 @@ export default function page() {
 
   useEffect(() => {
     if (results && results.length > 0) {
-      const transcripts = results.map(result => {
-        if (typeof result === 'string') {
-          return result;
-        } else {
-          return (result as ResultType).transcript;
+      
+      const latestResult = results.reduce((latest, current) => {
+        if (current?.timestamp > latest?.timestamp) {
+          return current;
         }
-      }).join('\n');
-      setText(transcripts);
+        return latest;
+      }, results[0]);
+  
+      setText(latestResult?.transcript);
     }
   }, [results]);
+  
 
   const handleNext = () => {
     if(interview){
@@ -116,6 +119,30 @@ if(skipped < interview?.questions?.length - 1){
 }    }
   }
   };
+
+  const handleComplete = () => {
+    if (interview && textareaRef.current) {
+      const currentQuestion = interview?.questions[currentQuestionIndex];
+       const newAnswer: UserAnswer = {
+        question: currentQuestion?.question,
+        answer: textareaRef.current.value,
+      };
+  
+      setUserAnswers(prevAnswers => [...prevAnswers, newAnswer]);
+      
+  
+      // Optionally clear the textarea after saving
+      textareaRef.current.value = '';
+      setText('');
+      handleNext();
+    }
+  };
+
+  useEffect(() => {
+    console.log(userAnswers);
+  }, [userAnswers])
+  
+  
 
   useEffect(() => {
     const fetchInterview = async () => {
@@ -240,11 +267,12 @@ if(skipped < interview?.questions?.length - 1){
       </div>
       </div>
       {/* Text Editor Section */}
-      <div className="relative  bg-white w-full p-5 rounded-lg h-[55%]  flex justify-center items-center">
-        <label htmlFor="userEditor" className="text-sm font-semibold block absolute top-1 left-6" >Answer Editor</label>
-      <textarea name="userEditor" placeholder="Enter your answer" rows={11} cols={60} id="UserEditor" className="bg-gray-100 rounded-lg text-gray-800 font-semibold p-2 outline-1 "
-      value={text} 
+      <div className="relative  bg-white w-full p-5 rounded-lg h-[55%]  flex flex-col gap-3 justify-center items-center">
+        <label htmlFor="userEditor" className="text-sm  font-semibold block absolute top-1 left-6" >Answer Editor</label>
+      <textarea name="userEditor" placeholder="Enter your answer" rows={11} cols={50} id="UserEditor" className="bg-gray-100  rounded-lg text-gray-800 mt-3 font-semibold p-2 outline-1 "
+      value={text}  ref={textareaRef}
       onChange={(e) => setText(e.target.value)} ></textarea>
+      <button type="button" className="px-4 py-2  bg-gray-400 text-bold text-gray-800 rounded-lg hover:bg-gray-400" onClick={handleComplete}>Submit</button>
       </div>
     </div>
     </div>
