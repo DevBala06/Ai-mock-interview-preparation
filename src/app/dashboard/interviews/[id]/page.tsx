@@ -156,6 +156,7 @@ if(skipped < interview?.questions?.length - 1){
   return (
     <div className="flex flex-1 justify-between gap-x-7">
       <div className="flex w-[50%] h-screen flex-col">
+      {/* Job Role Section */}
       <div>
         <h1 className="bg-white relative p-3 w-full rounded-lg text-base font-bold flex items-center gap-3">
           <Briefcase className="text-2xl text-amber-600" />
@@ -168,6 +169,7 @@ if(skipped < interview?.questions?.length - 1){
           </div>
         </h1>
       </div>
+      {/* Video Section */}
       <div className="bg-white p-4 mt-4 rounded-3xl w-full h-[60%]">
       <div
         className="relative w-full h-full"
@@ -197,18 +199,21 @@ if(skipped < interview?.questions?.length - 1){
       </div>
       
       </div>
+      {/* Audio & Video Icons Section */}
       <div className="w-full bg-slate-800 cursor-pointer rounded-2xl mt-4 justify-evenly p-3 flex gap-2 text-2xl text-white ">
           <div onClick={isRecording ? stopSpeechToText : startSpeechToText}>{isRecording ? <FaMicrophone/> : <FaMicrophoneSlash/>} </div>
           <div onClick={isVideoOn ? stopVideo : startVideo}>
         {isVideoOn ? <FaVideo /> : <FaVideoSlash />}
       </div>
       </div>
+        {/* No. of quest answered / unanswered / skipped nd all section  */}
       <div className=" flex justify-evenly text-sm font-bold w-full rounded-xl mt-4 bg-white p-3">
           <h1><span className="bg-green-400 p-1 text-white rounded-xl mr-2">Answered </span>: {answered}</h1>
           <h1><span className=" bg-red-400 p-1 text-white rounded-xl mr-2">Unanswered </span>: {unanswered}</h1>
           <h1><span className="bg-orange-400 p-1 text-white rounded-xl mr-2">Skipped </span>: {skipped}</h1>
       </div>
     </div>
+    {/* Displaying Question Section */}
     <div className="flex gap-y-4 w-[50%] h-screen flex-col">
       <div className="bg-white w-fit p-4 rounded-lg">
         <div className="w-full mt-3 bg-gray-800 text-white p-3 rounded-xl">
@@ -234,6 +239,7 @@ if(skipped < interview?.questions?.length - 1){
           </div>
       </div>
       </div>
+      {/* Text Editor Section */}
       <div className="relative  bg-white w-full p-5 rounded-lg h-[55%]  flex justify-center items-center">
         <label htmlFor="userEditor" className="text-sm font-semibold block absolute top-1 left-6" >Answer Editor</label>
       <textarea name="userEditor" placeholder="Enter your answer" rows={11} cols={60} id="UserEditor" className="bg-gray-100 rounded-lg text-gray-800 font-semibold p-2 outline-1 "
