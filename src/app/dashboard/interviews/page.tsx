@@ -9,6 +9,8 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { LayoutGrid, List } from "lucide-react"
 import Header from '../_components/Header'
+import { useRouter } from 'next/navigation'
+
 
 interface InterviewData {
   _id: string
@@ -24,6 +26,8 @@ export default function InterviewsPage() {
   const [error, setError] = useState<string | null>(null)
   const [viewMode, setViewMode] = useState<'card' | 'table'>('card')
   const { user } = useUser()
+  const router = useRouter()
+
 
   useEffect(() => {
     const fetchInterviews = async () => {
