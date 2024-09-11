@@ -164,7 +164,7 @@ if(skipped < interview?.questions?.length - 1){
             {interview?.jobRole}
           </span>
           <div className="absolute text-2xl cursor-pointer right-2">
-            <IoMdExit className="text-red-500"/>
+            <Link href={"/dashboard/interviews"}><IoMdExit className="text-red-500"/></Link>
           </div>
         </h1>
       </div>

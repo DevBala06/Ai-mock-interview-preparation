@@ -91,6 +91,12 @@ const UserPermissionModal = ({ openModal, handleCloseModal, interviewId }: Modal
                 &times;
               </button>
             </div>
+            {webcamEnabled && (
+              <div className="mt-4 flex flex-col justify-center items-center mb-3  h-[45%] w-full">
+                <Webcam ref={webcamRef} className=" object-cover w-[55%]" />
+                <h1 className='text-base font-bold'>Preview</h1>
+              </div>
+            )}
 
             <div className="flex flex-col gap-y-3 border border-gray-200 rounded-lg p-2 bg-blue-200 text-blue-800 font-semibold">
               <div className="flex gap-1">
@@ -166,11 +172,7 @@ const UserPermissionModal = ({ openModal, handleCloseModal, interviewId }: Modal
               </button>
             </div>
 
-            {webcamEnabled && (
-              <div className="mt-4 flex justify-center">
-                <Webcam ref={webcamRef} className="h-72 w-72" />
-              </div>
-            )}
+           
           </motion.div>
         </div>
       )}
