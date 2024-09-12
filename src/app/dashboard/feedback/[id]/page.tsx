@@ -1,3 +1,4 @@
+
 'use client'
 
 import React, { useEffect, useState } from 'react'
@@ -7,6 +8,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Progress } from "@/components/ui/progress"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { AlertCircle, CheckCircle2 } from 'lucide-react'
+
+interface Question {
+  questionNumber: number
+  question: string
+  expectedAnswer: string
+}
 
 interface FeedbackItem {
   questionNumber: number
@@ -20,7 +27,7 @@ interface InterviewData {
   jobRole: string
   technologies: string
   difficultyLevel: string
-  questions: Array<{ question: string; expectedAnswer: string }>
+  questions: Question[]
   userAnswers: string[]
   feedback: {
     feedback: FeedbackItem[]
@@ -31,14 +38,17 @@ interface InterviewData {
 
 export default function FeedbackPage() {
   const [interviewData, setInterviewData] = useState<InterviewData | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const params = useParams()
+  console.log(`This is ${params}`);
+
 
   useEffect(() => {
     const fetchInterviewData = async () => {
       try {
-        const response = await axios.get(`/api/submit-interview?interviewId=${params.interviewId}`)
+        setLoading(true)
+        const response = await axios.get(`/api/generate-interview/${params.id}`)
         setInterviewData(response.data.interview)
         setLoading(false)
       } catch (error) {
@@ -48,10 +58,10 @@ export default function FeedbackPage() {
       }
     }
 
-    if (params.interviewId) {
+    if (params.id) {
       fetchInterviewData()
     }
-  }, [params.interviewId])
+  }, [params.id])
 
   if (loading) {
     return <div className="flex justify-center items-center h-screen">Loading feedback...</div>
@@ -77,12 +87,12 @@ export default function FeedbackPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4">
       <Card className="mb-8">
         <CardHeader>
           <CardTitle>Interview Feedback</CardTitle>
           <CardDescription>
-            Job Role: {interviewData.jobRole} | Difficulty: {interviewData.difficultyLevel}
+            Job Role: {interviewData.jobRole} | Technologies: {interviewData.technologies} | Difficulty: {interviewData.difficultyLevel}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -94,7 +104,20 @@ export default function FeedbackPage() {
         </CardContent>
       </Card>
 
-      <Accordion type="single" collapsible className="w-full">
+      <div>
+        <div>
+
+        </div>
+        <div>
+
+        </div>
+        <div>
+          
+        </div>
+      </div>
+
+
+      {/* <Accordion type="single" collapsible className="w-full">
         {interviewData.feedback.feedback.map((item, index) => (
           <AccordionItem key={item.questionNumber} value={`item-${item.questionNumber}`}>
             <AccordionTrigger>
@@ -119,7 +142,40 @@ export default function FeedbackPage() {
             </AccordionContent>
           </AccordionItem>
         ))}
-      </Accordion>
+      </Accordion> */}
+      <div className='flex flex-col gap-7'>
+        {interviewData.feedback.feedback.map((item, index) => (
+          <div className='bg-gray-50 rounded-lg border border-zinc-200 p-10' key={item.questionNumber}>
+            <div className=''>
+              <div>
+                <h1 className=' text-zinc-800 font-semibold'>Question: { item.questionNumber}</h1>
+              </div>
+              <div className='py-3'>
+                <div className='py-2'>
+                  <span className=' text-zinc-800 font-semibold'>Answer</span>
+                  <p className='py-1 font-semibold text-zinc-500'>{interviewData.questions[index].question}</p>
+                </div>
+                <div className='py-2'>
+                  <span className=' text-zinc-800 font-semibold'>Your Answer</span>
+                  <p className='py-1 font-semibold text-zinc-500'>{interviewData.userAnswers[index]}</p>
+                </div>
+                <div className='py-2'>
+                  <span className=' text-zinc-800 font-semibold'> Expected Answer</span>
+                  <p className='py-1 font-semibold text-zinc-500'>{interviewData.questions[index].expectedAnswer}</p>
+                </div>
+                <div className='py-2'>
+                  <span className=' text-zinc-800 font-semibold'>Feedback</span>
+                  <p className='py-1 font-semibold text-zinc-500'>{item.suggestions}</p>
+                </div>
+              </div>
+            </div>
+            <div className='flex gap-3'>
+              <p className='px-4 py-0.5 bg-orange-50 border border-orange-300 rounded-full text-sm font-semibold'>Accuracy: {item.accuracy}</p>
+              <p className='px-4 py-0.5 bg-green-50 border border-green-300 rounded-full text-sm font-semibold'>Completeness: {item.completeness}</p>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }

@@ -3,16 +3,6 @@ import connectToDb from "@/utils/config/db";
 import { chatSession } from "@/utils/gemini-ai-model/question_answer_model";
 import Interview from "@/utils/models/interviewSchema";
 
-
-
-
-export async function GET() {
-  return NextResponse.json({
-    message: "Working"
-  })
-}
-
-
 export async function POST(request: NextRequest) {
   try {
     await connectToDb();
@@ -20,16 +10,15 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { interviewId, userAnswers } = body;
 
-    if (!interviewId || !userAnswers) {
+    if (!interviewId || !userAnswers || !Array.isArray(userAnswers)) {
       return NextResponse.json(
-        { error: "Missing required fields" },
+        { error: "Missing required fields or invalid data format" },
         { status: 400 }
       );
     }
 
     // Fetch the original interview questions
     const interview = await Interview.findById(interviewId);
-    console.log(interview);
     
     if (!interview) {
       return NextResponse.json(
@@ -38,13 +27,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Ensure userAnswers is an array of strings
+    const formattedUserAnswers = userAnswers.map((answer: any) => answer.answer);
+
     // Prepare the input for Gemini API
     const inputPrompt = `Analyze the following interview responses:
 
-    ${userAnswers.map((answer: string, index: number) => `
-    Question ${index + 1}: ${interview.questions.question}
-    Expected Answer: ${interview.questions.expectedAnswer}
-    User's Answer: ${answer}
+    ${interview.questions.map((question: any, index: number) => `
+    Question ${question.questionNumber}: ${question.question}
+    Expected Answer: ${question.expectedAnswer}
+    User's Answer: ${formattedUserAnswers[index]}
     `).join('\n')}
 
     Please provide feedback on each answer, including:
@@ -70,16 +62,27 @@ export async function POST(request: NextRequest) {
 
     const result = await chatSession.sendMessage(inputPrompt);
     const feedbackResponse = await result.response.text();
-    const parsedFeedback = JSON.parse(feedbackResponse);
+    let parsedFeedback;
+
+    try {
+      parsedFeedback = JSON.parse(feedbackResponse);
+    } catch (error) {
+      console.error("Error parsing Gemini API response:", error);
+      return NextResponse.json(
+        { error: "Failed to parse feedback response" },
+        { status: 500 }
+      );
+    }
 
     // Update the existing Interview document with user answers and feedback
-    interview.userAnswers = userAnswers;
+    interview.userAnswers = formattedUserAnswers;
     interview.feedback = parsedFeedback;
     await interview.save();
 
     return NextResponse.json({
       message: "Interview answers submitted and feedback generated",
-      interviewId: interview._id
+      interviewId: interview._id,
+      userId: interview.userId
     });
   } catch (error) {
     console.error("Error processing interview answers:", error);
