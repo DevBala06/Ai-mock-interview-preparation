@@ -215,7 +215,7 @@ const Navbar = () => {
           ) : (
             <div className="flex items-center justify-center gap-8">
               <div>
-                <Link href="/dashboard">
+                <Link href="/dashboard" prefetch>
                   <button
                     onMouseEnter={(e) => {
                       e.currentTarget.style.backgroundColor = "black";

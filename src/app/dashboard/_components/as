@@ -1,78 +1,264 @@
-const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
+"use client";
 
-    const inputPrompt = `jobrole: ${jobRole}, technologies: ${technologies}, difficultyLevel: ${difficultyLevel}. Based on these provided information, generate 5 interview questions in JSON format with "question" and "answer" fields in each JSON object.`;
+import { useState, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
+import axios from "axios";
+import Link from "next/link";
+import { useUser } from "@clerk/nextjs";
+import { Briefcase } from "lucide-react";
+import Webcam from "react-webcam";
+import { IoMdExit } from "react-icons/io";
+import { FaMicrophone, FaMicrophoneSlash, FaVideo, FaVideoSlash } from "react-icons/fa";
+import useSpeechToText from 'react-hook-speech-to-text';
 
-    try {
-      const result = await chatSession.sendMessage(inputPrompt);
-      const formattedResponse = result.response
-        .text()
-        .replace("```json", "")
-        .replace("```", "");
-      const parsedResponse = JSON.parse(formattedResponse);
+interface UserAnswer {
+  question: string;
+  answer: string;
+}
 
-      setResponseFromAi(parsedResponse);
+interface ResultType {
+  transcript: string;
+}
 
-      // Sending the data to the backend including the generated response
-      const response = await axios.post(
-        "http://localhost:3000/api/new-interview",
-        {
-          userId: user?.id,
-          jobRole,
-          technologies,
-          difficultyLevel,
-          queryResponseFromAi: parsedResponse,
+interface Question {
+  questionNumber: number;
+  question: string;
+  expectedAnswer: string;
+}
+
+interface InterviewData {
+  _id: string;
+  jobRole: string;
+  technologies: string;
+  difficultyLevel: string;
+  questions: Question[];
+  createdAt: string;
+}
+
+export default function InterviewPage() {
+  const [interview, setInterview] = useState<InterviewData | null>(null);
+  const [userAnswers, setUserAnswers] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [errors, setErrors] = useState<string | null>(null);
+  const params = useParams();
+  const router = useRouter();
+  const { user } = useUser();
+
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [skipped, setSkipped] = useState(0);
+  const [answered, setAnswered] = useState(0);
+  const [unanswered, setUnanswered] = useState(0);
+  const [isVideoOn, setIsVideoOn] = useState(false);
+  const [text, setText] = useState<string>('');
+
+  const startVideo = () => setIsVideoOn(true);
+  const stopVideo = () => setIsVideoOn(false);
+
+  const {
+    error,
+    interimResult,
+    isRecording,
+    results,
+    startSpeechToText,
+    stopSpeechToText,
+  } = useSpeechToText({
+    continuous: false,
+    useLegacyResults: false
+  });
+
+  useEffect(() => {
+    if (results && results.length > 0) {
+      const transcripts = results.map(result => {
+        if (typeof result === 'string') {
+          return result;
+        } else {
+          return (result as ResultType).transcript;
         }
-      );
+      }).join('\n');
+      setText(transcripts);
+    }
+  }, [results]);
 
-      console.log("Data successfully inserted:", response.data);
-    } catch (error) {
-      console.error("Error occurred:", error);
-    } finally {
-      setLoading(false);
+  const handleNext = () => {
+    if (interview) {
+      if (currentQuestionIndex < interview.questions.length - 1) {
+        // Save the current answer
+        setUserAnswers(prev => {
+          const newAnswers = [...prev];
+          newAnswers[currentQuestionIndex] = text;
+          return newAnswers;
+        });
+
+        setCurrentQuestionIndex(prevIndex => prevIndex + 1);
+        setText(''); // Clear the text for the next question
+        setAnswered(prev => prev + 1);
+        setUnanswered(prev => prev - 1);
+      } else {
+        // Last question, handle submission
+        handleSubmit();
+      }
     }
   };
 
+  const handleSkip = () => {
+    if (interview) {
+      if (currentQuestionIndex < interview.questions.length - 1) {
+        setCurrentQuestionIndex(prevIndex => prevIndex + 1);
+        setText(''); 
+        setSkipped(prev => prev + 1);
+      }
+    }
+  };
 
-  const interviewerNames = [
-    "Sarah Johnson", "Michael Chen", "Emily Rodriguez", "David Patel", "Olivia Kim"
-  ];
-  const randomInterviewer = interviewerNames[Math.floor(Math.random() * interviewerNames.length)];
+  const handleSubmit = async () => {
+    if (interview) {
+      try {
+        // Save the last answer
+        const finalAnswers = [...userAnswers, text];
+        
+        const response = await axios.post('/api/submit-interview', {
+          interviewId: interview._id,
+          userAnswers: finalAnswers
+        });
+        
+        const { interviewId } = response.data;
+        router.push(`/feedback/${interviewId}`);
+      } catch (error) {
+        console.error("Error submitting answers:", error);
+        setErrors("Failed to submit answers. Please try again.");
+      }
+    }
+  };
 
-  const inputPrompt = `Create an interview dialogue flow for a ${jobRole} position with the following tech stack: ${technologies}. The difficulty level should be ${difficultyLevel}. 
-    
-    Start with a personalized introduction: "Hello Abhishek, I'm ${randomInterviewer}, your interviewer for today's interview. It's great to meet you today for this ${jobRole} position interview."
-    
-    Then, begin with an opening question that's always a variation of "Tell me about yourself" or a similar introductory question.
-    
-    Provide the response as a Json format, where each object represents a dialogue turn and includes the following properties: 
-    - questionNumber (starting from 1)
-    - question (the actual question)
-    - expectedAnswer (expected answer)
-    
-    The first object should be the introduction, the second should be the opening question, and the rest should be technical questions related to the job role and technologies.
+  useEffect(() => {
+    const fetchInterview = async () => {
+      try {
+        const response = await axios.get(`/api/generate-interview/${params.id}`);
+        setInterview(response.data.interview);
+        setUnanswered(response.data.interview?.questions?.length || 0);
+        setUserAnswers(new Array(response.data.interview?.questions?.length).fill(''));
+      } catch (err) {
+        setErrors("Failed to fetch interview");
+        console.error("Error fetching interview:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    You have to work strictly on this text "Make the response in json format this is compulsory, and dont give any of the instructions and dont give any of not related text below or above except json."
-    
-    Example structure:
-    [
-      {
-        "questionNumber": 1,
-        "question": "Hello Abhishek, I'm ${randomInterviewer}, your personal interviewer for this interview. It's great to meet you today for this ${jobRole} position interview."
-        "expectedAnswer": hello, mr/mrs ${randomInterviewer} im abhishek jaiswar,
-      },
-      {
-        "questionNumber": 2,
-        "question": "To start off, could you tell me a bit about yourself and your journey in the tech world?"
-        "expectedAnswer": "Ok, have 3 years of experience in this field, "or something"",
-      },
-      {
-        "questionNumber": 3,
-        "question": "A brief overview of your background, education, and relevant experience in the field."
-        "expectedAnswer": "Expected Answer add according to the questions",
-      },
-      // ... more questions and expected answers
-    ]
-    
-    Please generate a realistic interview dialogue following this structure, focusing on
+    fetchInterview();
+  }, [params.id]);
+
+  if (loading) {
+    return <div className="text-center mt-8">Loading interview...</div>;
+  }
+
+  if (errors) {
+    return <div className="text-center mt-8 text-red-500">{errors}</div>;
+  }
+
+  if (!interview) {
+    return <div className="text-center mt-8">Interview not found</div>;
+  }
+
+  return (
+    <div className="flex flex-1 justify-between gap-x-7">
+      <div className="flex w-[50%] h-screen flex-col">
+        {/* Job Role Section */}
+        <div>
+          <h1 className="bg-white relative p-3 w-full rounded-lg text-base font-bold flex items-center gap-3">
+            <Briefcase className="text-2xl text-amber-600" />
+            <span className="text-black">Scheduled Interview for : </span>
+            <span className="text-white bg-slate-900 text-sm p-2 rounded-lg font-semibold ml-1">
+              {interview?.jobRole}
+            </span>
+            <div className="absolute text-2xl cursor-pointer right-2">
+              <Link href={"/dashboard/interviews"}><IoMdExit className="text-red-500"/></Link>
+            </div>
+          </h1>
+        </div>
+        {/* Video Section */}
+        <div className="bg-white p-4 mt-4 rounded-3xl w-full h-[60%]">
+          <div className="relative w-full h-full">
+            {isVideoOn ? (
+              <Webcam
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  border: "1px solid gray",
+                  borderRadius: "30px",
+                  objectFit: "cover",
+                }}
+              />
+            ) : (
+              <div
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  border: "1px solid gray",
+                  borderRadius: "30px",
+                  backgroundColor: "black",
+                }}
+              />
+            )}
+          </div>
+        </div>
+        {/* Audio & Video Icons Section */}
+        <div className="w-full bg-slate-800 cursor-pointer rounded-2xl mt-4 justify-evenly p-3 flex gap-2 text-2xl text-white ">
+          <div onClick={isRecording ? stopSpeechToText : startSpeechToText}>
+            {isRecording ? <FaMicrophone/> : <FaMicrophoneSlash/>}
+          </div>
+          <div onClick={isVideoOn ? stopVideo : startVideo}>
+            {isVideoOn ? <FaVideo /> : <FaVideoSlash />}
+          </div>
+        </div>
+        {/* No. of quest answered / unanswered / skipped section */}
+        <div className="flex justify-evenly text-sm font-bold w-full rounded-xl mt-4 bg-white p-3">
+          <h1><span className="bg-green-400 p-1 text-white rounded-xl mr-2">Answered </span>: {answered}</h1>
+          <h1><span className="bg-red-400 p-1 text-white rounded-xl mr-2">Unanswered </span>: {unanswered}</h1>
+          <h1><span className="bg-orange-400 p-1 text-white rounded-xl mr-2">Skipped </span>: {skipped}</h1>
+        </div>
+      </div>
+      {/* Displaying Question Section */}
+      <div className="flex gap-y-4 w-[50%] h-screen flex-col">
+        <div className="bg-white w-fit p-4 rounded-lg">
+          <div className="w-full mt-3 bg-gray-800 text-white p-3 rounded-xl">
+            <h2 className="text-lg font-semibold mb-2">
+              Question {currentQuestionIndex + 1} of {interview?.questions.length}
+            </h2>
+            <p className="text-gray-100 text-sm font-semibold mb-4">
+              {interview?.questions[currentQuestionIndex].question}
+            </p>
+            <div className="flex justify-between">
+              <button
+                onClick={handleSkip}
+                className="px-4 py-2 bg-gray-400 text-bold text-gray-800 rounded-lg hover:bg-gray-400"
+              >
+                Skip
+              </button>
+              <button
+                onClick={handleNext}
+                className="px-4 py-2 bg-blue-500 text-bold text-white rounded-lg hover:bg-blue-600"
+              >
+                {currentQuestionIndex === interview.questions.length - 1 ? 'Submit' : 'Next'}
+              </button>
+            </div>
+          </div>
+        </div>
+        {/* Text Editor Section */}
+        <div className="relative bg-white w-full p-5 rounded-lg h-[55%] flex justify-center items-center">
+          <label htmlFor="userEditor" className="text-sm font-semibold block absolute top-1 left-6">Answer Editor</label>
+          <textarea
+            name="userEditor"
+            placeholder="Enter your answer"
+            rows={11}
+            cols={60}
+            id="UserEditor"
+            className="bg-gray-100 rounded-lg text-gray-800 font-semibold p-2 outline-1"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+          ></textarea>
+        </div>
+      </div>
+    </div>
+  );
+}

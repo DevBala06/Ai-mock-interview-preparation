@@ -32,7 +32,19 @@ const interviewSchema = new Schema({
         type: String,
         required: true
     },
-    questions: [questionSchema]
+    questions: [questionSchema],
+    userAnswers: [String],
+    feedback: {
+        feedback: [{
+            questionNumber: Number,
+            accuracy: String,
+            completeness: String,
+            suggestions: String
+        }],
+        overallPerformance: Number,
+        generalFeedback: String
+    }
+
 }, { timestamps: true });
 
 const Interview = models.Interview || model('Interview', interviewSchema);

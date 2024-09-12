@@ -13,6 +13,7 @@ import { FaMicrophoneSlash } from "react-icons/fa";
 import { FaVideo } from "react-icons/fa6";
 import { FaVideoSlash } from "react-icons/fa6";
 import useSpeechToText from 'react-hook-speech-to-text';
+import { useRouter } from "next/navigation";
 
 
 interface UserAnswer {
@@ -55,6 +56,8 @@ export default function page() {
   const [isVideoOn, setIsVideoOn] = useState(false);
   const [text, setText] = useState<string>('');
 
+  // const router = useRouter()
+
 
   const startVideo = () => {
     // Logic to start video
@@ -93,28 +96,106 @@ export default function page() {
   }, [results]);
 
   const handleNext = () => {
-    if(interview){
-      if (currentQuestionIndex < interview?.questions?.length - 1) {
+    if (interview) {
+      const isLastQuestion = currentQuestionIndex === interview.questions.length - 1;
+
+      if (currentQuestionIndex < interview.questions.length - 1) {
+        // Save the current answer
+        setUserAnswers(prevAnswers => {
+          const question = interview.questions[currentQuestionIndex].question;
+          const newAnswer = text; // Assuming `text` contains the current answer
+
+          // Find if there's already an entry for the current question
+          const existingAnswerIndex = prevAnswers.findIndex(answer => answer.question === question);
+
+          if (existingAnswerIndex !== -1) {
+            // Update the existing answer
+            const updatedAnswers = [...prevAnswers];
+            updatedAnswers[existingAnswerIndex] = {
+              question,
+              answer: newAnswer
+            };
+            return updatedAnswers;
+          } else {
+            // Add a new answer
+            return [...prevAnswers, { question, answer: newAnswer }];
+          }
+        });
+
+        // Move to the next question
         setCurrentQuestionIndex(prevIndex => prevIndex + 1);
-        if(answered < interview?.questions?.length + 1){
+
+        // Update the answered/unanswered counts
+        if (answered < interview.questions.length) {
           setAnswered(prevIndex => prevIndex + 1);
         }
-        if(unanswered >= 1)
-        setUnanswered(prevIndex => prevIndex - 1)
+        if (unanswered > 0) {
+          setUnanswered(prevIndex => prevIndex - 1);
+        }
+
+        // Clear the text for the next question
+        setText('');
+      } else if (isLastQuestion) {
+        // Save the answer for the last question
+        setUserAnswers(prevAnswers => {
+          const question = interview.questions[currentQuestionIndex].question;
+          const newAnswer = text; // Assuming `text` contains the current answer
+
+          // Find if there's already an entry for the last question
+          const existingAnswerIndex = prevAnswers.findIndex(answer => answer.question === question);
+
+          if (existingAnswerIndex !== -1) {
+            // Update the existing answer
+            const updatedAnswers = [...prevAnswers];
+            updatedAnswers[existingAnswerIndex] = {
+              question,
+              answer: newAnswer
+            };
+            return updatedAnswers;
+          } else {
+            // Add a new answer
+            return [...prevAnswers, { question, answer: newAnswer }];
+          }
+        });
+
+        // Handle submission if it's the last question
+        handleSubmit();
+      }
+    }
+  };
+
+
+  const handleSubmit = async () => {
+    if (interview) {
+      try {
+        // Save the last answer
+        const finalAnswers = [...userAnswers, text];
+
+        const response = await axios.post('/api/submit-interview', {
+          interviewId: interview._id,
+          userAnswers: finalAnswers
+        });
+
+        const { interviewId } = response.data;
+        // if (response.status === 200) router.push(`/feedback/${interviewId}`)
+      } catch (error) {
+        console.error("Error submitting answers:", error);
+        setErrors("Failed to submit answers. Please try again.");
       }
     }
   };
 
   const handleSkip = () => {
-    
-    if(interview){
-    if (currentQuestionIndex < interview?.questions?.length - 1) {
-      setCurrentQuestionIndex(prevIndex => prevIndex + 1);
-if(skipped < interview?.questions?.length - 1){
-  setSkipped(prevIndex => prevIndex + 1);
 
-}    }
-  }
+    if (interview) {
+      if (currentQuestionIndex < interview?.questions?.length - 1) {
+        setCurrentQuestionIndex(prevIndex => prevIndex + 1);
+        if (skipped < interview?.questions?.length - 1) {
+          setSkipped(prevIndex => prevIndex + 1);
+
+        }
+      }
+    }
   };
 
   useEffect(() => {
@@ -135,11 +216,7 @@ if(skipped < interview?.questions?.length - 1){
 
     fetchInterview();
   }, [params.id]);
-  
-  
-  
-  
-  
+
 
   if (loading) {
     return <div className="text-center mt-8">Loading interview...</div>;
@@ -156,97 +233,102 @@ if(skipped < interview?.questions?.length - 1){
   return (
     <div className="flex flex-1 justify-between gap-x-7">
       <div className="flex w-[50%] h-screen flex-col">
-      {/* Job Role Section */}
-      <div>
-        <h1 className="bg-white relative p-3 w-full rounded-lg text-base font-bold flex items-center gap-3">
-          <Briefcase className="text-2xl text-amber-600" />
-          <span className="text-black">Scheduled Interview for : </span>
-          <span className="text-white bg-slate-900 text-sm p-2 rounded-lg font-semibold ml-1">
-            {interview?.jobRole}
-          </span>
-          <div className="absolute text-2xl cursor-pointer right-2">
-            <Link href={"/dashboard/interviews"}><IoMdExit className="text-red-500"/></Link>
+        {/* Job Role Section */}
+        <div>
+          <h1 className="bg-white relative p-3 w-full rounded-lg text-base font-bold flex items-center gap-3">
+            <Briefcase className="text-2xl text-amber-600" />
+            <span className="text-black">Scheduled Interview for : </span>
+            <span className="text-white bg-slate-900 text-sm p-2 rounded-lg font-semibold ml-1">
+              {interview?.jobRole}
+            </span>
+            <div className="absolute text-2xl cursor-pointer right-2">
+              <Link href={"/dashboard/interviews"}><IoMdExit className="text-red-500" /></Link>
+            </div>
+          </h1>
+        </div>
+        {/* Video Section */}
+        <div className="bg-white p-4 mt-4 rounded-3xl w-full h-[60%]">
+          <div className="relative w-full h-full">
+            {isVideoOn ? (
+              <Webcam
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  border: "1px solid gray",
+                  borderRadius: "30px",
+                  objectFit: "cover",
+                }}
+              />
+            ) : (
+              <div
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  border: "1px solid gray",
+                  borderRadius: "30px",
+                  backgroundColor: "black",
+                }}
+              />
+            )}
           </div>
-        </h1>
-      </div>
-      {/* Video Section */}
-      <div className="bg-white p-4 mt-4 rounded-3xl w-full h-[60%]">
-      <div
-        className="relative w-full h-full"
-        // style={{ width: "31.25rem", height: "18.75rem" }}
-      >
-        {isVideoOn ? (
-          <Webcam
-            style={{
-              width: "100%",
-              height: "100%",
-              border: "1px solid gray",
-              borderRadius: "30px",
-              objectFit: "cover",
-            }}
-          />
-        ) : (
-          <div
-            style={{
-              width: "100%",
-              height: "100%",
-              border: "1px solid gray",
-              borderRadius: "30px",
-              backgroundColor: "black", // When video is off, show a black screen
-            }}
-          />
-        )}
-      </div>
-      
-      </div>
-      {/* Audio & Video Icons Section */}
-      <div className="w-full bg-slate-800 cursor-pointer rounded-2xl mt-4 justify-evenly p-3 flex gap-2 text-2xl text-white ">
-          <div onClick={isRecording ? stopSpeechToText : startSpeechToText}>{isRecording ? <FaMicrophone/> : <FaMicrophoneSlash/>} </div>
+        </div>
+        {/* Audio & Video Icons Section */}
+        <div className="w-full bg-slate-800 cursor-pointer rounded-2xl mt-4 justify-evenly p-3 flex gap-2 text-2xl text-white ">
+          <div onClick={isRecording ? stopSpeechToText : startSpeechToText}>
+            {isRecording ? <FaMicrophone /> : <FaMicrophoneSlash />}
+          </div>
           <div onClick={isVideoOn ? stopVideo : startVideo}>
-        {isVideoOn ? <FaVideo /> : <FaVideoSlash />}
-      </div>
-      </div>
-        {/* No. of quest answered / unanswered / skipped nd all section  */}
-      <div className=" flex justify-evenly text-sm font-bold w-full rounded-xl mt-4 bg-white p-3">
-          <h1><span className="bg-green-400 p-1 text-white rounded-xl mr-2">Answered </span>: {answered}</h1>
-          <h1><span className=" bg-red-400 p-1 text-white rounded-xl mr-2">Unanswered </span>: {unanswered}</h1>
-          <h1><span className="bg-orange-400 p-1 text-white rounded-xl mr-2">Skipped </span>: {skipped}</h1>
-      </div>
-    </div>
-    {/* Displaying Question Section */}
-    <div className="flex gap-y-4 w-[50%] h-screen flex-col">
-      <div className="bg-white w-fit p-4 rounded-lg">
-        <div className="w-full mt-3 bg-gray-800 text-white p-3 rounded-xl">
-      <h2 className="text-lg font-semibold mb-2">
-          Question {currentQuestionIndex + 1} of {interview?.questions.length}
-        </h2>
-        <p className="text-gray-100 text-sm font-semibold  mb-4">
-          {interview?.questions[currentQuestionIndex].question}
-        </p>
-        <div className="flex justify-between">
-          <button
-            onClick={handleSkip}
-            className="px-4 py-2 bg-gray-400 text-bold text-gray-800 rounded-lg hover:bg-gray-400"
-          >
-            Skip
-          </button>
-          <button
-            onClick={handleNext}
-            className="px-4 py-2 bg-blue-500 text-bold text-white rounded-lg hover:bg-blue-600"
-          >
-            Next
-          </button>
+            {isVideoOn ? <FaVideo /> : <FaVideoSlash />}
           </div>
+        </div>
+        {/* No. of quest answered / unanswered / skipped section */}
+        <div className="flex justify-evenly text-sm font-bold w-full rounded-xl mt-4 bg-white p-3">
+          <h1><span className="bg-green-400 p-1 text-white rounded-xl mr-2">Answered </span>: {answered}</h1>
+          <h1><span className="bg-red-400 p-1 text-white rounded-xl mr-2">Unanswered </span>: {unanswered}</h1>
+          <h1><span className="bg-orange-400 p-1 text-white rounded-xl mr-2">Skipped </span>: {skipped}</h1>
+        </div>
       </div>
+      {/* Displaying Question Section */}
+      <div className="flex gap-y-4 w-[50%] h-screen flex-col">
+        <div className="bg-white w-fit p-4 rounded-lg">
+          <div className="w-full mt-3 bg-gray-800 text-white p-3 rounded-xl">
+            <h2 className="text-lg font-semibold mb-2">
+              Question {currentQuestionIndex + 1} of {interview?.questions.length}
+            </h2>
+            <p className="text-gray-100 text-sm font-semibold mb-4">
+              {interview?.questions[currentQuestionIndex].question}
+            </p>
+            <div className="flex justify-between">
+              <button
+                onClick={handleSkip}
+                className="px-4 py-2 bg-gray-400 text-bold text-gray-800 rounded-lg hover:bg-gray-400"
+              >
+                Skip
+              </button>
+              <button
+                onClick={handleNext}
+                className="px-4 py-2 bg-blue-500 text-bold text-white rounded-lg hover:bg-blue-600"
+              >
+                {currentQuestionIndex === interview.questions.length - 1 ? 'Submit' : 'Next'}
+              </button>
+            </div>
+          </div>
+        </div>
+        {/* Text Editor Section */}
+        <div className="relative bg-white w-full p-5 rounded-lg h-[55%] flex justify-center items-center">
+          <label htmlFor="userEditor" className="text-sm font-semibold block absolute top-1 left-6">Answer Editor</label>
+          <textarea
+            name="userEditor"
+            placeholder="Enter your answer"
+            rows={11}
+            cols={60}
+            id="UserEditor"
+            className="bg-gray-100 rounded-lg text-gray-800 font-semibold p-2 outline-1"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+          ></textarea>
+        </div>
       </div>
-      {/* Text Editor Section */}
-      <div className="relative  bg-white w-full p-5 rounded-lg h-[55%]  flex justify-center items-center">
-        <label htmlFor="userEditor" className="text-sm font-semibold block absolute top-1 left-6" >Answer Editor</label>
-      <textarea name="userEditor" placeholder="Enter your answer" rows={11} cols={60} id="UserEditor" className="bg-gray-100 rounded-lg text-gray-800 font-semibold p-2 outline-1 "
-      value={text} 
-      onChange={(e) => setText(e.target.value)} ></textarea>
-      </div>
-    </div>
     </div>
   );
 }
