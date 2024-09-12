@@ -4,7 +4,6 @@ import axios from "axios";
 import { useUser } from "@clerk/nextjs";
 import { Loader2Icon } from "lucide-react";
 import { useRouter } from 'next/navigation';
-import { ObjectId } from "mongoose";
 
 interface ModalProps {
   openModal: boolean;
@@ -32,7 +31,7 @@ const Modal: React.FC<ModalProps> = ({ openModal, handleCloseModal }) => {
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    
+
     const formData = new FormData(event.currentTarget);
     const userData: UserData = {
       jobRole: formData.get("jobRole") as string,
@@ -41,19 +40,19 @@ const Modal: React.FC<ModalProps> = ({ openModal, handleCloseModal }) => {
       userId: user?.id,
       username: user?.username as string
     };
-  
+
     try {
       setLoading(true);
-      
+
       const response = await axios.post("/api/generate-interview", userData, {
         headers: {
           'Content-Type': 'application/json',
         }
       });
-  
+
       console.log("Success:", response.data);
-      router.push(`/dashboard/interviews`);
-      
+      router.push(`/dashboard/interviews/${response.data.interviews._id}`);
+
     } catch (error) {
       console.error("Error:", error);
     } finally {

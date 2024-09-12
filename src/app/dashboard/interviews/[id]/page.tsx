@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
 import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
-import { Briefcase } from "lucide-react";
+import { Briefcase, Loader2 } from "lucide-react";
 import Webcam from "react-webcam";
 import { IoMdExit } from "react-icons/io";
 import { FaMicrophone, FaMicrophoneSlash, FaVideo, FaVideoSlash } from "react-icons/fa";
@@ -54,7 +54,7 @@ export default function InterviewComponent() {
   const [isVideoOn, setIsVideoOn] = useState(false);
   const [text, setText] = useState<string>('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const [completed, setCompleted] = useState(false)
+  const [submitLoading, setSubmitLoading] = useState(false)
 
   const {
     error,
@@ -89,13 +89,15 @@ export default function InterviewComponent() {
     if (interview) {
       const isLastQuestion = currentQuestionIndex === interview.questions.length - 1;
 
-      if (currentQuestionIndex < interview.questions.length - 1) {
-        saveCurrentAnswer();
+      saveCurrentAnswer();
+
+      if (!isLastQuestion) {
+        // Move to the next question if it's not the last one
         setCurrentQuestionIndex(prevIndex => prevIndex + 1);
         updateAnsweredCounts();
         setText('');
-      } else if (isLastQuestion) {
-        saveCurrentAnswer();
+      } else {
+        // If it's the last question, trigger submit
         handleSubmit();
       }
     }
@@ -133,16 +135,19 @@ export default function InterviewComponent() {
   const handleSubmit = async () => {
     if (interview) {
       try {
+        setSubmitLoading(true)
         const response = await axios.post('/api/submit-interview', {
           interviewId: interview._id,
           userAnswers: [...userAnswers, { question: interview.questions[currentQuestionIndex].question, answer: text }],
-
         });
         const { interviewId } = response.data;
         if (response.status === 200) router.push(`/dashboard/feedback/${interviewId}`);
+        setSubmitLoading(false)
       } catch (error) {
         console.error("Error submitting answers:", error);
         setErrors("Failed to submit answers. Please try again.");
+      } finally {
+        setSubmitLoading(false)
       }
     }
   };
@@ -198,15 +203,7 @@ export default function InterviewComponent() {
           <div className=" rounded-md w-full h-[45%]">
             <div className="relative w-full h-full">
               {isVideoOn ? (
-                <Webcam className="w-full h-full rounded-lg border-2 border-neutral-200 object-cover"
-                // style={{
-                //   width: "100%",
-                //   height: "100%",
-                //   border: "1px solid gray",
-                //   borderRadius: "15px",
-                //   objectFit: "cover",
-                // }}
-                />
+                <Webcam className="w-full h-full rounded-lg border-2 border-neutral-200 object-cover" />
               ) : (
                 <div className="w-full h-full rounded-lg border-2 border-neutral-200 bg-neutral-200/30" />
               )}
@@ -258,10 +255,18 @@ export default function InterviewComponent() {
               Skip
             </button>
             <button
+              disabled={!text || text.length === 0 || submitLoading}
               onClick={handleNext}
-              className="px-4 py-2 bg-blue-500 text-bold text-white rounded-lg hover:bg-blue-600"
+              className={`px-4 py-2 bg-[#eaff96ad] border-2 border-[#ddff53] font-bold text-neutral-800 rounded-lg hover:bg-[#d5ed76ad] ${!text || text.length === 0 ? "opacity-50 cursor-not-allowed" : ""} transition-all duration-200`}
             >
-              {currentQuestionIndex === interview.questions.length - 1 ? 'Submit' : 'Next'}
+              {submitLoading ? (
+                <span className="flex items-center justify-center gap-2">
+                  <Loader2 className="text-2xl font-bold animate-spin" />
+                  Submitting Interview wait...
+                </span>
+              ) : (
+                currentQuestionIndex === interview.questions.length - 1 ? 'Submit Interview' : 'Next Question'
+              )}
             </button>
           </div>
         </div>

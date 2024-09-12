@@ -110,7 +110,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       message: "Interview questions created",
       newInterview
-    });
+    }, {status: 200});
   } catch (error) {
     console.error("Error generating interview:", error);
     return NextResponse.json(

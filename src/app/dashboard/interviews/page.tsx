@@ -85,7 +85,7 @@ export default function InterviewsPage() {
             <div className=" border border-zinc-300 rounded-md p-4">
               <div className="flex items-center justify-between">
                 <h1 className="text-xl font-bold text-zinc-900">{interview.jobRole}</h1>
-                <button className="px-3 py-1 bg-[#d7f462d6] rounded-full text-xs font-semibold">{interview.status.toLocaleUpperCase()}</button>
+                <button className={`px-3 py-1 rounded-full text-xs font-semibold ${interview.status === "completed" ? "bg-[#d7f462] border border-[#9fb547] text-neutral-800" : "bg-red-300 border border-red-500"} `}>{interview.status.toLocaleUpperCase()}</button>
               </div>
               <div>
                 <h1 className="text-zinc-800 font-semibold py-1">
@@ -110,18 +110,26 @@ export default function InterviewsPage() {
               <div className="py-3">
                 {interview.status === "pending" ? (
                   <button
-                    className="px-2.5 py-1.5 bg-[#d7f462] rounded-md text-sm font-semibold hover:bg-[#c8e940]"
+                    className="px-2.5 py-1.5 border-2 border-red-400 rounded-md text-sm font-semibold hover:bg-red-300 transition-all duration-200"
                     onClick={() => handleOpenModal(interview._id)}
                   >
                     Start Interview
                   </button>
 
                 ) : (
-                  <Link href={`/dashboard/feedback/${interview._id}`}>
-                    <button className="px-2.5 py-1.5 bg-[#d7f462] rounded-md text-sm font-semibold hover:bg-[#c8e940]" >
-                      See feedback
+                  <div className="flex gap-4">
+                    <Link href={`/dashboard/feedback/${interview._id}`}>
+                      <button className="px-2.5 py-1.5 border-2 border-[#d7ff35] rounded-md text-sm font-semibold hover:bg-[#c8e940]" >
+                        See feedback
+                      </button>
+                    </Link>
+                    <button
+                      className="px-2.5 py-1.5 border-2 border-red-500 rounded-md text-sm font-semibold hover:bg-red-300 transition-all duration-200"
+                      onClick={() => handleOpenModal(interview._id)}
+                    >
+                      Retake
                     </button>
-                  </Link>
+                  </div>
                 )}
               </div>
             </div>
