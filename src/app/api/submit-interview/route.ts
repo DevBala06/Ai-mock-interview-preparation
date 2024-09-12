@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
 
     // Fetch the original interview questions
     const interview = await Interview.findById(interviewId);
-    
+
     if (!interview) {
       return NextResponse.json(
         { error: "Interview not found" },
@@ -44,8 +44,6 @@ export async function POST(request: NextRequest) {
     2. Completeness of the answer
     3. Suggestions for improvement
     4. Overall performance score (out of 100)
-
-    you have to compare Question with user's answers if you cant found user's answers warn him in suggesstion as feedbacks and make all the performace N/A or Say you haved give any answer "write these feedbacks with your own understanding of user's answers and what question"
 
     Format the response as a JSON object with the following structure:
     {

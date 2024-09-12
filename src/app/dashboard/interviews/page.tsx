@@ -13,11 +13,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { LayoutGrid, List } from "lucide-react";
+import { LayoutGrid, List, Trash2 } from "lucide-react";
 import { LuRefreshCw } from "react-icons/lu";
 import Header from "../_components/Header";
 import { motion } from "framer-motion";
 import UserPermissionModal from "../_components/UserPermissionModal";
+import { DeleteModal } from "../_components/DeleteModal";
 
 interface InterviewData {
   _id: string;
@@ -56,6 +57,17 @@ export default function InterviewsPage() {
       fetchInterviews();
     }
   }, [user?.id]);
+
+  const handleDelete = async (userId: string) => {
+    try {
+      await axios.delete(`/api/generate-interview`, { params: { userId } });
+      // Update the interviews state after deletion
+      setInterviews(interviews.filter(interview => interview._id !== userId));
+    } catch (error) {
+      console.error("Failed to delete interview", error);
+    }
+  };
+
 
   if (loading) {
     return <div className="text-center mt-8">Loading interviews...</div>;
@@ -107,7 +119,7 @@ export default function InterviewsPage() {
                   </span>
                 </h1>
               </div>
-              <div className="py-3">
+              <div className="py-3 flex justify-between">
                 {interview.status === "pending" ? (
                   <button
                     className="px-2.5 py-1.5 border-2 border-red-400 rounded-md text-sm font-semibold hover:bg-red-300 transition-all duration-200"
@@ -120,7 +132,7 @@ export default function InterviewsPage() {
                   <div className="flex gap-4">
                     <Link href={`/dashboard/feedback/${interview._id}`}>
                       <button className="px-2.5 py-1.5 border-2 border-[#d7ff35] rounded-md text-sm font-semibold hover:bg-[#c8e940]" >
-                        See feedback
+                        See feedbacks
                       </button>
                     </Link>
                     <button
@@ -131,6 +143,10 @@ export default function InterviewsPage() {
                     </button>
                   </div>
                 )}
+                <DeleteModal
+                  interviewId={interview._id}
+                  handleDelete={handleDelete}
+                />
               </div>
             </div>
 

@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import connectToDb from "@/utils/config/db";
 import { chatSession } from "@/utils/gemini-ai-model/question_answer_model";
 import Interview from "@/utils/models/interviewSchema";
-import NewUser from "@/utils/models/user.model";
 
 export async function GET(request: NextRequest) {
   try {
@@ -119,3 +118,41 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
+export async function DELETE(request: NextRequest) {
+  try {
+    await connectToDb();
+
+    const { searchParams } = new URL(request.url);
+    const interviewId = searchParams.get("userId");
+
+
+    if (!interviewId) {
+      return NextResponse.json(
+        { error: "Interview ID is required" },
+        { status: 400 }
+      );
+    }
+
+    const deletedInterview = await Interview.findByIdAndDelete(interviewId);
+
+    if (!deletedInterview) {
+      return NextResponse.json(
+        { error: "Interview not found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(
+      { message: "Interview deleted successfully", deletedInterview },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error deleting interview:", error);
+    return NextResponse.json(
+      { error: "Failed to delete interview" },
+      { status: 500 }
+    );
+  }
+}
+
