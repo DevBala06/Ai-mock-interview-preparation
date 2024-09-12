@@ -40,7 +40,7 @@ export default function InterviewComponent() {
   const [interview, setInterview] = useState<InterviewData | null>(null);
   const [userAnswers, setUserAnswers] = useState<UserAnswer[]>([]);
   console.log(userAnswers);
-  
+
   const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState<string | null>(null);
   const params = useParams();
@@ -70,16 +70,16 @@ export default function InterviewComponent() {
   useEffect(() => {
     if (results && results.length > 0) {
       const latestResult = results.reduce<ResultType>((latest, current) => {
-        
+
         if (typeof current === 'string') {
-          return latest; 
+          return latest;
         }
 
         if (current.timestamp > latest.timestamp) {
           return current;
         }
         return latest;
-      }, results[0] as ResultType); 
+      }, results[0] as ResultType);
 
       setText(latestResult.transcript);
     }
@@ -136,7 +136,7 @@ export default function InterviewComponent() {
         const response = await axios.post('/api/submit-interview', {
           interviewId: interview._id,
           userAnswers: [...userAnswers, { question: interview.questions[currentQuestionIndex].question, answer: text }],
-          
+
         });
         const { interviewId } = response.data;
         if (response.status === 200) router.push(`/dashboard/feedback/${interviewId}`);
@@ -177,97 +177,93 @@ export default function InterviewComponent() {
   if (!interview) return <div className="text-center mt-8">Interview not found</div>;
 
   return (
-    <div className="flex flex-1 justify-between gap-x-7">
-      <div className="flex w-[50%] h-screen flex-col">
-        <div>
-          <h1 className="bg-white relative p-3 w-full rounded-lg text-base font-bold flex items-center gap-3">
-            <Briefcase className="text-2xl text-amber-600" />
-            <span className="text-black">Scheduled Interview for : </span>
-            <span className="text-white bg-slate-900 text-sm p-2 rounded-lg font-semibold ml-1">
-              {interview.jobRole}
-            </span>
-            <div className="absolute text-2xl cursor-pointer right-2">
-              <Link href="/dashboard/interviews"><IoMdExit className="text-red-500" /></Link>
-            </div>
+    <div className="gap-x-4 h-[93vh]">
+      <div className=" bg-white border border-zinc-300 p-3 w-full rounded-md">
+        <div className="relative text-base font-bold flex items-center gap-3">
+          <Briefcase className="text-2xl text-[#D8F275]" />
+          <h1 className="text-black">Scheduled Interview for : </h1>
+          <h1 className="text-white bg-slate-900 text-sm p-2 rounded-lg font-semibold ml-1">
+            {interview.jobRole}
           </h1>
-        </div>
-        <div className="bg-white p-4 mt-4 rounded-3xl w-full h-[60%]">
-          <div className="relative w-full h-full">
-            {isVideoOn ? (
-              <Webcam
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  border: "1px solid gray",
-                  borderRadius: "30px",
-                  objectFit: "cover",
-                }}
-              />
-            ) : (
-              <div
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  border: "1px solid gray",
-                  borderRadius: "30px",
-                  backgroundColor: "black",
-                }}
-              />
-            )}
+          <div className="absolute cursor-pointer right-2">
+            <Link href="/dashboard/interviews" >
+              <button className=" px-3 py-2 font-semibold rounded-md bg-[#D8F275] flex items-center justify-center gap-2"><IoMdExit className="text-zinc-900 text-2xl" />Exit interview</button>
+            </Link>
           </div>
-        </div>
-        <div className="w-full bg-slate-800 cursor-pointer rounded-2xl mt-4 justify-evenly p-3 flex gap-2 text-2xl text-white ">
-          <div onClick={isRecording ? stopSpeechToText : startSpeechToText}>
-            {isRecording ? <FaMicrophone /> : <FaMicrophoneSlash />}
-          </div>
-          <div onClick={() => setIsVideoOn(!isVideoOn)}>
-            {isVideoOn ? <FaVideo /> : <FaVideoSlash />}
-          </div>
-        </div>
-        <div className="flex justify-evenly text-sm font-bold w-full rounded-xl mt-4 bg-white p-3">
-          <h1><span className="bg-green-400 p-1 text-white rounded-xl mr-2">Answered</span>: {answered}</h1>
-          <h1><span className="bg-red-400 p-1 text-white rounded-xl mr-2">Unanswered</span>: {unanswered}</h1>
-          <h1><span className="bg-orange-400 p-1 text-white rounded-xl mr-2">Skipped</span>: {skipped}</h1>
         </div>
       </div>
-      <div className="flex gap-y-4 w-[50%] h-screen flex-col">
-        <div className="bg-white w-fit p-4 rounded-lg">
-          <div className="w-full mt-3 bg-gray-800 text-white p-3 rounded-xl">
-            <h2 className="text-lg font-semibold mb-2">
-              Question {currentQuestionIndex + 1} of {interview.questions.length}
-            </h2>
-            <p className="text-gray-100 text-sm font-semibold mb-4">
-              {interview.questions[currentQuestionIndex].question}
-            </p>
-            <div className="flex justify-between">
-              <button
-                onClick={handleSkip}
-                className="px-4 py-2 bg-gray-400 text-bold text-gray-800 rounded-lg hover:bg-gray-400"
-              >
-                Skip
-              </button>
-              <button
-                onClick={handleNext}
-                className="px-4 py-2 bg-blue-500 text-bold text-white rounded-lg hover:bg-blue-600"
-              >
-                {currentQuestionIndex === interview.questions.length - 1 ? 'Submit' : 'Next'}
-              </button>
+
+      <div className="flex justify-between h-full gap-4 mt-8">
+        <div className="w-[40%]">
+          <div className=" rounded-md w-full h-[45%]">
+            <div className="relative w-full h-full">
+              {isVideoOn ? (
+                <Webcam className="w-full h-full rounded-lg border-2 border-neutral-200 object-cover"
+                // style={{
+                //   width: "100%",
+                //   height: "100%",
+                //   border: "1px solid gray",
+                //   borderRadius: "15px",
+                //   objectFit: "cover",
+                // }}
+                />
+              ) : (
+                <div className="w-full h-full rounded-lg border-2 border-neutral-200 bg-neutral-200/30" />
+              )}
             </div>
           </div>
+          <div className=" flex items-center justify-center gap-8 p-5">
+            <div onClick={isRecording ? stopSpeechToText : startSpeechToText} className={`bg-lime-200/30 border-2 border-lime-200 px-6 py-2 rounded-full cursor-pointer hover:bg-lime-200/70 ${isRecording ? "bg-lime-200/70 " : ""}`}>
+              {isRecording ? <FaMicrophone className="text-black text-2xl" /> : <FaMicrophoneSlash className="text-2xl" />}
+            </div>
+            <div onClick={() => setIsVideoOn(!isVideoOn)} className={`bg-lime-200/30 border-2 border-lime-200 px-6 py-2 rounded-full cursor-pointer hover:bg-lime-200/70 ${isVideoOn ? "bg-lime-200/70" : ""}`}>
+              {isVideoOn ? <FaVideo className="text-black text-2xl" /> : <FaVideoSlash className="text-2xl" />}
+            </div>
+          </div>
+          <div className="flex items-center justify-center gap-3 w-full rounded-xl bg-white p-3">
+            <h1 className="bg-green-400 text-sm font-bold px-3 py-1 text-white rounded-full"><span >Answered</span>: {answered}</h1>
+            <h1 className="bg-red-400 text-sm font-bold px-3 py-1 text-white rounded-full"><span >Unanswered</span>: {unanswered}</h1>
+            <h1 className="bg-orange-400 text-sm font-bold px-3 py-1 text-white rounded-full"><span >Skipped</span>: {skipped}</h1>
+          </div>
         </div>
-        <div className="relative bg-white w-full p-5 rounded-lg h-[55%] flex justify-center items-center">
-          <label htmlFor="userEditor" className="text-sm font-semibold block absolute top-1 left-6">Answer Editor</label>
-          <textarea
-            name="userEditor"
-            placeholder="Enter your answer"
-            rows={11}
-            cols={60}
-            id="UserEditor"
-            className="bg-gray-100 rounded-lg text-gray-800 font-semibold p-2 outline-1"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            ref={textareaRef}
-          ></textarea>
+
+        <div className="flex w-[60%] h-[88%] flex-col px-3">
+          <div className=" h-28 border-b-2 border-neutral-200 mb-2">
+            <p className="text-lg inline-block px-3 py-1 rounded-full font-semibold mb-2 bg-[#eaff96ad] border-2 border-[#ddff53] text-neutral-900">
+              Question {currentQuestionIndex + 1} of {interview.questions.length}
+            </p>
+            <p className="text-neutral-800 font-semibold mb-4">
+              {interview.questions[currentQuestionIndex].question}
+            </p>
+          </div>
+          <div className="">
+            <label htmlFor="userEditor" className="text-neutral-600 font-semibold">
+              Provide Your Answer Below
+            </label>
+            <textarea
+              className="bg-neutral-200/30 mt-2 w-full h-[22rem] resize-none text-lg text-zinc-700 font-semibold p-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-1 focus:ring-lime-200 shadow-sm"
+              name="userEditor"
+              placeholder="Describe your answer in detail...!"
+              id="UserEditor"
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              ref={textareaRef}
+            ></textarea>
+          </div>
+          <div className="flex justify-between">
+            <button
+              onClick={handleSkip}
+              className="px-4 py-2 bg-gray-400 text-bold text-gray-800 rounded-lg hover:bg-gray-400"
+            >
+              Skip
+            </button>
+            <button
+              onClick={handleNext}
+              className="px-4 py-2 bg-blue-500 text-bold text-white rounded-lg hover:bg-blue-600"
+            >
+              {currentQuestionIndex === interview.questions.length - 1 ? 'Submit' : 'Next'}
+            </button>
+          </div>
         </div>
       </div>
     </div>

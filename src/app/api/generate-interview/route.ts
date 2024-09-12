@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
     await connectToDb();
 
     const body = await request.json();
-    const { jobRole, technologies, difficultyLevel, userId } = body;
+    const { jobRole, technologies, difficultyLevel, userId, username } = body;
     console.log(userId);
     
 
@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
       
         Start with a personalized introduction: "Hello Abhishek, I'm ${randomInterviewer}, your interviewer for today's interview. It's great to meet you today for this ${jobRole} position interview."
         
-        Then, begin with an opening question that's always a variation of "Tell me about yourself" or a similar introductory question.
+        Then, begin with an opening question that's always a variation and every time generate different question of "Tell me about yourself" or a similar introductory question.
         
         Provide the response as a Json format, where each object represents a dialogue turn and includes the following properties: 
         - questionNumber (starting from 1)
@@ -64,24 +64,24 @@ export async function POST(request: NextRequest) {
         
         The first object should be the introduction, the second should be the opening question, and the rest should be technical questions related to the job role and technologies.
       
-        Example structure:
+        Example structure don't response me back exactly same, imrovise the questions set and use the provided names or values:
         [
             {
               "questionNumber": 1,
-              "question": "Hello Abhishek, I'm ${randomInterviewer}, your personal interviewer for this interview. It's great to meet you today for this ${jobRole} position interview.",
+              "question": " such as:  Hello ${username}, I'm ${randomInterviewer}, your personal interviewer for this interview. It's great to meet you today for this ${jobRole} position interview.",
               "expectedAnswer": "Hello, Mr/Mrs ${randomInterviewer}, I'm Abhishek Jaiswar."
             },
             {
               "questionNumber": 2,
-              "question": "To start off, could you tell me a bit about yourself and your journey in the tech world?",
+              "question": "To start off, could you tell me a bit about yourself and your journey in the tech world? 'Dont repeat this question every time generate or make something new' ",
               "expectedAnswer": "I have 3 years of experience in this field, ..."
             },
             {
               "questionNumber": 3,
-              "question": "A brief overview of your background, education, and relevant experience in the field.",
+              "question": "A brief overview of your background, education, and relevant experience in the field. "Same for all the question"",
               "expectedAnswer": "Expected Answer add according to the questions"
             }
-            // ... more questions and expected answers
+            // ... generate all the question as provided inpormation maximum question is 8, 9, 10 not extra.
         ]`;
 
     const result = await chatSession.sendMessage(inputPrompt);

@@ -15,8 +15,8 @@ interface UserData {
   jobRole: string;
   technologies: string;
   difficultyLevel: string;
-  userId: any
-
+  userId: any;
+  username: string;
 }
 
 const Modal: React.FC<ModalProps> = ({ openModal, handleCloseModal }) => {
@@ -38,7 +38,8 @@ const Modal: React.FC<ModalProps> = ({ openModal, handleCloseModal }) => {
       jobRole: formData.get("jobRole") as string,
       technologies: formData.get("technologies") as string,
       difficultyLevel: formData.get("difficultyLevel") as string,
-      userId: user?.id
+      userId: user?.id,
+      username: user?.username as string
     };
   
     try {
