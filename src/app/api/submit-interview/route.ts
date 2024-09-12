@@ -77,6 +77,7 @@ export async function POST(request: NextRequest) {
     // Update the existing Interview document with user answers and feedback
     interview.userAnswers = formattedUserAnswers;
     interview.feedback = parsedFeedback;
+    interview.status = 'completed';
     await interview.save();
 
     return NextResponse.json({

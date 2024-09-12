@@ -104,6 +104,7 @@ export async function POST(request: NextRequest) {
       technologies: technologies,
       difficultyLevel: difficultyLevel,
       questions,
+      
     });
 
     return NextResponse.json({

@@ -6,13 +6,6 @@ import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
   Table,
   TableBody,
   TableCell,
@@ -32,25 +25,16 @@ interface InterviewData {
   technologies: string;
   difficultyLevel: string;
   createdAt: string;
+  status: string
 }
 
 export default function InterviewsPage() {
   const [interviews, setInterviews] = useState<InterviewData[]>([]);
+  console.log(interviews);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<"card" | "table">("card");
   const { user } = useUser();
-  // const [openModal, setOpenModal] = useState(false);
-
-  // // Function to open the modal
-  // const handleOpenModal = () => {
-  //   setOpenModal(true);
-  // };
-
-  // // Function to close the modal
-  // const handleCloseModal = () => {
-  //   setOpenModal(false);
-  // };
 
   const fetchInterviews = async () => {
     try {
@@ -67,7 +51,6 @@ export default function InterviewsPage() {
   };
 
   useEffect(() => {
-    
 
     if (user?.id) {
       fetchInterviews();
@@ -84,55 +67,65 @@ export default function InterviewsPage() {
 
   const CardView = () => {
     const [openModal, setOpenModal] = useState<string | null>(null); // Store interview ID or null if no modal is open
-  
+
     // Handle opening the modal and passing the interview ID
     const handleOpenModal = (id: string) => {
       setOpenModal(id);
     };
-  
+
     // Handle closing the modal
     const handleCloseModal = () => {
       setOpenModal(null);
     };
-  
+    // bg-[#d7f462]
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {interviews.map((interview) => (
           <div key={interview._id}>
-            <Card>
-              <CardHeader>
-                <CardTitle>{interview.jobRole}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <h1 className="text-zinc-800 font-semibold">
+            <div className=" border border-zinc-300 rounded-md p-4">
+              <div className="flex items-center justify-between">
+                <h1 className="text-xl font-bold text-zinc-900">{interview.jobRole}</h1>
+                <button className="px-3 py-1 bg-[#d7f462d6] rounded-full text-xs font-semibold">{interview.status.toLocaleUpperCase()}</button>
+              </div>
+              <div>
+                <h1 className="text-zinc-800 font-semibold py-1">
                   Technologies:{" "}
-                  <span className="text-zinc-700 font-medium">
+                  <span className="text-zinc-600 font-semibold text-sm">
                     {interview.technologies}
-                  </span>{" "}
+                  </span>
                 </h1>
-                <h1 className="text-zinc-800 font-semibold">
+                <h1 className="text-zinc-800 font-semibold py-1">
                   Difficulty:{" "}
-                  <span className="text-zinc-700 font-medium">
+                  <span className=" text-zinc-600 font-semibold">
                     {interview.difficultyLevel}
                   </span>
                 </h1>
-                <h1 className="text-zinc-800 font-semibold">
+                <h1 className="text-zinc-800 font-semibold py-1">
                   Created:{" "}
-                  <span className="text-zinc-700 font-medium">
+                  <span className="text-zinc-700 font-semibold">
                     {new Date(interview.createdAt).toLocaleDateString()}
                   </span>
                 </h1>
-              </CardContent>
-              <CardFooter>
-                <Button
-                  variant="default"
-                  onClick={() => handleOpenModal(interview._id)}
-                >
-                  Start Interview
-                </Button>
-              </CardFooter>
-            </Card>
-  
+              </div>
+              <div className="py-3">
+                {interview.status === "pending" ? (
+                  <button
+                    className="px-2.5 py-1.5 bg-[#d7f462] rounded-md text-sm font-semibold hover:bg-[#c8e940]"
+                    onClick={() => handleOpenModal(interview._id)}
+                  >
+                    Start Interview
+                  </button>
+
+                ) : (
+                  <Link href={`/dashboard/feedback/${interview._id}`}>
+                    <button className="px-2.5 py-1.5 bg-[#d7f462] rounded-md text-sm font-semibold hover:bg-[#c8e940]" >
+                      See feedback
+                    </button>
+                  </Link>
+                )}
+              </div>
+            </div>
+
             {/* Only render the modal if the interview's ID matches the openModal state */}
             {openModal === interview._id && (
               <UserPermissionModal

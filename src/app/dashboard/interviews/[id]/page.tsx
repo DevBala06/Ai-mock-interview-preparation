@@ -54,6 +54,7 @@ export default function InterviewComponent() {
   const [isVideoOn, setIsVideoOn] = useState(false);
   const [text, setText] = useState<string>('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [completed, setCompleted] = useState(false)
 
   const {
     error,
@@ -134,9 +135,9 @@ export default function InterviewComponent() {
       try {
         const response = await axios.post('/api/submit-interview', {
           interviewId: interview._id,
-          userAnswers: [...userAnswers, { question: interview.questions[currentQuestionIndex].question, answer: text }]
+          userAnswers: [...userAnswers, { question: interview.questions[currentQuestionIndex].question, answer: text }],
+          
         });
-
         const { interviewId } = response.data;
         if (response.status === 200) router.push(`/dashboard/feedback/${interviewId}`);
       } catch (error) {
