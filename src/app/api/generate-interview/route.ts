@@ -126,7 +126,6 @@ export async function DELETE(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const interviewId = searchParams.get("userId");
 
-
     if (!interviewId) {
       return NextResponse.json(
         { error: "Interview ID is required" },

@@ -5,9 +5,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import axios from 'axios'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { AlertCircle, CheckCircle2 } from 'lucide-react'
+import { PerformanceChart } from '../../_components/charts/PerformanceChar'
 
 interface Question {
   questionNumber: number
@@ -88,31 +86,29 @@ export default function FeedbackPage() {
 
   return (
     <div className="container mx-auto px-4">
-      <Card className="mb-8">
-        <CardHeader>
-          <CardTitle>Interview Feedback</CardTitle>
-          <CardDescription>
-            Job Role: {interviewData.jobRole} | Technologies: {interviewData.technologies} | Difficulty: {interviewData.difficultyLevel}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="mb-4">
-            <h3 className="text-lg font-semibold mb-2">Overall Performance</h3>
-            <Progress value={interviewData.feedback.overallPerformance} className="w-full" />
-            <p className="mt-2 text-sm text-gray-600">{interviewData.feedback.overallPerformance}% - {interviewData.feedback.generalFeedback}</p>
+      <div className="mb-8">
+        <div>
+          <h1 className='text-2xl font-bold text-neutral-800 pb-1'>Interview Feedback</h1>
+          <div>
+            <p className=' font-semibold text-neutral-700 '>Job Role: {interviewData.jobRole} | Technologies: {interviewData.technologies} | Difficulty: {interviewData.difficultyLevel}</p>
           </div>
-        </CardContent>
-      </Card>
-
-      <div>
-        <div>
-
         </div>
         <div>
-
-        </div>
-        <div>
-          
+          <div >
+            <h3 className="text-2xl font-semibold py-8">Overall Performance</h3>
+            <div className='flex gap-9 '>
+              <div className='w-full'>
+                <PerformanceChart />
+              </div>
+              <div>
+                <h1 className='text-2xl text-neutral-900 font-bold pb-4'>Interview Feedback From Ai</h1>
+                <p className=" text-neutral-700 font-semibold">{interviewData.feedback.generalFeedback}</p>
+                <div className='flex items-center justify-center mt-20'>
+                  <h1 className=' text-6xl text-lime-400 font-extrabold'>{interviewData.feedback.overallPerformance}%</h1>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -148,7 +144,7 @@ export default function FeedbackPage() {
           <div className='bg-gray-50 rounded-lg border border-zinc-200 p-10' key={item.questionNumber}>
             <div className=''>
               <div>
-                <h1 className=' text-zinc-800 font-semibold'>Question: { item.questionNumber}</h1>
+                <h1 className=' text-zinc-800 font-semibold'>Question: {item.questionNumber}</h1>
               </div>
               <div className='py-3'>
                 <div className='py-2'>

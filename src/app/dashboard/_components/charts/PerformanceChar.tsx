@@ -22,7 +22,7 @@ import { ChartConfig, ChartContainer } from "@/components/ui/chart"
 export const description = "A radial chart with text"
 
 const chartData = [
-    { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
+    { browser: "safari", visitors: 250, fill: "var(--color-safari)" },
 ]
 
 const chartConfig = {
@@ -35,12 +35,13 @@ const chartConfig = {
     },
 } satisfies ChartConfig
 
-export function Component() {
+
+export function PerformanceChart() {
     return (
         <Card className="flex flex-col">
             <CardHeader className="items-center pb-0">
-                <CardTitle>Radial Chart - Text</CardTitle>
-                <CardDescription>January - June 2024</CardDescription>
+                <CardTitle>Overall Performance chart</CardTitle>
+                <CardDescription>Frontend Developer</CardDescription>
             </CardHeader>
             <CardContent className="flex-1 pb-0">
                 <ChartContainer
