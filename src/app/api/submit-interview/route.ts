@@ -31,34 +31,48 @@ export async function POST(request: NextRequest) {
     const formattedUserAnswers = userAnswers.map((answer: any) => answer.answer);
 
     // Prepare the input for Gemini API
-    const inputPrompt = `Analyze the following interview responses:
+    const inputPrompt = `Analyze the following interview responses and provide feedback in a structured JSON format. Do not show any calculations or explanations in the response. Only return the JSON object.
 
-    ${interview.questions.map((question: any, index: number) => `
-    Question ${question.questionNumber}: ${question.question}
-    Expected Answer: ${question.expectedAnswer}
-    User's Answer: ${formattedUserAnswers[index]}
-    `).join('\n')}
+${interview.questions.map((question: any, index: number) => `
+Question ${question.questionNumber}: ${question.question}
+Expected Answer: ${question.expectedAnswer}
+User's Answer: ${formattedUserAnswers[index]}
+`).join('\n')}
 
-    Please provide feedback on each answer, including:
-    1. Accuracy of the response
-    2. Completeness of the answer
-    3. Suggestions for improvement
-    4. Overall performance score (out of 100)
+Return only a JSON object with the following structure, filling in all values directly without explanations:
 
-    Format the response as a JSON object with the following structure:
+{
+  "feedback": [
     {
-      "feedback": [
-        {
-          "questionNumber": 1,
-          "accuracy": "...",
-          "completeness": "...",
-          "suggestions": "..."
-        },
-        // ... (for each question)
-      ],
-      "overallPerformance": 85,
-      "generalFeedback": "..."
-    }`;
+      "questionNumber": 1,
+      "analyticalSkills": {
+        "accuracy": 0,
+        "correctness": 0,
+        "problemSolving": 0,
+        "relevance": 0,
+        "creativity": 0,
+        "efficiency": 0,
+        "communication": 0,
+        "clarity": 0
+      }
+    },
+    // Repeat for each question
+  ],
+  "overallAnalyticalSkills": {
+    "accuracy": 0,
+    "correctness": 0,
+    "problemSolving": 0,
+    "relevance": 0,
+    "creativity": 0,
+    "efficiency": 0,
+    "communication": 0,
+    "clarity": 0
+  },
+  "overallPerformance": 0,
+  "generalFeedback": ""
+}
+
+Ensure all numerical values are integers between 0 and 100, representing percentages. Fill in all fields with appropriate values based on the interview responses. Do not include any explanations or calculations outside the JSON structure.`;
 
     const result = await chatSession.sendMessage(inputPrompt);
     const feedbackResponse = await result.response.text();
@@ -76,7 +90,15 @@ export async function POST(request: NextRequest) {
 
     // Update the existing Interview document with user answers and feedback
     interview.userAnswers = formattedUserAnswers;
-    interview.feedback = parsedFeedback;
+    interview.feedback = {
+      feedback: parsedFeedback.feedback.map((item: any) => ({
+        questionNumber: item.questionNumber,
+        analyticalSkills: [item.analyticalSkills] // Wrap in array to match schema
+      })),
+      overallAnalyticalSkills: [parsedFeedback.overallAnalyticalSkills], // Wrap in array to match schema
+      overallPerformance: parsedFeedback.overallPerformance,
+      generalFeedback: parsedFeedback.generalFeedback
+    };
     interview.status = 'completed';
     await interview.save();
 

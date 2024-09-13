@@ -1,4 +1,3 @@
-
 'use client'
 
 import React, { useEffect, useState } from 'react'
@@ -6,6 +5,7 @@ import { useParams } from 'next/navigation'
 import axios from 'axios'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { PerformanceChart } from '../../_components/charts/PerformanceChar'
+import { Skeleton } from "@/components/ui/skeleton"
 
 interface Question {
   questionNumber: number
@@ -13,11 +13,20 @@ interface Question {
   expectedAnswer: string
 }
 
+interface AnalyticalSkills {
+  accuracy: number
+  correctness: number
+  problemSolving: number
+  relevance: number
+  creativity: number
+  efficiency: number
+  communication: number
+  clarity: number
+}
+
 interface FeedbackItem {
   questionNumber: number
-  accuracy: string
-  completeness: string
-  suggestions: string
+  analyticalSkills: AnalyticalSkills[]
 }
 
 interface InterviewData {
@@ -29,29 +38,28 @@ interface InterviewData {
   userAnswers: string[]
   feedback: {
     feedback: FeedbackItem[]
+    overallAnalyticalSkills: AnalyticalSkills[]
     overallPerformance: number
     generalFeedback: string
   }
+  status: string
 }
 
 export default function FeedbackPage() {
   const [interviewData, setInterviewData] = useState<InterviewData | null>(null)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const params = useParams()
-  console.log(`This is ${params}`);
-
 
   useEffect(() => {
     const fetchInterviewData = async () => {
       try {
-        setLoading(true)
         const response = await axios.get(`/api/generate-interview/${params.id}`)
         setInterviewData(response.data.interview)
-        setLoading(false)
       } catch (error) {
         console.error("Error fetching interview data:", error)
         setError("Failed to load interview feedback. Please try again later.")
+      } finally {
         setLoading(false)
       }
     }
@@ -62,116 +70,147 @@ export default function FeedbackPage() {
   }, [params.id])
 
   if (loading) {
-    return <div className="flex justify-center items-center h-screen">Loading feedback...</div>
+    return <LoadingSkeleton />
   }
 
   if (error) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle className="text-red-500">Error</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p>{error}</p>
-          </CardContent>
-        </Card>
-      </div>
-    )
+    return <ErrorCard message={error} />
   }
 
   if (!interviewData) {
-    return <div className="flex justify-center items-center h-screen">No feedback data available.</div>
+    return <ErrorCard message="No feedback data available." />
   }
 
   return (
-    <div className="container mx-auto px-4">
-      <div className="mb-8">
-        <div>
-          <h1 className='text-2xl font-bold text-neutral-800 pb-1'>Interview Feedback</h1>
-          <div>
-            <p className=' font-semibold text-neutral-700 '>Job Role: {interviewData.jobRole} | Technologies: {interviewData.technologies} | Difficulty: {interviewData.difficultyLevel}</p>
+    <div className="-mt-1">
+      <div className=" rounded-md border border-neutral-200 p-6 pt-3">
+        <div className=''>
+          <h1 className="text-2xl font-bold text-neutral-800">Interview Feedback</h1>
+          <div className=''>
+            <p className='text-neutral-700 font-semibold py-2 pb-0'>Job Role: {interviewData.jobRole} | Technologies: {interviewData.technologies} | Difficulty: {interviewData.difficultyLevel}</p>
           </div>
         </div>
-        <div>
-          <div >
-            <h3 className="text-2xl font-semibold py-8">Overall Performance</h3>
-            <div className='flex gap-9 '>
-              <div className='w-full'>
-                <PerformanceChart />
-              </div>
-              <div>
-                <h1 className='text-2xl text-neutral-900 font-bold pb-4'>Interview Feedback From Ai</h1>
-                <p className=" text-neutral-700 font-semibold">{interviewData.feedback.generalFeedback}</p>
-                <div className='flex items-center justify-center mt-20'>
-                  <h1 className=' text-6xl text-lime-400 font-extrabold'>{interviewData.feedback.overallPerformance}%</h1>
-                </div>
+        <div className='mt-6'>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <PerformanceChart overallScore={interviewData.feedback.overallPerformance} />
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold mb-4">AI Feedback</h3>
+              <p className="text-neutral-700 mb-4">{interviewData.feedback.generalFeedback}</p>
+              <div className=" w-full">
+                {interviewData.feedback.overallAnalyticalSkills.map((skills) => (
+                  <div className='flex items-start justify-start gap-4 flex-wrap'>
+                    <p className='px-2 py-0.5 text-sm rounded-full border-2 border-green-400 bg-green-300 text-neutral-800 font-semibold'>Accuracy: {skills.accuracy}%</p>
+                    <p className='px-2 py-0.5 text-sm rounded-full border-2 border-blue-400 bg-blue-300 text-neutral-800 font-semibold'>Correctness: {skills.correctness}%</p>
+                    <p className='px-2 py-0.5 text-sm rounded-full border-2 border-lime-400 bg-lime-300 text-neutral-800 font-semibold'>Clearity: {skills.clarity}%</p>
+                    <p className='px-2 py-0.5 text-sm rounded-full border-2 border-orange-400 bg-orange-300 text-neutral-800 font-semibold'>Communication: {skills.communication}%</p>
+                    <p className='px-2 py-0.5 text-sm rounded-full border-2 border-yellow-400 bg-yellow-300 text-neutral-800 font-semibold'>Efficiency: {skills.efficiency}%</p>
+                    <p className='px-2 py-0.5 text-sm rounded-full border-2 border-emerald-400 bg-emerald-300 text-neutral-800 font-semibold'>Problem Solving: {skills.problemSolving}%</p>
+                    <p className='px-2 py-0.5 text-sm rounded-full border-2 border-indigo-400 bg-indigo-300 text-neutral-800 font-semibold'>Creativity: {skills.creativity}%</p>
+                    <p className='px-2 py-0.5 text-sm rounded-full border-2 border-fuchsia-400 bg-fuchsia-300 text-neutral-800 font-semibold'>Relevance: {skills.relevance}%</p>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
         </div>
       </div>
 
-
-      {/* <Accordion type="single" collapsible className="w-full">
+      <div className=" mt-5">
         {interviewData.feedback.feedback.map((item, index) => (
-          <AccordionItem key={item.questionNumber} value={`item-${item.questionNumber}`}>
-            <AccordionTrigger>
-              <div className="flex items-center">
-                <span className="mr-2">Question {item.questionNumber}</span>
-                {item.accuracy.toLowerCase().includes('correct') ? (
-                  <CheckCircle2 className="h-5 w-5 text-green-500" />
-                ) : (
-                  <AlertCircle className="h-5 w-5 text-yellow-500" />
-                )}
-              </div>
-            </AccordionTrigger>
-            <AccordionContent>
-              <div className="space-y-2">
-                <p><strong>Question:</strong> {interviewData.questions[index].question}</p>
-                <p><strong>Your Answer:</strong> {interviewData.userAnswers[index]}</p>
-                <p><strong>Expected Answer:</strong> {interviewData.questions[index].expectedAnswer}</p>
-                <p><strong>Accuracy:</strong> {item.accuracy}</p>
-                <p><strong>Completeness:</strong> {item.completeness}</p>
-                <p><strong>Suggestions:</strong> {item.suggestions}</p>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        ))}
-      </Accordion> */}
-      <div className='flex flex-col gap-7'>
-        {interviewData.feedback.feedback.map((item, index) => (
-          <div className='bg-gray-50 rounded-lg border border-zinc-200 p-10' key={item.questionNumber}>
-            <div className=''>
-              <div>
-                <h1 className=' text-zinc-800 font-semibold'>Question: {item.questionNumber}</h1>
-              </div>
-              <div className='py-3'>
-                <div className='py-2'>
-                  <span className=' text-zinc-800 font-semibold'>Answer</span>
-                  <p className='py-1 font-semibold text-zinc-500'>{interviewData.questions[index].question}</p>
+          <Card key={item.questionNumber} className=''>
+            <CardHeader>
+              <CardTitle>Question {item.questionNumber}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div>
+                  <h4 className="font-semibold">Question:</h4>
+                  <p>{interviewData.questions[index].question}</p>
                 </div>
-                <div className='py-2'>
-                  <span className=' text-zinc-800 font-semibold'>Your Answer</span>
-                  <p className='py-1 font-semibold text-zinc-500'>{interviewData.userAnswers[index]}</p>
+                <div>
+                  <h4 className="font-semibold">Your Answer:</h4>
+                  <p>{interviewData.userAnswers[index]}</p>
                 </div>
-                <div className='py-2'>
-                  <span className=' text-zinc-800 font-semibold'> Expected Answer</span>
-                  <p className='py-1 font-semibold text-zinc-500'>{interviewData.questions[index].expectedAnswer}</p>
+                <div>
+                  <h4 className="font-semibold">Expected Answer:</h4>
+                  <p>{interviewData.questions[index].expectedAnswer}</p>
                 </div>
-                <div className='py-2'>
-                  <span className=' text-zinc-800 font-semibold'>Feedback</span>
-                  <p className='py-1 font-semibold text-zinc-500'>{item.suggestions}</p>
+                <div>
+                  <h4 className="font-semibold">Analytical Skills:</h4>
+                  <div>
+                    {item.analyticalSkills.map((skills, value) => (
+                      <div className='flex items-start justify-start gap-4 flex-wrap'>
+                        <p className='px-2 py-0.5 text-sm rounded-full border-2 border-green-400 bg-green-300 text-neutral-800 font-semibold'>Accuracy: {skills.accuracy}%</p>
+                        <p className='px-2 py-0.5 text-sm rounded-full border-2 border-blue-400 bg-blue-300 text-neutral-800 font-semibold'>Correctness: {skills.correctness}%</p>
+                        <p className='px-2 py-0.5 text-sm rounded-full border-2 border-lime-400 bg-lime-300 text-neutral-800 font-semibold'>Clearity: {skills.clarity}%</p>
+                        <p className='px-2 py-0.5 text-sm rounded-full border-2 border-orange-400 bg-orange-300 text-neutral-800 font-semibold'>Communication: {skills.communication}%</p>
+                        <p className='px-2 py-0.5 text-sm rounded-full border-2 border-yellow-400 bg-yellow-300 text-neutral-800 font-semibold'>Efficiency: {skills.efficiency}%</p>
+                        <p className='px-2 py-0.5 text-sm rounded-full border-2 border-emerald-400 bg-emerald-300 text-neutral-800 font-semibold'>Problem Solving: {skills.problemSolving}%</p>
+                        <p className='px-2 py-0.5 text-sm rounded-full border-2 border-indigo-400 bg-indigo-300 text-neutral-800 font-semibold'>Creativity: {skills.creativity}%</p>
+                        <p className='px-2 py-0.5 text-sm rounded-full border-2 border-fuchsia-400 bg-fuchsia-300 text-neutral-800 font-semibold'>Relevance: {skills.relevance}%</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className='flex gap-3'>
-              <p className='px-4 py-0.5 bg-orange-50 border border-orange-300 rounded-full text-sm font-semibold'>Accuracy: {item.accuracy}</p>
-              <p className='px-4 py-0.5 bg-green-50 border border-green-300 rounded-full text-sm font-semibold'>Completeness: {item.completeness}</p>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         ))}
       </div>
+    </div>
+  )
+}
+
+function LoadingSkeleton() {
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <Card className="mb-8">
+        <CardHeader>
+          <Skeleton className="h-8 w-3/4" />
+          <Skeleton className="h-4 w-full" />
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <Skeleton className="h-64 w-full" />
+            <div className="space-y-4">
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-3/4" />
+              <Skeleton className="h-16 w-32 mx-auto" />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+      {[1, 2, 3].map((i) => (
+        <Card key={i} className="mb-8">
+          <CardHeader>
+            <Skeleton className="h-6 w-1/4" />
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-3/4" />
+              <Skeleton className="h-4 w-5/6" />
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  )
+}
+
+function ErrorCard({ message }: { message: string }) {
+  return (
+    <div className="flex justify-center items-center h-screen">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle className="text-red-500">Error</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p>{message}</p>
+        </CardContent>
+      </Card>
     </div>
   )
 }

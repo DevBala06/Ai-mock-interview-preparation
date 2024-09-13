@@ -36,7 +36,7 @@ const chartConfig = {
 } satisfies ChartConfig
 
 
-export function PerformanceChart() {
+export function PerformanceChart({overallScore}: any) {
     return (
         <Card className="flex flex-col">
             <CardHeader className="items-center pb-0">
@@ -79,14 +79,14 @@ export function PerformanceChart() {
                                                     y={viewBox.cy}
                                                     className="fill-foreground text-4xl font-bold"
                                                 >
-                                                    {chartData[0].visitors.toLocaleString()}
+                                                    {overallScore}%
                                                 </tspan>
                                                 <tspan
                                                     x={viewBox.cx}
                                                     y={(viewBox.cy || 0) + 24}
                                                     className="fill-muted-foreground"
                                                 >
-                                                    Visitors
+                                                    completeness
                                                 </tspan>
                                             </text>
                                         )
