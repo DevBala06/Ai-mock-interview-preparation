@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import axios from 'axios'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { PerformanceChart } from '../../_components/charts/PerformanceChar'
 import { Skeleton } from "@/components/ui/skeleton"
 
 interface Question {
@@ -25,7 +24,8 @@ interface AnalyticalSkills {
 }
 
 interface FeedbackItem {
-  questionNumber: number
+  questionNumber: number,
+  answerFeedback: string,
   analyticalSkills: AnalyticalSkills[]
 }
 
@@ -93,7 +93,7 @@ export default function FeedbackPage() {
         <div className='mt-6'>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-              <PerformanceChart overallScore={interviewData.feedback.overallPerformance} />
+              <p>Hello</p>
             </div>
             <div>
               <h3 className="text-xl font-semibold mb-4">AI Feedback</h3>
@@ -136,6 +136,10 @@ export default function FeedbackPage() {
                 <div>
                   <h4 className="font-semibold">Expected Answer:</h4>
                   <p>{interviewData.questions[index].expectedAnswer}</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold">Feedback:</h4>
+                  <p>{item.answerFeedback}</p>
                 </div>
                 <div>
                   <h4 className="font-semibold">Analytical Skills:</h4>

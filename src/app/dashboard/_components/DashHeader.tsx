@@ -37,8 +37,7 @@ interface InterviewData {
 const DashHeader = () => {
   const { user } = useUser();
   const [isMounted, setIsMounted] = useState(false);
-  const [interviewData, setInterviewData] = useState<InterviewData>({ interviews: [], message: "" });
-
+  
   useEffect(() => {
     const sendUserData = async () => {
       if (user) {
@@ -60,24 +59,9 @@ const DashHeader = () => {
       }
     };
 
-    const fetchInterviews = async () => {
-      if (user) {
-        try {
-          const response = await axios.get("/api/new-interview", {
-            params: { userId: user.id },
-          });
-          const data = response.data;
-          console.log(data);
-          setInterviewData(data);
-        } catch (err) {
-          console.error("Failed to fetch interviews", err);
-        }
-      }
-    };
 
     if (user) {
       sendUserData();
-      fetchInterviews();
     }
 
     setIsMounted(true);
@@ -92,7 +76,7 @@ const DashHeader = () => {
       <div className="flex items-center justify-between">
         <div className="flex items-center justify-center gap-3">
           <h1 className="text-2xl text-zinc-800 font-bold">
-            Welcome back, {user.username}
+            Welcome back, {user?.username}
           </h1>
           <PiHandWavingBold className="text-2xl" />
         </div>
@@ -111,13 +95,6 @@ const DashHeader = () => {
             <UserButton />
           </div>
         </div>
-      </div>
-      <div>
-        {/* {interviewData.interviews.length > 0 ? (
-          <h1>Job Role: {interviewData.interviews[0].jobRole}</h1>
-        ) : (
-          <h1>No job roles available</h1>
-        )} */}
       </div>
     </div>
   );

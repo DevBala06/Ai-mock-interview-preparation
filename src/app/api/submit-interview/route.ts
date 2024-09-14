@@ -27,24 +27,23 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Ensure userAnswers is an array of strings
     const formattedUserAnswers = userAnswers.map((answer: any) => answer.answer);
 
-    // Prepare the input for Gemini API
     const inputPrompt = `Analyze the following interview responses and provide feedback in a structured JSON format. Do not show any calculations or explanations in the response. Only return the JSON object.
 
-${interview.questions.map((question: any, index: number) => `
-Question ${question.questionNumber}: ${question.question}
-Expected Answer: ${question.expectedAnswer}
-User's Answer: ${formattedUserAnswers[index]}
-`).join('\n')}
+    ${interview.questions.map((question: any, index: number) => `
+    Question ${question.questionNumber}: ${question.question}
+    Expected Answer: ${question.expectedAnswer}
+    User's Answer: ${formattedUserAnswers[index]}
+    `).join('\n')}
 
-Return only a JSON object with the following structure, filling in all values directly without explanations:
+  Return only a JSON object with the following structure, filling in all values directly without explanations:
 
-{
+  {
   "feedback": [
     {
       "questionNumber": 1,
+      answerFeedback: "Give detailed feedback on the user answer with your answer.",
       "analyticalSkills": {
         "accuracy": 0,
         "correctness": 0,
@@ -56,7 +55,7 @@ Return only a JSON object with the following structure, filling in all values di
         "clarity": 0
       }
     },
-    // Repeat for each question
+    // Repeat for each question dont forget to fill any of the analytical skills values
   ],
   "overallAnalyticalSkills": {
     "accuracy": 0,
@@ -88,14 +87,13 @@ Ensure all numerical values are integers between 0 and 100, representing percent
       );
     }
 
-    // Update the existing Interview document with user answers and feedback
     interview.userAnswers = formattedUserAnswers;
     interview.feedback = {
       feedback: parsedFeedback.feedback.map((item: any) => ({
         questionNumber: item.questionNumber,
-        analyticalSkills: [item.analyticalSkills] // Wrap in array to match schema
+        analyticalSkills: [item.analyticalSkills] 
       })),
-      overallAnalyticalSkills: [parsedFeedback.overallAnalyticalSkills], // Wrap in array to match schema
+      overallAnalyticalSkills: [parsedFeedback.overallAnalyticalSkills], 
       overallPerformance: parsedFeedback.overallPerformance,
       generalFeedback: parsedFeedback.generalFeedback
     };

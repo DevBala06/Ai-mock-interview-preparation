@@ -66,7 +66,7 @@ const UserPermissionModal = ({ openModal, handleCloseModal, interviewId }: Modal
     <AnimatePresence>
       {openModal && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 px-4"
           onClick={handleBackdropClick}
         >
           <motion.div
@@ -110,8 +110,8 @@ const UserPermissionModal = ({ openModal, handleCloseModal, interviewId }: Modal
 
             <div className="mt-4">
               <div className="flex items-center mb-4">
-                <span className="mr-2 text-gray-700 font-semibold text-base text-nowrap">
-                Turn on camera permissions to interact in real-time:
+                <span className="mr-2 text-gray-700 font-semibold text-base text-wrap">
+                  Turn on camera permissions to interact in real-time:
                 </span>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
@@ -122,16 +122,15 @@ const UserPermissionModal = ({ openModal, handleCloseModal, interviewId }: Modal
                   />
                   <div className="w-11 h-6 bg-gray-200 rounded-full"></div>
                   <div
-                    className={`absolute left-1 w-5 h-5 ${cameraPermission ? 'bg-blue-600' : 'bg-white'} rounded-full transform transition-transform ${
-                      cameraPermission ? 'translate-x-4' : 'translate-x-0'
-                    }`}
+                    className={`absolute left-1 w-5 h-5 ${cameraPermission ? 'bg-blue-600' : 'bg-white'} rounded-full transform transition-transform ${cameraPermission ? 'translate-x-4' : 'translate-x-0'
+                      }`}
                   ></div>
                 </label>
               </div>
 
               <div className="flex items-center mb-4">
-                <span className="mr-2 text-gray-700 font-semibold text-base text-nowrap">
-                Turn on microphone permissions to participate in voice interaction:
+                <span className="mr-2 text-gray-700 font-semibold text-base text-wrap">
+                  Turn on microphone permissions to participate in voice interaction:
                 </span>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
@@ -142,9 +141,8 @@ const UserPermissionModal = ({ openModal, handleCloseModal, interviewId }: Modal
                   />
                   <div className="w-11 h-6 bg-gray-200 rounded-full"></div>
                   <div
-                    className={`absolute left-1 w-5 h-5 ${microphonePermission ? 'bg-blue-600' : 'bg-white'} rounded-full transform transition-transform ${
-                      microphonePermission ? 'translate-x-4' : 'translate-x-0'
-                    }`}
+                    className={`absolute left-1 w-5 h-5 ${microphonePermission ? 'bg-blue-600' : 'bg-white'} rounded-full transform transition-transform ${microphonePermission ? 'translate-x-4' : 'translate-x-0'
+                      }`}
                   ></div>
                 </label>
               </div>
@@ -152,9 +150,8 @@ const UserPermissionModal = ({ openModal, handleCloseModal, interviewId }: Modal
 
             <div className="mt-4 flex justify-center gap-4">
               <button
-                className={`px-4 py-2 rounded-lg text-white ${
-                  cameraPermission && microphonePermission ? 'bg-green-500 hover:bg-green-600' : 'bg-gray-400 cursor-not-allowed'
-                }`}
+                className={`px-2 py-1.5 text-sm font-semibold text-neutral-800 lg:px-4 lg:py-2 rounded-lg ${cameraPermission && microphonePermission ? 'bg-lime-300 hover:bg-lime-200' : 'bg-lime-300 cursor-not-allowed'
+                  }`}
                 onClick={handlePermissionToggle}
                 disabled={!cameraPermission || !microphonePermission}
               >
@@ -162,9 +159,8 @@ const UserPermissionModal = ({ openModal, handleCloseModal, interviewId }: Modal
               </button>
 
               <button
-                className={`px-4 py-2 rounded-lg text-white ${
-                  cameraPermission && microphonePermission ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-400 cursor-not-allowed'
-                }`}
+                className={` px-2 py-1.5 text-sm font-semibold text-neutral-800 lg:px-4 lg:py-2 rounded-lg ${cameraPermission && microphonePermission ? 'bg-lime-300 hover:bg-lime-200' : 'bg-lime-300 cursor-not-allowed'
+                  }`}
                 onClick={handleProceed}
                 disabled={!cameraPermission || !microphonePermission}
               >
@@ -172,7 +168,7 @@ const UserPermissionModal = ({ openModal, handleCloseModal, interviewId }: Modal
               </button>
             </div>
 
-           
+
           </motion.div>
         </div>
       )}

@@ -37,6 +37,7 @@ const interviewSchema = new Schema({
     feedback: {
         feedback: [{
             questionNumber: Number,
+            answerFeedback: String,
             analyticalSkills: [{
                 accuracy: Number,
                 correctness: Number,

@@ -1,27 +1,44 @@
 'use client'
 
 import React, { useState } from 'react'
-import Link from 'next/link'
-import Modal from './Modal'
+import { useRouter } from 'next/navigation';
+import Modal from './Modal';
 
-const Header = () => {
-  const [openModal, setOpenModal] = useState(false);
+interface HeaderProps {
+  onInterviewCreated: () => void;
+}
 
-  const handleOpenModal = () => {
-    setOpenModal(true);
-  };
+const Header: React.FC<HeaderProps> = ({ onInterviewCreated }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const router = useRouter();
+ 
 
-  const handleCloseModal = () => {
-    setOpenModal(false);
-  };
+  const openModal = () => {
+    setIsModalOpen(true);
+  }
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  }
+
+  const handleSuccessRedirect = (interviewId: string) => {
+    onInterviewCreated();
+    router.push(`/dashboard/interviews/`)
+  }
+
+
   return (
-    <div className='flex items-center justify-between max-w-7xl mx-auto'>
+    <div className='flex items-center justify-between max-w-7xl mx-auto lg:max-w-full'>
       <div>
-        <h1 className='text-lg text-zinc-800 font-semibold'>Interviews</h1>
+        <h1 className=' text-lg lg:text-2xl text-zinc-800 font-bold'>Your Interviews</h1>
       </div>
       <div>
-        <button onClick={handleOpenModal} className='bg-[#d6f462] text-zinc-800 px-4 py-2 rounded-lg font-bold hover:bg-[#cff143]'>Create interview</button>
-        <Modal openModal={openModal} handleCloseModal={handleCloseModal} />
+        <button onClick={openModal} className='bg-[#d6f462] text-sm py-1.5 px-2 text-zinc-800 md:px-4 md:py-2 md:text-base rounded-lg font-bold hover:bg-[#cff143]'>Create interview</button>
+        <Modal
+          openModal={isModalOpen}
+          handleCloseModal={closeModal}
+          onSuccessRedirect={handleSuccessRedirect}
+        />
       </div>
     </div>
   )

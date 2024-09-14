@@ -1,27 +1,15 @@
-import { useState } from "react";
 import { motion, AnimatePresence } from 'framer-motion';
-import axios from "axios";
-import { useUser } from "@clerk/nextjs";
 import { Loader2Icon } from "lucide-react";
-import { useRouter } from 'next/navigation';
+import { useInterviewForm } from '@/hooks/useInterviewForm';
 
 interface ModalProps {
   openModal: boolean;
   handleCloseModal: () => void;
+  onSuccessRedirect: (interviewId: string) => void;
 }
 
-interface UserData {
-  jobRole: string;
-  technologies: string;
-  difficultyLevel: string;
-  userId: any;
-  username: string;
-}
-
-const Modal: React.FC<ModalProps> = ({ openModal, handleCloseModal }) => {
-  const [loading, setLoading] = useState(false);
-  const { user } = useUser();
-  const router = useRouter();
+const Modal: React.FC<ModalProps> = ({ openModal, handleCloseModal, onSuccessRedirect }) => {
+  const { loading, onSubmit } = useInterviewForm({ handleCloseModal, onSuccessRedirect });
 
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
@@ -29,43 +17,11 @@ const Modal: React.FC<ModalProps> = ({ openModal, handleCloseModal }) => {
     }
   };
 
-  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const formData = new FormData(event.currentTarget);
-    const userData: UserData = {
-      jobRole: formData.get("jobRole") as string,
-      technologies: formData.get("technologies") as string,
-      difficultyLevel: formData.get("difficultyLevel") as string,
-      userId: user?.id,
-      username: user?.username as string
-    };
-
-    try {
-      setLoading(true);
-
-      const response = await axios.post("/api/generate-interview", userData, {
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
-
-      console.log("Success:", response.data);
-      router.push(`/dashboard/interviews/${response.data.interviews._id}`);
-
-    } catch (error) {
-      console.error("Error:", error);
-    } finally {
-      setLoading(false);
-      handleCloseModal();
-    }
-  };
-
   return (
-    <AnimatePresence>
+    <>
       {openModal && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+          className="fixed inset-0 z-50 px-4 flex items-center justify-center bg-black bg-opacity-50 md:px-0"
           onClick={handleBackdropClick}
         >
           <motion.div
@@ -77,7 +33,7 @@ const Modal: React.FC<ModalProps> = ({ openModal, handleCloseModal }) => {
           >
             <div className="flex justify-between items-center relative mb-4">
               <div>
-                <h2 className="text-xl font-black">Start Your Mock Interview</h2>
+                <h2 className=" text-lg md:text-xl font-black">Start Your Mock Interview</h2>
                 <p className="text-xs font-semibold text-zinc-600">
                   Create Your Custom AI Mock Interview
                 </p>
@@ -149,7 +105,7 @@ const Modal: React.FC<ModalProps> = ({ openModal, handleCloseModal }) => {
           </motion.div>
         </div>
       )}
-    </AnimatePresence>
+    </>
   );
 };
 

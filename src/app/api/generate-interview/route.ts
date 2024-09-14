@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     if (userId) {
       // Fetch interviews related to a specific userId
       interviews = await Interview.find({ userId }).sort({ createdAt: -1 });
-    } 
+    }
 
     return NextResponse.json({ interviews });
   } catch (error) {
@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { jobRole, technologies, difficultyLevel, userId, username } = body;
     console.log(userId);
-    
+
 
     if (!jobRole || !technologies || !difficultyLevel) {
       return NextResponse.json(
@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
 
     const inputPrompt = `Create an interview dialogue flow for a ${jobRole} position with the following tech stack: ${technologies}. The difficulty level should be ${difficultyLevel}. 
       
-        Start with a personalized introduction: "Hello Abhishek, I'm ${randomInterviewer}, your interviewer for today's interview. It's great to meet you today for this ${jobRole} position interview."
+        Start with a personalized introduction: "Hello ${username}, I'm ${randomInterviewer}, your interviewer for today's interview. It's great to meet you today(This is an exaple promt you can use yours greeting users), for this ${jobRole} position interview."
         
         Then, begin with an opening question that's always a variation and every time generate different question of "Tell me about yourself" or a similar introductory question.
         
@@ -67,18 +67,18 @@ export async function POST(request: NextRequest) {
         [
             {
               "questionNumber": 1,
-              "question": " such as:  Hello ${username}, I'm ${randomInterviewer}, your personal interviewer for this interview. It's great to meet you today for this ${jobRole} position interview.",
-              "expectedAnswer": "Hello, Mr/Mrs ${randomInterviewer}, I'm Abhishek Jaiswar."
+              "question": " such as:  Hello ${username} use the provided user name, I'm ${randomInterviewer}, your personal interviewer for this interview. It's great to meet you today for this ${jobRole} position interview.",
+              "expectedAnswer": "Hello, Mr/Mrs ${randomInterviewer}, ${username} use the provided user name"
             },
             {
               "questionNumber": 2,
-              "question": "To start off, could you tell me a bit about yourself and your journey in the tech world? 'Dont repeat this question every time generate or make something new' ",
-              "expectedAnswer": "I have 3 years of experience in this field, ..."
+              "question": "Generate a random question asked by the real interviewer",
+              "expectedAnswer": "Answer based on the question"
             },
             {
               "questionNumber": 3,
-              "question": "A brief overview of your background, education, and relevant experience in the field. "Same for all the question"",
-              "expectedAnswer": "Expected Answer add according to the questions"
+              "question": "Generate a random question asked by the real interviewer",
+              "expectedAnswer": "Answer based on the question"
             }
             // ... generate all the question as provided inpormation maximum question is 8, 9, 10 not extra.
         ]`;
@@ -103,13 +103,13 @@ export async function POST(request: NextRequest) {
       technologies: technologies,
       difficultyLevel: difficultyLevel,
       questions,
-      
+
     });
 
     return NextResponse.json({
       message: "Interview questions created",
-      newInterview
-    }, {status: 200});
+      interviews: newInterview,
+    }, { status: 200 });
   } catch (error) {
     console.error("Error generating interview:", error);
     return NextResponse.json(

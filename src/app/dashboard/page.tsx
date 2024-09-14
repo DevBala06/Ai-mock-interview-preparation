@@ -2,21 +2,24 @@
 import React, { useState } from "react";
 import DashHeader from "./_components/DashHeader";
 import Modal from "./_components/Modal";
-import { PerformanceChart } from "./_components/charts/PerformanceChar";
 import { TechnicalChart } from "./_components/charts/TechnicalChart";
 import { ProductivityChart } from "./_components/charts/ProductivityChart";
 import { BehaviouralChart } from "./_components/charts/BehaviouralChart";
-
+import { useRouter } from "next/navigation";
 
 const Page = ({ }) => {
   const [openModal, setOpenModal] = useState(false);
-
+  const router = useRouter()
   const handleOpenModal = () => {
     setOpenModal(true);
   };
 
   const handleCloseModal = () => {
     setOpenModal(false);
+  };
+
+  const handleSuccessRedirect = () => {
+    router.push('/dashboard/interviews');
   };
 
   const interviewStats = [
@@ -54,7 +57,11 @@ const Page = ({ }) => {
             </button>
           </div>
 
-          <Modal openModal={openModal} handleCloseModal={handleCloseModal} />
+          <Modal
+            openModal={openModal}
+            handleCloseModal={handleCloseModal}
+            onSuccessRedirect={handleSuccessRedirect}
+          />
 
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-1">
             {interviewStats.map((stat, index) => (
@@ -79,9 +86,6 @@ const Page = ({ }) => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-10 ">
             <div className="">
               <TechnicalChart />
-            </div>
-            <div>
-              <PerformanceChart  />
             </div>
             <div>
               <ProductivityChart />
