@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation';
-import Modal from './Modal';
+import Modal from '../../../DashboardComponents/Modal';
 
 interface HeaderProps {
   onInterviewCreated: () => void;
@@ -11,7 +11,7 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ onInterviewCreated }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
- 
+
 
   const openModal = () => {
     setIsModalOpen(true);

@@ -1,10 +1,10 @@
 "use client";
 import React, { useState } from "react";
 import DashHeader from "./_components/DashHeader";
-import Modal from "./_components/Modal";
-import { TechnicalChart } from "./_components/charts/TechnicalChart";
-import { ProductivityChart } from "./_components/charts/ProductivityChart";
-import { BehaviouralChart } from "./_components/charts/BehaviouralChart";
+import Modal from "../../DashboardComponents/Modal";
+import { TechnicalChart } from "../../DashboardComponents/charts/TechnicalChart";
+import { ProductivityChart } from "../../DashboardComponents/charts/ProductivityChart";
+import { BehaviouralChart } from "../../DashboardComponents/charts/BehaviouralChart";
 import { useRouter } from "next/navigation";
 
 const Page = ({ }) => {
