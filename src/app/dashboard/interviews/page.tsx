@@ -70,7 +70,7 @@ const Page = () => {
   };
 
   return (
-    <div>
+    <div className="max-md:w-full max-md:pl-12 max-md:mx-auto ">
       <div className="mb-8">
         <Header onInterviewCreated={handleInterviewCreated} />
       </div>

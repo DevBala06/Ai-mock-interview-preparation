@@ -30,10 +30,10 @@ const Header: React.FC<HeaderProps> = ({ onInterviewCreated }) => {
   return (
     <div className='flex items-center justify-between max-w-7xl mx-auto lg:max-w-full'>
       <div>
-        <h1 className=' text-lg lg:text-2xl text-zinc-800 font-bold'>Your Interviews</h1>
+        <h1 className=' text-lg lg:text-2xl text-zinc-800 font-bold '>Your Interviews</h1>
       </div>
       <div>
-        <button onClick={openModal} className='bg-[#d6f462] text-sm py-1.5 px-2 text-zinc-800 md:px-4 md:py-2 md:text-base rounded-lg font-bold hover:bg-[#cff143]'>Create interview</button>
+        <button onClick={openModal} className='bg-[#d6f462] text-sm py-1.5 px-2 text-zinc-800 md:px-4 md:py-2 md:text-base rounded-lg font-bold hover:bg-[#cff143] text-nowrap'>Create interview</button>
         <Modal
           openModal={isModalOpen}
           handleCloseModal={closeModal}
