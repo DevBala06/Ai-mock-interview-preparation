@@ -82,7 +82,7 @@ export default function FeedbackPage() {
   }
 
   return (
-    <div className="-mt-1">
+    <div className="-mt-1 max-md:w-full max-md:pl-12 max-md:mx-auto ">
       <div className=" rounded-md border border-neutral-200 p-6 pt-3">
         <div className=''>
           <h1 className="text-2xl font-bold text-neutral-800">Interview Feedback</h1>

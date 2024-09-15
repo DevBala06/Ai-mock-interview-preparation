@@ -79,7 +79,7 @@ export default function InterviewByAi() {
     if (!interview) return <div className="text-center mt-8">Interview not found</div>;
 
     return (
-        <div className="flex flex-col h-screen p-4 lg:p-0 space-y-4">
+        <div className="max-md:w-full max-md:pl-12 max-md:mx-auto flex flex-col h-screen p-4 lg:p-0 space-y-4">
             <div className="bg-white border border-zinc-300 p-3 w-full rounded-md">
                 <div className="relative flex items-center gap-3">
                     <Briefcase className="text-xl lg:text-2xl text-[#D8F275]" />
