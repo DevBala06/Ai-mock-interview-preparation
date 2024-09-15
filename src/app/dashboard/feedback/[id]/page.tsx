@@ -87,7 +87,7 @@ export default function FeedbackPage() {
         <div className=''>
           <h1 className="text-2xl font-bold text-neutral-800">Interview Feedback</h1>
           <div className=''>
-            <p className='text-neutral-700 font-semibold py-2 pb-0'>Job Role: {interviewData.jobRole} | Technologies: {interviewData.technologies} | Difficulty: {interviewData.difficultyLevel}</p>
+            <p className='text-neutral-700 font-semibold py-2 pb-0 '>Job Role: {interviewData.jobRole} | Technologies: {interviewData.technologies} | Difficulty: {interviewData.difficultyLevel}</p>
           </div>
         </div>
         <div className='mt-6'>
