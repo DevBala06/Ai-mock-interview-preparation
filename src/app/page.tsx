@@ -16,7 +16,6 @@ import { FAQAccordian } from "@/components/FAQAccordian";
 import Cursor from "@/components/Cursor";
 
 const Home = () => {
-  // const { cursorRef } = useCursor();
   const elem = useRef<HTMLDivElement>(null);
   const [sectionHeight, setSectionHeight] = useState(0);
   // const { contextSafe } = useGSAP();

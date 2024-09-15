@@ -3,8 +3,6 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import axios from 'axios'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton"
 
 interface Question {
   questionNumber: number
@@ -70,7 +68,9 @@ export default function FeedbackPage() {
   }, [params.id])
 
   if (loading) {
-    return <LoadingSkeleton />
+    return <div className='h-screen flex items-center justify-center'>
+      <p className='text-2xl'>Loading please wait</p>
+    </div>
   }
 
   if (error) {
@@ -119,11 +119,11 @@ export default function FeedbackPage() {
 
       <div className=" mt-5">
         {interviewData.feedback.feedback.map((item, index) => (
-          <Card key={item.questionNumber} className=''>
-            <CardHeader>
-              <CardTitle>Question {item.questionNumber}</CardTitle>
-            </CardHeader>
-            <CardContent>
+          <div key={item.questionNumber} className=''>
+            <div>
+              <h1>Question {item.questionNumber}</h1>
+            </div>
+            <div>
               <div className="space-y-4">
                 <div>
                   <h4 className="font-semibold">Question:</h4>
@@ -159,47 +159,10 @@ export default function FeedbackPage() {
                   </div>
                 </div>
               </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-function LoadingSkeleton() {
-  return (
-    <div className="container mx-auto px-4 py-8">
-      <Card className="mb-8">
-        <CardHeader>
-          <Skeleton className="h-8 w-3/4" />
-          <Skeleton className="h-4 w-full" />
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <Skeleton className="h-64 w-full" />
-            <div className="space-y-4">
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-3/4" />
-              <Skeleton className="h-16 w-32 mx-auto" />
             </div>
           </div>
-        </CardContent>
-      </Card>
-      {[1, 2, 3].map((i) => (
-        <Card key={i} className="mb-8">
-          <CardHeader>
-            <Skeleton className="h-6 w-1/4" />
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-3/4" />
-              <Skeleton className="h-4 w-5/6" />
-            </div>
-          </CardContent>
-        </Card>
-      ))}
+        ))}
+      </div>
     </div>
   )
 }
@@ -207,14 +170,7 @@ function LoadingSkeleton() {
 function ErrorCard({ message }: { message: string }) {
   return (
     <div className="flex justify-center items-center h-screen">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle className="text-red-500">Error</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p>{message}</p>
-        </CardContent>
-      </Card>
+      <p>{message}</p>
     </div>
   )
 }

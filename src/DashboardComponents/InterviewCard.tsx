@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import UserPermissionModal from "../../../DashboardComponents/UserPermissionModal";
-import { DeleteModal } from "../_components/DeleteModal";
+import UserPermissionModal from "./UserPermissionModal";
+import { DeleteModal } from "./DeleteModal";
 
 interface InterviewData {
     _id: string;

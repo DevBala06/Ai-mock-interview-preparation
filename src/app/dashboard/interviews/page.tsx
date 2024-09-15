@@ -3,10 +3,12 @@
 import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { useUser } from "@clerk/nextjs";
-import Header from '../_components/Header'
-import InterviewCard from "../_components/InterviewCard";
 import { fetchInterviews } from "@/utils/actions";
 import { Loader2 } from "lucide-react";
+import dynamic from "next/dynamic";
+
+const InterviewCard = dynamic(() => import('@/DashboardComponents/InterviewCard'), { ssr: false });
+const Header = dynamic(() => import('@/DashboardComponents/Header'), { ssr: false });
 
 interface InterviewData {
   _id: string;

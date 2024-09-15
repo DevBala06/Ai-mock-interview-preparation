@@ -1,13 +1,15 @@
 "use client";
 import React, { useState } from "react";
-import DashHeader from "./_components/DashHeader";
-import Modal from "../../DashboardComponents/Modal";
 import { TechnicalChart } from "../../DashboardComponents/charts/TechnicalChart";
 import { ProductivityChart } from "../../DashboardComponents/charts/ProductivityChart";
 import { BehaviouralChart } from "../../DashboardComponents/charts/BehaviouralChart";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 
-const Page = ({ }) => {
+const DashHeader = dynamic(() => import('@/DashboardComponents/DashHeader'), {ssr: false,});
+const Modal = dynamic(() => import ("@/DashboardComponents/Modal"), {ssr: false})
+
+const Page = () => {
   const [openModal, setOpenModal] = useState(false);
   const router = useRouter()
   const handleOpenModal = () => {
