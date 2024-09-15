@@ -99,8 +99,8 @@ export default function FeedbackPage() {
               <h3 className="text-xl font-semibold mb-4">AI Feedback</h3>
               <p className="text-neutral-700 mb-4">{interviewData.feedback.generalFeedback}</p>
               <div className=" w-full">
-                {interviewData.feedback.overallAnalyticalSkills.map((skills) => (
-                  <div className='flex items-start justify-start gap-4 flex-wrap'>
+                {interviewData.feedback.overallAnalyticalSkills.map((skills,index) => (
+                  <div key={index} className='flex items-start justify-start gap-4 flex-wrap'>
                     <p className='px-2 py-0.5 text-sm rounded-full border-2 border-green-400 bg-green-300 text-neutral-800 font-semibold'>Accuracy: {skills.accuracy}%</p>
                     <p className='px-2 py-0.5 text-sm rounded-full border-2 border-blue-400 bg-blue-300 text-neutral-800 font-semibold'>Correctness: {skills.correctness}%</p>
                     <p className='px-2 py-0.5 text-sm rounded-full border-2 border-lime-400 bg-lime-300 text-neutral-800 font-semibold'>Clearity: {skills.clarity}%</p>
@@ -144,8 +144,8 @@ export default function FeedbackPage() {
                 <div>
                   <h4 className="font-semibold">Analytical Skills:</h4>
                   <div>
-                    {item.analyticalSkills.map((skills, value) => (
-                      <div className='flex items-start justify-start gap-4 flex-wrap'>
+                    {item.analyticalSkills.map((skills, i) => (
+                      <div key={i} className='flex items-start justify-start gap-4 flex-wrap'>
                         <p className='px-2 py-0.5 text-sm rounded-full border-2 border-green-400 bg-green-300 text-neutral-800 font-semibold'>Accuracy: {skills.accuracy}%</p>
                         <p className='px-2 py-0.5 text-sm rounded-full border-2 border-blue-400 bg-blue-300 text-neutral-800 font-semibold'>Correctness: {skills.correctness}%</p>
                         <p className='px-2 py-0.5 text-sm rounded-full border-2 border-lime-400 bg-lime-300 text-neutral-800 font-semibold'>Clearity: {skills.clarity}%</p>

@@ -19,7 +19,7 @@ interface InterviewData {
   status: string
 }
 
-const page = () => {
+const Page = () => {
   const [interviews, setInterviews] = useState<InterviewData[]>([]);
   console.log(interviews);
   const [loading, setLoading] = useState(true);
@@ -102,4 +102,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page;

@@ -46,7 +46,7 @@ const Page = () => {
   ];
 
   return (
-    <div>
+    <div className="max-md:px-10">
       <div>
         <DashHeader />
       </div>

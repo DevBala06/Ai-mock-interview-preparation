@@ -10,6 +10,7 @@ import {
 import { FiPieChart } from "react-icons/fi";
 import Link from "next/link";
 
+
 const Sidebar: React.FC = () => {
   const [open, setOpen] = useState(true);
   const [position, setPosition] = useState({
@@ -17,6 +18,30 @@ const Sidebar: React.FC = () => {
     height: 0,
     opacity: 0,
   });
+
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
+
+  const menuVariants: Variants = {
+    hidden: {
+      x: "-100%",
+      opacity: 0,
+      display: 'none',
+      transition: {
+        type: "spring",
+        stiffness: 45,
+      },
+    },
+    visible: {
+      x: "0%",
+      opacity: 1,
+      display: 'flex',
+      transition: {
+        type: "spring",
+        stiffness: 45,
+      },
+    },
+  };
 
   const handleToggle = () => {
     setOpen(!open);
@@ -41,10 +66,11 @@ const Sidebar: React.FC = () => {
   };
 
   return (
+    <>
     <motion.div
-      className={`h-[95vh] rounded-2xl flex flex-col ${
+      className={`h-[95vh] rounded-2xl flex flex-col  ${
         open ? "items-start" : "items-center"
-      } m-4 sticky top-4 bg-[#1F1E30] text-[#FDFFF4] shadow-lg flex flex-col p-3`}
+      } m-4 sticky top-4 max-md:top-1 bg-[#1F1E30] text-[#FDFFF4] shadow-lg max-md:absolute max-md:-left-3 max-md:z-50 flex flex-col p-3`}
       style={{ width: open ? "12rem" : "3rem" }} // Width transition
       initial={{ width: "12rem" }}
       animate={{ width: open ? "12rem" : "3rem" }}
@@ -163,6 +189,12 @@ const Sidebar: React.FC = () => {
 
       </div>
     </motion.div>
+
+
+    
+
+    
+    </>
   );
 };
 
