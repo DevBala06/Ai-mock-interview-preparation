@@ -94,7 +94,7 @@ const Home = () => {
         <section id="testimonials">
           <TestimonialSection />
         </section>
-        <div className="w-[90%] mx-auto h-full lg:h-screen mt-11" id="pricing">
+        <div className="w-[65%] mx-auto h-full lg:h-screen mt-11" id="pricing">
           <Pricing />
         </div>
 

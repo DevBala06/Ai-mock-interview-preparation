@@ -111,7 +111,7 @@ const TiltCard = ({ items }: { items: Pricing }) => {
         </div>
         <div className="flex items-end justify-start gap-1">
           <h1
-            className="text-5xl font-bold">${items.price}</h1>
+            className="text-5xl font-bold">₹{items.price}</h1>
           <span
           >/</span>
           <p
