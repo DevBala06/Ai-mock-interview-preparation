@@ -30,11 +30,11 @@ const Footer = () => {
                 <div className="flex flex-col  text-sm max-md:font-extrabold max-md:text-xs font-extrabold gap-y-2 max-md:gap-y-0 text-gray-600">
                     <h1 className="text-base max-md:text-sm font-black cursor-none text-gray-800">PRODUCT</h1>
                     <Link href={'#'}>HOME</Link>
-                    <Link href={'#'}>FEATURES</Link>
-                    <Link href={'#'}>ABOUT US</Link>
-                    <Link href={'#'}>CONTACT US</Link>
-                    <Link href={'#'}>PRICING</Link>
-                    <Link href={'#'}>SIGN IN</Link>
+                    <Link href={"#features"}>FEATURES</Link>
+                    {/* <Link href={'#'}>ABOUT US</Link>
+                    <Link href={'#'}>CONTACT US</Link> */}
+                    <Link href={'#pricing'}>PRICING</Link>
+                    <Link href={'/sign-in'}>SIGN IN</Link>
                 </div>
                 <div className="ml-24 max-md:ml-0 flex flex-col h-full justify-start text-sm max-md:font-extrabold max-md:text-xs font-extrabold gap-y-2 max-md:gap-y-0 text-gray-600">
                 <h1 className="text-base max-md:text-sm font-black cursor-none text-gray-800">BRANDS</h1>

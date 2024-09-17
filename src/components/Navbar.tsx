@@ -89,7 +89,7 @@ const Navbar = () => {
   const ref2 = useRef<HTMLAnchorElement>(null);
   const ref3 = useRef<HTMLAnchorElement>(null);
   const ref4 = useRef<HTMLAnchorElement>(null);
-  const ref5 = useRef<HTMLAnchorElement>(null);
+  // const ref5 = useRef<HTMLAnchorElement>(null);
 
 
   useEffect(() => {
@@ -185,7 +185,7 @@ const Navbar = () => {
             }} className="text-sm relative text-white px-3 z-40  mix-blend-difference font-normal">
               Pricing
             </Link>
-            <Link href={"#"} ref={ref5} onMouseEnter={() => {
+            {/* <Link href={"#"} ref={ref5} onMouseEnter={() => {
               if (!ref5.current) return;
               const { width } = ref5.current.getBoundingClientRect();
               setPosition({
@@ -200,7 +200,7 @@ const Navbar = () => {
               }))
             }} className="text-sm relative text-white px-3 z-40  mix-blend-difference font-normal">
               Contact Us
-            </Link>
+            </Link> */}
             <motion.div animate={position} className="absolute h-8 z-30 rounded-full bg-black"></motion.div>
           </div>
           {!isSignedIn ? (
