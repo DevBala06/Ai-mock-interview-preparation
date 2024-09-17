@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { fetchSingleInterview, submitInterview } from '@/utils/actions';
 import { GetInterviewTypes } from '@/utils/Types/GetInterviewTypes';
-import { useUser } from '@clerk/nextjs';
 
 interface UserAnswer {
     question: string;

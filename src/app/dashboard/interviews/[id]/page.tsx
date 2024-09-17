@@ -17,7 +17,6 @@ interface ResultType {
 
 export default function InterviewByAi() {
     const params = useParams();
-    const router = useRouter();
     const interviewId = params.id as string;
 
     const {
