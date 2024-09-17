@@ -78,12 +78,12 @@ export default function InterviewByAi() {
     if (!interview) return <div className="text-center mt-8">Interview not found</div>;
 
     return (
-        <div className="flex flex-col h-screen p-4 lg:p-0 space-y-4">
+        <div className="max-md:w-full max-md:pl-12 max-xsm:pl-11 max-xsm:pr-0 max-md:mx-auto flex flex-col h-screen p-4 lg:p-0 space-y-4">
             <div className="bg-white border border-zinc-300 p-3 w-full rounded-md">
                 <div className="relative flex items-center gap-3">
                     <Briefcase className="text-xl lg:text-2xl text-[#D8F275]" />
-                    <h1 className="text-black text-sm lg:text-lg font-bold">
-                        Interview/ <span className="text-neutral-900">{interview.jobRole}</span>
+                    <h1 className="text-black text-sm lg:text-lg font-bold max-lsm:p-2 ">
+                        Interview/ <span className="text-neutral-900 max-xsm:block">{interview.jobRole}</span>
                     </h1>
                     <Link href="/dashboard/interviews" className="absolute right-0">
                         <button className="px-2 py-1 lg:px-3 lg:py-2 text-xs lg:text-sm font-semibold rounded-md bg-[#D8F275] flex items-center justify-center gap-2">

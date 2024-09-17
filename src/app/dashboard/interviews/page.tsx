@@ -19,7 +19,7 @@ interface InterviewData {
   status: string
 }
 
-const page = () => {
+const Page = () => {
   const [interviews, setInterviews] = useState<InterviewData[]>([]);
   console.log(interviews);
   const [loading, setLoading] = useState(true);
@@ -70,7 +70,7 @@ const page = () => {
   };
 
   return (
-    <div>
+    <div className="max-md:w-full max-md:pl-12 max-md:mx-auto ">
       <div className="mb-8">
         <Header onInterviewCreated={handleInterviewCreated} />
       </div>
@@ -102,4 +102,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page;

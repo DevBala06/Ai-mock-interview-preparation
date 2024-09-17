@@ -75,14 +75,14 @@ const DashHeader = () => {
     <div>
       <div className="flex items-center justify-between">
         <div className="flex items-center justify-center gap-3">
-          <h1 className="text-2xl text-zinc-800 font-bold">
+          <h1 className="text-2xl max-md:text-xl text-zinc-800 font-bold">
             Welcome back, {user?.username}
           </h1>
           <PiHandWavingBold className="text-2xl" />
         </div>
         <div>
           <div className="flex items-center justify-center gap-5">
-            <div>
+            {/* <div>
               <div className="flex items-center justify-center gap-3 bg-white px-4 py-1.5 rounded-full shadow-sm">
                 <FaSearch className="text-gray-600 text-lg" />
                 <input
@@ -91,7 +91,7 @@ const DashHeader = () => {
                   type="text"
                 />
               </div>
-            </div>
+            </div> */}
             <UserButton />
           </div>
         </div>

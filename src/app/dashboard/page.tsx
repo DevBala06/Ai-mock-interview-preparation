@@ -46,18 +46,21 @@ const Page = () => {
   ];
 
   return (
-    <div>
+    <div className="max-md:w-full max-md:pl-12 max-md:mx-auto ">
       <div>
         <DashHeader />
       </div>
       <div>
         <div>
-          <div className="flex justify-between font-extrabold text-base mt-9 items-center mx-auto">
+          <div className=" max-md:w-full mx-auto">
+          <div className="flex justify-between font-extrabold text-base mt-9 items-center    mx-auto">
             <h3>Overview</h3>
-            <button onClick={handleOpenModal} type="button" className="bg-[#D8F275] px-3 py-2 text-[#1f1e30ea] rounded-lg">
+            <button onClick={handleOpenModal} type="button" className="bg-[#D8F275] px-3 py-2 max-md:px-2 max-md:py-1 max-md:text-sm text-[#1f1e30ea] rounded-lg">
               Create interview
             </button>
           </div>
+          </div>
+          
 
           <Modal
             openModal={openModal}
@@ -65,9 +68,9 @@ const Page = () => {
             onSuccessRedirect={handleSuccessRedirect}
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-1">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-1 max-md:w-full">
             {interviewStats.map((stat, index) => (
-              <div key={index} className="mt-3 border-t-2 pt-4 border-slate-300 space-y-2">
+              <div key={index} className="mt-3 border-t-2 pt-4 max-md:w-[90%] max-md:mx-auto border-slate-300 space-y-2">
                 <h1 className="font-bold text-base">{stat.title}</h1>
                 <h1 className="font-bold text-3xl">{stat.value}</h1>
                 <div className="flex gap-x-1 text-sm font-bold">
