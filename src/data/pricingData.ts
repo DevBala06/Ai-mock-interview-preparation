@@ -1,17 +1,17 @@
 export const pricingPlans = [
-    {
-      name: 'Free',
-      description: 'Perfect for those who want to explore the platform before committing.',
-      price: '0',
-      duration: 'MO.',
-      features: [
-        '2 Hours of interviews in a week',
-        'Basic interview questions',
-        'Community access',
-        'Limited interview feedback',
-        'Access to only one category of interviews',
-      ],
-    },
+    // {
+    //   name: 'Free',
+    //   description: 'Perfect for those who want to explore the platform before committing.',
+    //   price: '0',
+    //   duration: 'MO.',
+    //   features: [
+    //     '2 Hours of interviews in a week',
+    //     'Basic interview questions',
+    //     'Community access',
+    //     'Limited interview feedback',
+    //     'Access to only one category of interviews',
+    //   ],
+    // },
     {
       name: 'Starter',
       description: 'Great for beginners starting their interview preparation journey.',

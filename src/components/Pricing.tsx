@@ -33,7 +33,7 @@ const Pricing = () => {
       </div>
 
       {/* Pricing cards grid */}
-      <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-4 md:gap-14">
+      <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4 md:gap-14">
         {pricingPlans.map((plan) => (
           <TiltCard key={plan.name} items={plan} />
         ))}
@@ -105,16 +105,11 @@ const TiltCard = ({ items }: { items: Pricing }) => {
             {items.name}
           </h1>
         </div>
-        <div
-
-        >
+        <div className="py-2">
           <p
             className="text-sm">{items.description}</p>
         </div>
-        <div
-
-          className="flex items-end justify-start gap-1"
-        >
+        <div className="flex items-end justify-start gap-1">
           <h1
             className="text-5xl font-bold">${items.price}</h1>
           <span
@@ -122,9 +117,7 @@ const TiltCard = ({ items }: { items: Pricing }) => {
           <p
           >{items.duration}</p>
         </div>
-        <div
-
-        >
+        <div className="py-4">
           <button
             className="w-full rounded-lg border border-slate-500 hover:bg-black  hover:text-white flex items-center justify-center gap-2 font-semibold px-2 py-2 transition-all ease-in duration-700">
             Get started

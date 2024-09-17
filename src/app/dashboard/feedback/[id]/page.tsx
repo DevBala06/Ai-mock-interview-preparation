@@ -117,11 +117,11 @@ export default function FeedbackPage() {
         </div>
       </div>
 
-      <div className=" mt-5">
+      <div className=" mt-5 flex flex-col gap-6">
         {interviewData.feedback.feedback.map((item, index) => (
-          <div key={item.questionNumber} className=''>
-            <div>
-              <h1>Question {item.questionNumber}</h1>
+          <div key={item.questionNumber} className=' border border-neutral-300 p-6 rounded-lg'>
+            <div className='pb-4'>
+              <h1 className='px-4 py-1 inline-block bg-orange-300 border border-orange-500 rounded-full'>Question {item.questionNumber}</h1>
             </div>
             <div>
               <div className="space-y-4">

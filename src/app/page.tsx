@@ -76,7 +76,7 @@ const Home = () => {
       <div>
         <Navbar />
       </div>
-      <div className="w-full min-h-screen relative bg-[#F1F0EE]">
+      <div className="w-full min-h-screen relative bg-[#F1F0EE]" id="home">
         <HeroSection />
 
         <DashboardImg />
@@ -86,14 +86,15 @@ const Home = () => {
             <TopCompanies />
           </div>
         </section>
-        <section className="min-h-fit mb-56 "  >
-
+        <section className="min-h-fit mb-56 " id='features' >
           <div className="w-full min-h-fit  bg-[#F1F0EE] " ref={elem} >
             <Features />
           </div>
         </section>
-        <TestimonialSection />
-        <div className="w-[90%] mx-auto h-full lg:h-screen mt-11">
+        <section id="testimonials">
+          <TestimonialSection />
+        </section>
+        <div className="w-[90%] mx-auto h-full lg:h-screen mt-11" id="pricing">
           <Pricing />
         </div>
 

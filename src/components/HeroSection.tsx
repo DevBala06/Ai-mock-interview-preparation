@@ -41,7 +41,7 @@ const HeroSection = () => {
     <>
       <section className="w-full h-[89%] relative flex flex-col justify-center items-center">
         <div className="w-full h-[97%] flex flex-col justify-center mb-10 items-center ">
-          <h1 className="text-[1.59rem] xsm:font-extrabold lsm:text-4xl md:text-5xl md:font-extrabold lg:text-5xl xl:text-[3.6rem] xl:font-extrabold font-bold text-wrap text-center leading-tight select-none">
+          <h1 className="text-[1.59rem] font-bold xsm:font-extrabold lsm:text-4xl md:text-5xl md:font-extrabold lg:text-5xl xl:text-[3.6rem] xl:font-extrabold text-wrap text-center leading-tight select-none">
             Transform Your{" "}
             <div className="relative inline-block">
               <div
@@ -70,7 +70,7 @@ const HeroSection = () => {
             <br /> with AI
           </h1>
           <div className="flex flex-col justify-center items-center w-full px-2 sm:px-4 md:px-10 lg:px-10 xl:px-10 2xl:px-12">
-            <p className="font-semibold text-sm xsm:text-xs xsm:leading-4 xsm:px-6 sm:text-xs leading-4 md:text-sm md:px-32 lg:px-32 lg:text-sm xl:text-sm xl:px-80 2xl:text-2xl mt-3 text-center">
+            <p className="font-semibold text-sm xsm:text-xs xsm:leading-4 xsm:px-6 sm:text-xs leading-4 md:text-sm md:px-32 lg:px-32 lg:text-sm xl:text-sm xl:px-80 2xl:text-[1.] mt-3 text-center text-neutral-700">
               Maximize your interview potential with our advanced AI
               technology. Personalized insights and real-time feedback ensure
               you approach each interview confidently and effectively.
@@ -79,7 +79,7 @@ const HeroSection = () => {
           <div className="mt-3">
             <Link
               href="/sign-in"
-              className="flex justify-center gap-3 md:gap-4 items-center text-[0.83rem] xsm:text-xs xsm:px-3 xsm:py-2 md:text-xs bg-black text-white rounded-full py-[0.3rem] px-[0.7rem] md:px-2 md:py-2 lg:py-3 lg:px-4 lg:text-xs xl:text-xs xl:px-3 xl:py-3 xl:gap-4 font-normal tracking-wide"
+              className="flex justify-center gap-3 md:gap-4 items-center text-[0.83rem] xsm:text-xs xsm:px-3 xsm:py-2 md:text-xs bg-black text-white rounded-full py-[0.3rem] px-[0.7rem] md:px-2 md:py-2 lg:py-2 lg:px-6 lg:text-base xl:text-base xl:px-3 xl:py-2 xl:gap-2 font-normal tracking-wide"
             >
               Get Started{" "}
               <FaArrowTurnUp className="rotate-90 translate-y-[1px] text-[11px] font-black xl:text-xs" />
