@@ -1,4 +1,5 @@
-import React, { useRef } from "react";
+"use client"
+import React, { useRef, useState } from "react";
 import { FaSquareCheck } from "react-icons/fa6";
 import { pricingPlans } from "@/data/pricingData"; // Ensure the path to your pricing data is correct
 import {
@@ -7,6 +8,14 @@ import {
   useMotionValue,
   useSpring,
 } from "framer-motion";
+import axios from "axios";
+import { useUser } from "@clerk/nextjs";
+import Razorpay from "razorpay";
+import Script from 'next/script'
+import subscriptions from "razorpay/dist/types/subscriptions";
+
+
+declare global{interface Window{Razorpay:any}};
 
 // Define the type for the Pricing data structure
 type Pricing = {
@@ -19,6 +28,11 @@ type Pricing = {
 
 // Main Pricing component that renders the pricing plans
 const Pricing = () => {
+
+  
+
+
+
   return (
     <div className="w-full h-full flex items-center justify-center flex-col gap-8 md:gap-14 p-4">
       {/* Header section */}
@@ -44,6 +58,72 @@ const Pricing = () => {
 
 // TiltCard component that implements the tilt effect using Framer Motion
 const TiltCard = ({ items }: { items: Pricing }) => {
+
+  const {user} = useUser();
+  const primaryEmail = user?.emailAddresses.find(email => email.id === user.primaryEmailAddressId)?.emailAddress || "default@example.com";
+  const [isProcessing , setIsProcessing] = useState(false);
+  
+
+  const handleSubscription = async()=>{
+    setIsProcessing(true);
+    try {
+      if(user){
+        const response = await axios.post("/api/upgrade-to-pro",{
+          ...items,          
+          userId: user?.id   
+      },
+      {
+          headers: {
+            'Content-Type': 'application/json',
+        }
+        });
+        console.log("Success:", response.data);
+        const { subscriptionId, orderId, keyId ,amount } = response.data;
+
+        const options = {
+          key:keyId,
+          amount,
+          currency:"INR",
+          name:"Mock.io",
+          description:"Test transaction",
+          order_id:orderId,
+          handler:async function(response:any){
+            console.log("Payment Successful",response);
+            const res = await axios.post("/api/new-user",{
+              clerkId:user?.id,
+              userName:user.username || "default",
+              email:primaryEmail,
+              subscription:items?.name,
+              updatedAt: new Date(),
+            },{
+              headers: {
+              'Content-Type': 'application/json',
+            },});
+            console.log("Subscriptiom",items?.name);
+            console.log("User updated",res.data)
+          },
+          prefill: {
+            name: 'Customer Name',
+            email: 'customer@example.com',
+            contact: '9999999999',
+        },
+        theme: {
+            color: '#3399cc',
+        },
+        }
+        const rzp1 = new window.Razorpay(options);
+        rzp1.open()
+      }
+
+    } catch (error) {
+      console.log("Payment failed",error)
+    }finally{
+      setIsProcessing(false);
+    }
+    
+
+  }
+
   const ref = useRef<HTMLDivElement>(null);
 
   const x = useMotionValue(0);
@@ -118,9 +198,11 @@ const TiltCard = ({ items }: { items: Pricing }) => {
           >{items.duration}</p>
         </div>
         <div className="py-4">
+          <Script src="https://checkout.razorpay.com/v1/checkout.js"/>
           <button
-            className="w-full rounded-lg border border-slate-500 hover:bg-black  hover:text-white flex items-center justify-center gap-2 font-semibold px-2 py-2 transition-all ease-in duration-700">
-            Get started
+          disabled={isProcessing}
+            className="w-full rounded-lg border border-slate-500 hover:bg-black  hover:text-white flex items-center justify-center gap-2 font-semibold px-2 py-2 transition-all ease-in duration-700" onClick={handleSubscription}>
+            {isProcessing ?"Processing":"Get started"}
           </button>
         </div>
         <div

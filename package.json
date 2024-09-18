@@ -24,6 +24,7 @@
     "lucide-react": "^0.435.0",
     "mongoose": "^8.6.0",
     "next": "14.2.5",
+    "razorpay": "^2.9.4",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-speech-to-text": "^0.8.0",

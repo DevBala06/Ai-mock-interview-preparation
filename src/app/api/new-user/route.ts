@@ -27,7 +27,27 @@ export const POST = async (request: Request) => {
 
         const body = await request.json();
 
-        const { clerkId, userName, email, createdAt, updatedAt } = body;
+        const { clerkId, userName, email, createdAt, updatedAt ,subscription } = body;
+        // const currentUser = await NewUser.findOne({ clerkId });
+        
+        if(subscription){
+            if(clerkId){
+                const updatedUser = await NewUser.findOneAndUpdate(
+                    { clerkId },
+                    {
+                        subscription,
+                        updatedAt,
+                    },
+                    {new:true}
+    
+                )
+                return NextResponse.json({
+                message: "User updated successfully",
+                updatedUser,
+            }, { status: 201 });
+            }
+
+        }else{
 
         const user = await NewUser.findOneAndUpdate(
             { clerkId },
@@ -40,13 +60,13 @@ export const POST = async (request: Request) => {
             { upsert: true, new: true } 
           );
 
-        const savedUser = await user.save();
+        // const savedUser = await user.save();
 
         return NextResponse.json({
             message: "User created successfully",
-            user: savedUser,
+            user,
         }, { status: 201 });
-
+    }
     } catch (error: any) {
         console.error("Error creating user:", error);
         return NextResponse.json({

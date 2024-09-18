@@ -4,6 +4,7 @@ interface NewUserType extends Document {
     clerkId:string;
     email:string;
     userName:string;
+    subscription:string;
     createdAt: Date;
     updatedAt: Date;
 };
@@ -23,6 +24,10 @@ const NewUserSchema = new Schema<NewUserType>({
         type: String,
         unique:true,
         maxlength: [50, 'Username cannot exceed 50 characters'],
+    },
+    subscription: {
+        type: String,
+        default:"Base",
     },
 }, {
     timestamps: true,
