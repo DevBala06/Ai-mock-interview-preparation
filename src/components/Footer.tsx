@@ -3,6 +3,7 @@ import React from "react";
 import { FaXTwitter } from "react-icons/fa6";
 import { FaInstagram } from "react-icons/fa";
 import { FaLinkedinIn } from "react-icons/fa";
+import { SiMinutemailer } from "react-icons/si";
 
 const Footer = () => {
   return (
@@ -25,6 +26,8 @@ const Footer = () => {
             <p className="text-sm font-bold text-gray-900 max-md:text-xs max-md:mt-2   mt-5">~ We provide AI-powered mock interviews designed to help you land
               your dream job. Our platform delivers personalized practice
               sessions tailored to boost your skill and confidence.</p>
+              {/* <h1 className="text-2xl font-bold pt-2">For any query drop a mail on</h1>
+              <Link href="mailto:pwrbuster-balajisamy369@gmailcom" className="text-sm font-extrabold">balajisamy369@gmail.com</Link> */}
             </div>
             <div className="w-2/5 max-md:w-full max-md:mt-2 max-md:gap-y-2 max-md:items-start  flex max-md:flex-col items-center justify-center">
                 <div className="flex flex-col  text-sm max-md:font-extrabold max-md:text-xs font-extrabold gap-y-2 max-md:gap-y-0 text-gray-600">
@@ -42,6 +45,10 @@ const Footer = () => {
                 <Link href={'#'}>FACEBOOK</Link>
                 <Link href={'#'}>LINKEDIN</Link>
                 <Link href={'#'}>TWITTER</Link>
+                </div>
+                <div className="ml-24 max-md:ml-0 flex flex-col h-full justify-start text-sm max-md:font-extrabold max-md:text-xs font-extrabold gap-y-2 max-md:gap-y-0 text-gray-600">
+                <h1 className="text-base max-md:text-sm font-black cursor-none text-gray-800">CONTACT US</h1>
+                <Link href="mailto:pwrbuster-balajisamy369@gmailcom" className="flex justify-center items-center gap-x-1 text-sm font-extrabold"><span className="text-xl text-black"><SiMinutemailer/></span>balajisamy369@gmail.com</Link>
                 </div>
             </div>
         </div>
