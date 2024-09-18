@@ -43,7 +43,7 @@ export default function Page() {
                                 Sign up to access AI-driven mock interviews and personalized feedback, helping you ace your next interview with confidence.
                             </p>
                         </div>
-                        <SignUp />
+                        <SignUp fallbackRedirectUrl={process.env.NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL}/>
                     </div>
                 </main>
             </div>
