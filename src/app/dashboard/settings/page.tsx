@@ -4,7 +4,7 @@ import Pricing from '@/components/Pricing';
 import { useUser } from '@clerk/nextjs';
 import React, { useState } from 'react'
 
-const page = () => {
+const Page = () => {
 
     const [personalDetails , setPersonalDetails] = useState(false);
     const {user} = useUser();
@@ -25,7 +25,7 @@ const page = () => {
             </div>
             <div>
 {personalDetails ? (
-    <div className="text-sm font-semibold">
+    <div className="text-sm font-semibold mt-4">
     <form className="space-y-4">
       {/* Username Field */}
       <div className='w-2/5'>
@@ -37,7 +37,7 @@ const page = () => {
           id="username"
           value={user?.username || ''}
           readOnly
-          className="mt-1 p-2 w-full bg-zinc-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="mt-1 p-2 w-full bg-[#F6F8FA] border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
   
@@ -51,7 +51,7 @@ const page = () => {
           id="email"
           value={primaryEmail || ''}
           readOnly
-          className="mt-1 p-2 w-full bg-zinc-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="mt-1 p-2 w-full bg-[#F6F8FA] border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
     </form>
@@ -69,4 +69,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page;
