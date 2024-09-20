@@ -3,6 +3,7 @@ import React from "react";
 import { FaXTwitter } from "react-icons/fa6";
 import { FaInstagram } from "react-icons/fa";
 import { FaLinkedinIn } from "react-icons/fa";
+import { SiMinutemailer } from "react-icons/si";
 
 const Footer = () => {
   return (
@@ -44,6 +45,10 @@ const Footer = () => {
                 <Link href={'#'}>FACEBOOK</Link>
                 <Link href={'#'}>LINKEDIN</Link>
                 <Link href={'#'}>TWITTER</Link>
+                </div>
+                <div className="ml-24 max-md:ml-0 flex flex-col h-full justify-start text-sm max-md:font-extrabold max-md:text-xs font-extrabold gap-y-2 max-md:gap-y-0 text-gray-600">
+                <h1 className="text-base max-md:text-sm font-black cursor-none text-gray-800">CONTACT US</h1>
+                <Link href="mailto:pwrbuster-balajisamy369@gmailcom" className="flex justify-center items-center gap-x-1 text-sm font-extrabold"><span className="text-xl text-black"><SiMinutemailer/></span>balajisamy369@gmail.com</Link>
                 </div>
             </div>
         </div>

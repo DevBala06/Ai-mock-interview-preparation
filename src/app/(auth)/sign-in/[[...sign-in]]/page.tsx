@@ -49,7 +49,7 @@ export default function Page() {
                             </p>
                         </div>
 
-                        <SignIn />
+                        <SignIn fallbackRedirectUrl={process.env.NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL} />
                     </div>
                 </main>
             </div>

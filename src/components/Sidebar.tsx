@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { motion, Variants } from "framer-motion";
 import { FaComments, FaClipboardList } from "react-icons/fa";
 import { MdOutlineArrowOutward } from "react-icons/md";
+import { IoSettings } from "react-icons/io5";
 import {
   TbLayoutSidebarRightExpandFilled,
   TbLayoutSidebarRightCollapseFilled,
@@ -142,6 +143,20 @@ const Sidebar: React.FC = () => {
           <span className={`${open ? "block" : "hidden"} `}>
             Feedbacks
           </span>
+        </motion.div>
+        <motion.div
+          className="relative flex font-semibold items-center text-[#FDFFF4] rounded-full z-50 space-x-2 p-2 cursor-pointer"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          whileHover={{ color: "#1F1E30" }}
+          transition={{ duration: 0.3 }}
+        >
+          <Link href={'/dashboard/settings'} className="flex items-center justify-center gap-2">
+          <IoSettings />
+          <span className={`${open ? "block" : "hidden"} `}>
+            Settings
+          </span>
+          </Link>
         </motion.div>
 
         {/* Animated Indicator */}
