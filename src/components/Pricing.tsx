@@ -13,6 +13,7 @@ import { useUser } from "@clerk/nextjs";
 import Razorpay from "razorpay";
 import Script from 'next/script'
 import subscriptions from "razorpay/dist/types/subscriptions";
+import { useRouter } from "next/navigation";
 
 
 declare global{interface Window{Razorpay:any}};
@@ -28,10 +29,6 @@ type Pricing = {
 
 // Main Pricing component that renders the pricing plans
 const Pricing = () => {
-
-  
-
-
 
   return (
     <div className="w-full h-full flex items-center justify-center flex-col gap-8 md:gap-14 p-4">
@@ -59,7 +56,8 @@ const Pricing = () => {
 // TiltCard component that implements the tilt effect using Framer Motion
 const TiltCard = ({ items }: { items: Pricing }) => {
 
-  const {user} = useUser();
+  const {isSignedIn,user} = useUser();
+  const router = useRouter();
   const primaryEmail = user?.emailAddresses.find(email => email.id === user.primaryEmailAddressId)?.emailAddress || "default@example.com";
   const [isProcessing , setIsProcessing] = useState(false);
   
@@ -67,53 +65,58 @@ const TiltCard = ({ items }: { items: Pricing }) => {
   const handleSubscription = async()=>{
     setIsProcessing(true);
     try {
-      if(user){
-        const response = await axios.post("/api/upgrade-to-pro",{
-          ...items,          
-          userId: user?.id   
-      },
-      {
-          headers: {
-            'Content-Type': 'application/json',
-        }
-        });
-        console.log("Success:", response.data);
-        const { subscriptionId, orderId, keyId ,amount } = response.data;
-
-        const options = {
-          key:keyId,
-          amount,
-          currency:"INR",
-          name:"Mock.io",
-          description:"Test transaction",
-          order_id:orderId,
-          handler:async function(response:any){
-            console.log("Payment Successful",response);
-            const res = await axios.post("/api/new-user",{
-              clerkId:user?.id,
-              userName:user.username || "default",
-              email:primaryEmail,
-              subscription:items?.name,
-              updatedAt: new Date(),
-            },{
-              headers: {
+      if(isSignedIn){
+        if(user){
+          const response = await axios.post("/api/upgrade-to-pro",{
+            ...items,          
+            userId: user?.id   
+        },
+        {
+            headers: {
               'Content-Type': 'application/json',
-            },});
-            console.log("Subscriptiom",items?.name);
-            console.log("User updated",res.data)
+          }
+          });
+          console.log("Success:", response.data);
+          const { subscriptionId, orderId, keyId ,amount } = response.data;
+  
+          const options = {
+            key:keyId,
+            amount,
+            currency:"INR",
+            name:"Mock.io",
+            description:"Test transaction",
+            order_id:orderId,
+            handler:async function(response:any){
+              console.log("Payment Successful",response);
+              const res = await axios.post("/api/new-user",{
+                clerkId:user?.id,
+                userName:user.username || "default",
+                email:primaryEmail,
+                subscription:items?.name,
+                updatedAt: new Date(),
+              },{
+                headers: {
+                'Content-Type': 'application/json',
+              },});
+              console.log("Subscriptiom",items?.name);
+              console.log("User updated",res.data)
+            },
+            prefill: {
+              name: 'Customer Name',
+              email: 'customer@example.com',
+              contact: '9999999999',
           },
-          prefill: {
-            name: 'Customer Name',
-            email: 'customer@example.com',
-            contact: '9999999999',
-        },
-        theme: {
-            color: '#3399cc',
-        },
+          theme: {
+              color: '#3399cc',
+          },
+          }
+          const rzp1 = new window.Razorpay(options);
+          rzp1.open()
         }
-        const rzp1 = new window.Razorpay(options);
-        rzp1.open()
+      }else {
+        router.push('/sign-up?redirectTo=/dashboard/settings');
       }
+      
 
     } catch (error) {
       console.log("Payment failed",error)
