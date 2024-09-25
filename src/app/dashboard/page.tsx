@@ -81,7 +81,7 @@ const Page = () => {
             ))}
             <div className="mt-3 border-t-2 pt-4 border-slate-300 space-y-2">
               <h1 className="font-bold text-base">Available interviews</h1>
-              <h1 className="font-bold text-3xl">1</h1>
+              <h1 className="font-bold text-3xl">&#8734;</h1>
               <h1 className="bg-[#D8F275] text-slate-700 w-fit px-2 rounded-md text-sm font-bold">
                 Free credit
               </h1>

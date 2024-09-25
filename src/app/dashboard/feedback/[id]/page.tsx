@@ -3,6 +3,8 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import axios from 'axios'
+import Link from 'next/link'
+import { MdKeyboardDoubleArrowRight } from "react-icons/md";
 
 interface Question {
   questionNumber: number
@@ -162,6 +164,12 @@ export default function FeedbackPage() {
             </div>
           </div>
         ))}
+      </div>
+      <div className='w-full flex justify-end mt-3'>
+      <Link href="/dashboard/interviews" prefetch>
+                  <button
+                     className='text-base px-3 py-0.5 gap-x-1 rounded-full border-2 border-lime-400 bg-lime-300 flex justify-center items-center text-neutral-800 font-bold'>Return <MdKeyboardDoubleArrowRight/></button>
+                </Link>
       </div>
     </div>
   )
