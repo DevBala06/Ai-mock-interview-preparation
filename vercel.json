@@ -2,7 +2,7 @@
     "crons": [
       {
         "path": "/api/resetInterviewLimits",
-        "schedule": "45 21 * * *"
+        "schedule": "0 0 * * *"
       }
     ]
   }
