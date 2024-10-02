@@ -1,15 +1,18 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Loader2Icon } from "lucide-react";
 import { useInterviewForm } from '@/hooks/useInterviewForm';
+import { Dispatch, SetStateAction } from 'react';
 
 interface ModalProps {
+  interviewLimit:number;
+  setInterviewLimit:Dispatch<SetStateAction<number>>;
   openModal: boolean;
   handleCloseModal: () => void;
   onSuccessRedirect: (interviewId: string) => void;
 }
 
-const Modal: React.FC<ModalProps> = ({ openModal, handleCloseModal, onSuccessRedirect }) => {
-  const { loading, onSubmit } = useInterviewForm({ handleCloseModal, onSuccessRedirect });
+const Modal: React.FC<ModalProps> = ({ openModal, handleCloseModal, onSuccessRedirect ,interviewLimit,setInterviewLimit}) => {
+  const { loading, onSubmit } = useInterviewForm({ handleCloseModal, onSuccessRedirect ,interviewLimit,setInterviewLimit});
 
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {

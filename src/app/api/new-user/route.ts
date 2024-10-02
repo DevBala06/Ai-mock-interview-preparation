@@ -27,7 +27,7 @@ export const POST = async (request: Request) => {
 
         const body = await request.json();
 
-        const { clerkId, userName, email, createdAt, updatedAt ,subscription } = body;
+        const { clerkId, userName, email, createdAt, updatedAt ,subscription , interviewLimit } = body;
         // const currentUser = await NewUser.findOne({ clerkId });
         
         if(subscription){
@@ -36,6 +36,7 @@ export const POST = async (request: Request) => {
                     { clerkId },
                     {
                         subscription,
+                        interviewLimit,
                         updatedAt,
                     },
                     {new:true}

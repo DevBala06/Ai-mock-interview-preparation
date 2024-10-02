@@ -3,6 +3,8 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation';
 import Modal from './Modal';
+import { useUser } from '@clerk/nextjs';
+import axios from 'axios';
 
 interface HeaderProps {
   onInterviewCreated: () => void;
@@ -10,11 +12,37 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ onInterviewCreated }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [interviewLimit, setInterviewLimit] = useState<number>(0);
+const {user} = useUser();
   const router = useRouter();
 
+  const fetchUserData = async () => {
+    try {
+      const userId = user?.id;
+      const UserData = await axios.get(`/api/new-user/${userId}`);
+      console.log(UserData?.data?.user?.interviewLimit);
+      // var interviewLimitCount = UserData?.data?.user?.interviewLimit;
+      const updatedCount =  UserData?.data?.user?.interviewLimit;
+      setInterviewLimit(updatedCount);
+      console.log(interviewLimit);
 
-  const openModal = () => {
-    setIsModalOpen(true);
+      // if (interviewLimit) {
+      //   setInterviewLimit((prevLimit:any) => prevLimit - 1);
+      // }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
+
+  const openModal = async() => {
+    if (user) {
+        await fetchUserData();
+        if (interviewLimit > 0) {
+          setIsModalOpen(true);
+        } else {
+          alert('You have reached your interview limit.');
+        }
+    }
   }
 
   const closeModal = () => {
@@ -35,6 +63,8 @@ const Header: React.FC<HeaderProps> = ({ onInterviewCreated }) => {
       <div>
         <button onClick={openModal} className='bg-[#d6f462] text-sm py-1.5 px-2 text-zinc-800 md:px-4 md:py-2 md:text-base rounded-lg font-bold hover:bg-[#cff143] text-nowrap'>Create interview</button>
         <Modal
+          interviewLimit = {interviewLimit}
+          setInterviewLimit = {setInterviewLimit}
           openModal={isModalOpen}
           handleCloseModal={closeModal}
           onSuccessRedirect={handleSuccessRedirect}

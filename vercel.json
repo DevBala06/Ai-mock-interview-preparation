@@ -1,0 +1,9 @@
+{
+    "crons": [
+      {
+        "path": "/api/resetInterviewLimits",
+        "schedule": "0 0 * * *"
+      }
+    ]
+  }
+  

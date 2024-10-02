@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import axios from "axios";
 import { useUser } from "@clerk/nextjs";
 
@@ -13,9 +13,11 @@ interface UserData {
 interface UseInterviewFormProps {
     handleCloseModal: () => void;
     onSuccessRedirect: (interviewId: string) => void;
+    interviewLimit:number;
+    setInterviewLimit:Dispatch<SetStateAction<number>>;
 }
 
-export const useInterviewForm = ({ handleCloseModal, onSuccessRedirect }: UseInterviewFormProps) => {
+export const useInterviewForm = ({ handleCloseModal, onSuccessRedirect, interviewLimit, setInterviewLimit }: UseInterviewFormProps) => {
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState('');
     const { user } = useUser();
@@ -42,6 +44,24 @@ export const useInterviewForm = ({ handleCloseModal, onSuccessRedirect }: UseInt
             });
 
             console.log("Success:", response.data);
+            if (interviewLimit && interviewLimit > 0) {
+                const updatedInterviewLimit = interviewLimit - 1;
+                setInterviewLimit(updatedInterviewLimit);
+          
+                await axios.put(
+                  `/api/new-user/${user?.id}`,
+                  {
+                    interviewLimit: updatedInterviewLimit, 
+                    clerkId: user?.id,
+                  },
+                  {
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                  }
+                );
+              }
+            
             onSuccessRedirect(response.data.interviews._id);
 
         } catch (error) {

@@ -17,6 +17,7 @@ export const pricingPlans = [
       description: 'Great for beginners starting their interview preparation journey.',
       price: '149',
       duration: 'MO.',
+      dailyLimit: 6,
       features: [
         '6 Hours of interviews in a week',
         'Access to interview feedback',
@@ -30,6 +31,7 @@ export const pricingPlans = [
       description: 'Ideal for professionals seeking comprehensive interview preparation.',
       price: '299',
       duration: 'MO.',
+      dailyLimit: 15,
       features: [
         'Unlimited interview hours',
         'Advanced interview questions',

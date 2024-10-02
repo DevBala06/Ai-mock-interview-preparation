@@ -24,6 +24,7 @@ type Pricing = {
   description: string;
   price: string;
   duration: string;
+  dailyLimit:Number;
   features: string[];
 };
 
@@ -93,6 +94,7 @@ const TiltCard = ({ items }: { items: Pricing }) => {
                 userName:user.username || "default",
                 email:primaryEmail,
                 subscription:items?.name,
+                interviewLimit:items?.dailyLimit,
                 updatedAt: new Date(),
               },{
                 headers: {

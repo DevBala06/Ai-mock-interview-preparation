@@ -5,6 +5,7 @@ interface NewUserType extends Document {
     email:string;
     userName:string;
     subscription:string;
+    interviewLimit:Number;
     createdAt: Date;
     updatedAt: Date;
 };
@@ -29,6 +30,10 @@ const NewUserSchema = new Schema<NewUserType>({
         type: String,
         default:"Base",
     },
+    interviewLimit: {
+        type:String,
+        default:2,
+    }
 }, {
     timestamps: true,
     versionKey: false,
