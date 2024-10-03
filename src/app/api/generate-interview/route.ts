@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     await connectToDb();
 
     const body = await request.json();
-    const { jobRole, technologies, difficultyLevel, userId, username } = body;
+    const { jobRole, technologies, difficultyLevel, userId, userName } = body;
     console.log(userId);
 
 
@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
 
     const inputPrompt = `Create an interview dialogue flow for a ${jobRole} position with the following tech stack: ${technologies}. The difficulty level should be ${difficultyLevel}. 
       
-        Start with a personalized introduction: "Hello ${username}, I'm ${randomInterviewer}, your interviewer for today's interview. It's great to meet you today(This is an exaple promt you can use yours greeting users), for this ${jobRole} position interview."
+        Start with a personalized introduction: "Hello ${userName}, I'm ${randomInterviewer}, your interviewer for today's interview. It's great to meet you today(This is an exaple promt you can use yours greeting users), for this ${jobRole} position interview."
         
         Then, begin with an opening question that's always a variation and every time generate different question of "Tell me about yourself" or a similar introductory question.
         
@@ -67,8 +67,8 @@ export async function POST(request: NextRequest) {
         [
             {
               "questionNumber": 1,
-              "question": " such as:  Hello ${username} use the provided user name, I'm ${randomInterviewer}, your personal interviewer for this interview. It's great to meet you today for this ${jobRole} position interview.",
-              "expectedAnswer": "Hello, Mr/Mrs ${randomInterviewer}, ${username} use the provided user name"
+              "question": " such as:  Hello ${userName} use the provided user name, I'm ${randomInterviewer}, your personal interviewer for this interview. It's great to meet you today for this ${jobRole} position interview.",
+              "expectedAnswer": "Hello, Mr/Mrs ${randomInterviewer}, ${userName} use the provided user name"
             },
             {
               "questionNumber": 2,

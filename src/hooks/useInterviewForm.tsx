@@ -7,14 +7,14 @@ interface UserData {
     technologies: string;
     difficultyLevel: string;
     userId: string | undefined;
-    username: string | undefined;
+    userName: string | undefined;
 }
 
 interface UseInterviewFormProps {
     handleCloseModal: () => void;
     onSuccessRedirect: (interviewId: string) => void;
-    interviewLimit:number;
-    setInterviewLimit:Dispatch<SetStateAction<number>>;
+    interviewLimit: number;
+    setInterviewLimit: Dispatch<SetStateAction<number>>;
 }
 
 export const useInterviewForm = ({ handleCloseModal, onSuccessRedirect, interviewLimit, setInterviewLimit }: UseInterviewFormProps) => {
@@ -26,12 +26,13 @@ export const useInterviewForm = ({ handleCloseModal, onSuccessRedirect, intervie
         event.preventDefault();
 
         const formData = new FormData(event.currentTarget);
+        const userName = user?.username || user?.fullName;
         const userData: UserData = {
             jobRole: formData.get("jobRole") as string,
             technologies: formData.get("technologies") as string,
             difficultyLevel: formData.get("difficultyLevel") as string,
             userId: user?.id,
-            username: user?.username as string
+            userName: userName as string
         };
 
         try {
@@ -47,21 +48,21 @@ export const useInterviewForm = ({ handleCloseModal, onSuccessRedirect, intervie
             if (interviewLimit && interviewLimit > 0) {
                 const updatedInterviewLimit = interviewLimit - 1;
                 setInterviewLimit(updatedInterviewLimit);
-          
+
                 await axios.put(
-                  `/api/new-user/${user?.id}`,
-                  {
-                    interviewLimit: updatedInterviewLimit, 
-                    clerkId: user?.id,
-                  },
-                  {
-                    headers: {
-                      "Content-Type": "application/json",
+                    `/api/new-user/${user?.id}`,
+                    {
+                        interviewLimit: updatedInterviewLimit,
+                        clerkId: user?.id,
                     },
-                  }
+                    {
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                    }
                 );
-              }
-            
+            }
+
             onSuccessRedirect(response.data.interviews._id);
 
         } catch (error) {

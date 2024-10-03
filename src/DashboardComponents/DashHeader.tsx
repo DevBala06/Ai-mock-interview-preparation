@@ -76,7 +76,7 @@ const DashHeader = () => {
       <div className="flex items-center justify-between">
         <div className="flex items-center justify-center gap-3">
           <h1 className="text-2xl max-md:text-xl text-zinc-800 font-bold">
-            Welcome back, {user?.username}
+            Welcome back, {user?.fullName || user?.username}
           </h1>
           <PiHandWavingBold className="text-2xl" />
         </div>
