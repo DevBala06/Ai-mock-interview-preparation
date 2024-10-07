@@ -13,6 +13,7 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ onInterviewCreated }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [interviewLimit, setInterviewLimit] = useState<number>(0);
+  const [interviewCount, setInterviewCount] = useState<number>(0);
 const {user} = useUser();
   const router = useRouter();
 
@@ -65,6 +66,8 @@ const {user} = useUser();
         <Modal
           interviewLimit = {interviewLimit}
           setInterviewLimit = {setInterviewLimit}
+          interviewCount = {interviewCount}
+          setInterviewCount = {setInterviewCount}
           openModal={isModalOpen}
           handleCloseModal={closeModal}
           onSuccessRedirect={handleSuccessRedirect}

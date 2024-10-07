@@ -6,13 +6,15 @@ import { Dispatch, SetStateAction } from 'react';
 interface ModalProps {
   interviewLimit:number;
   setInterviewLimit:Dispatch<SetStateAction<number>>;
+  interviewCount:number;
+  setInterviewCount:Dispatch<SetStateAction<number>>;
   openModal: boolean;
   handleCloseModal: () => void;
   onSuccessRedirect: (interviewId: string) => void;
 }
 
-const Modal: React.FC<ModalProps> = ({ openModal, handleCloseModal, onSuccessRedirect ,interviewLimit,setInterviewLimit}) => {
-  const { loading, onSubmit } = useInterviewForm({ handleCloseModal, onSuccessRedirect ,interviewLimit,setInterviewLimit});
+const Modal: React.FC<ModalProps> = ({ openModal, handleCloseModal, onSuccessRedirect ,interviewLimit,setInterviewLimit,interviewCount,setInterviewCount}) => {
+  const { loading, onSubmit } = useInterviewForm({ handleCloseModal, onSuccessRedirect ,interviewLimit,setInterviewLimit,interviewCount,setInterviewCount});
 
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {

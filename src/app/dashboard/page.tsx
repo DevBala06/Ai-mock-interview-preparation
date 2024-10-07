@@ -18,7 +18,7 @@ const Modal = dynamic(() => import("@/DashboardComponents/Modal"), {
 const Page = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [interviewLimit, setInterviewLimit] = useState<number>(0);
-  // const [interviewCount, setInterviewCount] = useState<Number>(0);
+  const [interviewCount, setInterviewCount] = useState<number>(0);
   const { user } = useUser();
   const router = useRouter();
 
@@ -118,6 +118,8 @@ const Page = () => {
           <Modal
             interviewLimit = {interviewLimit}
             setInterviewLimit = {setInterviewLimit}
+            interviewCount = {interviewCount}
+            setInterviewCount = {setInterviewCount}
             openModal={openModal}
             handleCloseModal={handleCloseModal}
             onSuccessRedirect={handleSuccessRedirect}

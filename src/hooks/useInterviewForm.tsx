@@ -15,9 +15,12 @@ interface UseInterviewFormProps {
     onSuccessRedirect: (interviewId: string) => void;
     interviewLimit: number;
     setInterviewLimit: Dispatch<SetStateAction<number>>;
+    setInterviewCount: Dispatch<SetStateAction<number>>;
+    interviewCount:number;
+
 }
 
-export const useInterviewForm = ({ handleCloseModal, onSuccessRedirect, interviewLimit, setInterviewLimit }: UseInterviewFormProps) => {
+export const useInterviewForm = ({ handleCloseModal, onSuccessRedirect, interviewLimit, setInterviewLimit , setInterviewCount , interviewCount }: UseInterviewFormProps) => {
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState('');
     const { user } = useUser();
@@ -47,7 +50,9 @@ export const useInterviewForm = ({ handleCloseModal, onSuccessRedirect, intervie
             console.log("Success:", response.data);
             if (interviewLimit && interviewLimit > 0) {
                 const updatedInterviewLimit = interviewLimit - 1;
+                const updatedInterviewCount = interviewCount + 1;
                 setInterviewLimit(updatedInterviewLimit);
+                setInterviewCount(updatedInterviewCount);
 
                 await axios.put(
                     `/api/new-user/${user?.id}`,
