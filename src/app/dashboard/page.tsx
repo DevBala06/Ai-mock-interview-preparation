@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { useUser } from "@clerk/nextjs";
 import axios from "axios";
+import { LineCharts } from "@/DashboardComponents/charts/LineCharts";
 
 const DashHeader = dynamic(() => import("@/DashboardComponents/DashHeader"), {
   ssr: false,
@@ -22,18 +23,18 @@ const Page = () => {
   const { user } = useUser();
   const router = useRouter();
 
-  
-  useEffect( () => {
-   fetchUserData();
+
+  useEffect(() => {
+    fetchUserData();
   }, [user])
-  
+
   const fetchUserData = async () => {
     try {
       const userId = user?.id;
       const UserData = await axios.get(`/api/new-user/${userId}`);
       console.log(UserData?.data?.user?.interviewLimit);
       // var interviewLimitCount = UserData?.data?.user?.interviewLimit;
-      const updatedCount =  UserData?.data?.user?.interviewLimit;
+      const updatedCount = UserData?.data?.user?.interviewLimit;
       setInterviewLimit(updatedCount);
       console.log(interviewLimit);
 
@@ -57,14 +58,14 @@ const Page = () => {
     }
   };
 
-  
 
-//   useEffect(() => {
-  
-// if(user){
-//     fetchUserData();
-// }
-//   }, [user]);
+
+  //   useEffect(() => {
+
+  // if(user){
+  //     fetchUserData();
+  // }
+  //   }, [user]);
 
   const handleCloseModal = () => {
     setOpenModal(false);
@@ -116,10 +117,10 @@ const Page = () => {
           </div>
 
           <Modal
-            interviewLimit = {interviewLimit}
-            setInterviewLimit = {setInterviewLimit}
-            interviewCount = {interviewCount}
-            setInterviewCount = {setInterviewCount}
+            interviewLimit={interviewLimit}
+            setInterviewLimit={setInterviewLimit}
+            interviewCount={interviewCount}
+            setInterviewCount={setInterviewCount}
             openModal={openModal}
             handleCloseModal={handleCloseModal}
             onSuccessRedirect={handleSuccessRedirect}
@@ -155,10 +156,13 @@ const Page = () => {
               <TechnicalChart />
             </div>
             <div>
+              <BehaviouralChart />
+            </div>
+            <div>
               <ProductivityChart />
             </div>
             <div>
-              <BehaviouralChart />
+              <LineCharts />
             </div>
           </div>
         </div>

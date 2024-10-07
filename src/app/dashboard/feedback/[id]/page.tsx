@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation'
 import axios from 'axios'
 import Link from 'next/link'
 import { MdKeyboardDoubleArrowRight } from "react-icons/md";
+import { PieDonutChart } from '@/DashboardComponents/charts/PieDonutChart'
 
 interface Question {
   questionNumber: number
@@ -95,22 +96,25 @@ export default function FeedbackPage() {
         <div className='mt-6'>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-              <p>Hello</p>
+              <PieDonutChart
+                level={interviewData.difficultyLevel}
+                role={interviewData.jobRole}
+                percentage={interviewData.feedback.overallPerformance}
+              />
             </div>
             <div>
               <h3 className="text-xl font-semibold mb-4">AI Feedback</h3>
               <p className="text-neutral-700 mb-4">{interviewData.feedback.generalFeedback}</p>
               <div className=" w-full">
-                {interviewData.feedback.overallAnalyticalSkills.map((skills,index) => (
+                {interviewData.feedback.overallAnalyticalSkills.map((skills, index) => (
                   <div key={index} className='flex items-start justify-start gap-4 flex-wrap'>
                     <p className='px-2 py-0.5 text-sm rounded-full border-2 border-green-400 bg-green-300 text-neutral-800 font-semibold'>Accuracy: {skills.accuracy}%</p>
                     <p className='px-2 py-0.5 text-sm rounded-full border-2 border-blue-400 bg-blue-300 text-neutral-800 font-semibold'>Correctness: {skills.correctness}%</p>
-                    <p className='px-2 py-0.5 text-sm rounded-full border-2 border-lime-400 bg-lime-300 text-neutral-800 font-semibold'>Clearity: {skills.clarity}%</p>
                     <p className='px-2 py-0.5 text-sm rounded-full border-2 border-orange-400 bg-orange-300 text-neutral-800 font-semibold'>Communication: {skills.communication}%</p>
                     <p className='px-2 py-0.5 text-sm rounded-full border-2 border-yellow-400 bg-yellow-300 text-neutral-800 font-semibold'>Efficiency: {skills.efficiency}%</p>
                     <p className='px-2 py-0.5 text-sm rounded-full border-2 border-emerald-400 bg-emerald-300 text-neutral-800 font-semibold'>Problem Solving: {skills.problemSolving}%</p>
                     <p className='px-2 py-0.5 text-sm rounded-full border-2 border-indigo-400 bg-indigo-300 text-neutral-800 font-semibold'>Creativity: {skills.creativity}%</p>
-                    <p className='px-2 py-0.5 text-sm rounded-full border-2 border-fuchsia-400 bg-fuchsia-300 text-neutral-800 font-semibold'>Relevance: {skills.relevance}%</p>
+
                   </div>
                 ))}
               </div>
@@ -139,10 +143,10 @@ export default function FeedbackPage() {
                   <h4 className="font-semibold">Expected Answer:</h4>
                   <p>{interviewData.questions[index].expectedAnswer}</p>
                 </div>
-                <div>
+                {/* <div> it is not available right now
                   <h4 className="font-semibold">Feedback:</h4>
                   <p>{item.answerFeedback}</p>
-                </div>
+                </div> */}
                 <div>
                   <h4 className="font-semibold">Analytical Skills:</h4>
                   <div>
@@ -150,12 +154,11 @@ export default function FeedbackPage() {
                       <div key={i} className='flex items-start justify-start gap-4 flex-wrap'>
                         <p className='px-2 py-0.5 text-sm rounded-full border-2 border-green-400 bg-green-300 text-neutral-800 font-semibold'>Accuracy: {skills.accuracy}%</p>
                         <p className='px-2 py-0.5 text-sm rounded-full border-2 border-blue-400 bg-blue-300 text-neutral-800 font-semibold'>Correctness: {skills.correctness}%</p>
-                        <p className='px-2 py-0.5 text-sm rounded-full border-2 border-lime-400 bg-lime-300 text-neutral-800 font-semibold'>Clearity: {skills.clarity}%</p>
                         <p className='px-2 py-0.5 text-sm rounded-full border-2 border-orange-400 bg-orange-300 text-neutral-800 font-semibold'>Communication: {skills.communication}%</p>
                         <p className='px-2 py-0.5 text-sm rounded-full border-2 border-yellow-400 bg-yellow-300 text-neutral-800 font-semibold'>Efficiency: {skills.efficiency}%</p>
                         <p className='px-2 py-0.5 text-sm rounded-full border-2 border-emerald-400 bg-emerald-300 text-neutral-800 font-semibold'>Problem Solving: {skills.problemSolving}%</p>
                         <p className='px-2 py-0.5 text-sm rounded-full border-2 border-indigo-400 bg-indigo-300 text-neutral-800 font-semibold'>Creativity: {skills.creativity}%</p>
-                        <p className='px-2 py-0.5 text-sm rounded-full border-2 border-fuchsia-400 bg-fuchsia-300 text-neutral-800 font-semibold'>Relevance: {skills.relevance}%</p>
+                     
                       </div>
                     ))}
                   </div>
@@ -166,10 +169,10 @@ export default function FeedbackPage() {
         ))}
       </div>
       <div className='w-full flex justify-end mt-3'>
-      <Link href="/dashboard/interviews" prefetch>
-                  <button
-                     className='text-base px-3 py-0.5 gap-x-1 rounded-full border-2 border-lime-400 bg-lime-300 flex justify-center items-center text-neutral-800 font-bold'>Return <MdKeyboardDoubleArrowRight/></button>
-                </Link>
+        <Link href="/dashboard/interviews" prefetch>
+          <button
+            className='text-base px-3 py-0.5 gap-x-1 rounded-full border-2 border-lime-400 bg-lime-300 flex justify-center items-center text-neutral-800 font-bold'>Return <MdKeyboardDoubleArrowRight /></button>
+        </Link>
       </div>
     </div>
   )
