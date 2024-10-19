@@ -70,7 +70,7 @@ const UserPermissionModal = ({ openModal, handleCloseModal, interviewId }: Modal
           onClick={handleBackdropClick}
         >
           <motion.div
-            className="bg-white p-5 w-full max-w-xl  rounded-lg shadow-lg"
+            className="bg-white p-5 w-full max-xsm:h-[94%] max-md:w-[90%] max-w-xl  rounded-lg shadow-lg"
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
@@ -95,7 +95,7 @@ const UserPermissionModal = ({ openModal, handleCloseModal, interviewId }: Modal
             <div className="flex flex-col gap-y-3 border border-gray-200 rounded-lg p-2 bg-blue-200 text-blue-800 font-semibold">
               <div className="flex gap-1">
                 <Lightbulb />
-                <h1 className="text-base">Note:</h1>
+                <h1 className="text-base ">Note:</h1>
               </div>
               <p className="text-sm">
                 To provide you with real-time feedback and interactive features, we need access to your microphone and camera. Your privacy and security are important to us, and we will only use these permissions for the intended purpose.
@@ -104,7 +104,7 @@ const UserPermissionModal = ({ openModal, handleCloseModal, interviewId }: Modal
 
             <div className="mt-4">
               <div className="flex items-center mb-4">
-                <span className="mr-2 text-gray-700 font-semibold text-base text-nowrap">
+                <span className="mr-2 max-md:text-sm max-md:text-wrap text-gray-700 font-semibold text-base text-nowrap">
                 Turn on camera permissions to interact in real-time:
                 </span>
                 <label className="relative inline-flex items-center cursor-pointer">
@@ -124,7 +124,7 @@ const UserPermissionModal = ({ openModal, handleCloseModal, interviewId }: Modal
               </div>
 
               <div className="flex items-center mb-4">
-                <span className="mr-2 text-gray-700 font-semibold text-base text-nowrap">
+                <span className="mr-2  max-md:text-sm max-md:text-wrap text-gray-700 font-semibold text-base text-nowrap">
                 Turn on microphone permissions to participate in voice interaction:
                 </span>
                 <label className="relative inline-flex items-center cursor-pointer">
@@ -144,9 +144,9 @@ const UserPermissionModal = ({ openModal, handleCloseModal, interviewId }: Modal
               </div>
             </div>
 
-            <div className="mt-4 flex justify-center gap-4">
+            <div className="mt-4 flex justify-center gap-4 ">
               <button
-                className={`px-4 py-2 rounded-lg text-white ${
+                className={`px-4 py-2 rounded-lg text-white max-xsm:text-sm max-xsm:px-2 max-xsm:py-1  ${
                   cameraPermission && microphonePermission ? 'bg-green-500 hover:bg-green-600' : 'bg-gray-400 cursor-not-allowed'
                 }`}
                 onClick={handlePermissionToggle}
@@ -156,7 +156,7 @@ const UserPermissionModal = ({ openModal, handleCloseModal, interviewId }: Modal
               </button>
 
               <button
-                className={`px-4 py-2 rounded-lg text-white ${
+                className={`px-4 py-2 rounded-lg text-white max-xsm:text-sm max-xsm:px-2 max-xsm:py-1 ${
                   cameraPermission && microphonePermission ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-400 cursor-not-allowed'
                 }`}
                 onClick={handleProceed}
